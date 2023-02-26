@@ -1,0 +1,325 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+
+
+.header{
+  display: flex;
+ align-items: center;
+ background-color: #00425A;
+
+ padding: 10px;
+ margin-bottom: 25px;
+
+}
+h1 {
+  margin-right: auto;
+}
+h2{
+  margin: 15px;
+}
+h3{
+  align-items: center;
+  
+}
+h4{
+  margin: 15px;
+}
+h5{
+  margin-left: 15px;
+  margin-right: auto;
+}
+
+.tracks {
+  margin: 10px;
+  background-color: #7B8FA1;
+  border-radius: 10px;
+  max-width: 345px;
+  
+  align-items: center;  
+  display: flex;
+justify-content: center;
+flex-direction: column;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+transition: transform 0.3s ease;
+
+
+} 
+.tracks:hover {
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+  transform: translateZ(50px);
+}
+
+.container{
+  display: flex;
+  flex-wrap: wrap;
+ 
+}
+.booking-timelines{
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  margin-bottom: 106px;
+ 
+}
+.timeline{
+  margin:5px;
+}
+form {
+  width: 300px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-top: 1em;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+input, textarea {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  background: #ccc;
+  color: #fff;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.links{
+  color:black;
+}
+.success{
+  text-align: center;
+}
+.booked-times{
+  display: flex;
+  
+  background-color: #ffffff !important ;
+}
+.booked-times-h2{
+  margin-right: auto;
+}
+.booked-times:hover{
+
+  cursor: pointer;
+}
+
+.cancel-see{
+  color:#7B8FA1 !important
+}
+.cancel-see:hover{
+  background-color:#f3f3f3 !important
+}
+
+.timeline-div{
+  margin:  6px;
+  width: 220px;
+  
+}
+
+
+select {
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  width: 220px;
+  
+  margin: 15px;
+}
+
+option {
+  font-size: 14px;
+  padding: 10px;
+}
+option:hover {
+  background-color: #7B8FA1;
+}
+p {
+  font-size: 16px;
+  margin-top: 10px;}
+.slots-list-element{
+margin: 10px;
+}
+
+.images{
+  width: 100%;
+  height: 360px ;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.images:not(:first-child) {
+  display: none;
+}
+.images-and-descr{
+  display: flex;
+  margin: 30px auto;
+  
+}
+.slider {
+  position: relative;
+  border-radius: 15px;
+  width: 30%;
+  height: 50%;
+  overflow: hidden;
+  margin: 15px;
+  margin-right: 50px;
+}
+.desc-and-rating{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  margin: 10px;
+}
+span{
+  margin-left: 150px;
+}
+.foot{
+ height: 40px;
+  
+  position: relative;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+}
+.App{
+  min-height: calc(100vh - 60px);
+}
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+box-shadow: 3px #000000;}
+
+
+.MuiSlider-root {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  border: none;
+  background-color: transparent;
+  color: #000000 !important;
+  
+}
+
+
+.MuiSlider-track {
+  margin: 0;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #000000 !important;
+}
+
+
+.MuiSlider-thumb {
+  margin: 0px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #000000;
+  box-shadow: 0px 1px 3px #000000;
+  background-color: #000000 !important;
+}
+
+.MuiSlider-rail {
+  margin: 0;
+  background-color: #000000 !important;
+}
+
+.MuiSlider-valueLabel {
+  left: calc(-50% + 6px);
+  top: -22px;
+  margin: 0;
+  background-color: transparent!important;
+}
+
+.MuiSlider-valueLabel > span {
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  line-height: 30px;
+  background-color: transparent !important;
+  border-radius: 50%;
+  box-shadow: 0px;
+}
+.MuiSlider-valueLabelLabel{
+  margin-left: 7px;
+  margin-right: 3px;
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+.MuiSlider-valueLabelCircle{
+  margin-left: -15px !important;
+  background-color: #00425A !important;
+  
+}
+.MuiSlider-valueLabelOpen{
+  margin: 0;
+  background-color: #567189;
+}
+.css-nnid7-MuiSlider-valueLabel{
+  background-color: #567189 !important;
+}
+
+label{
+  margin: 0 !important;
+
+}
+.filter{
+  background-color: #00425A;
+  color: black;
+}
+.MuiInputBase-root{
+  background-color: #fff !important;
+}
+label{
+  color: black !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+hr {
+  border: none;
+  height: 0.1px;
+  width: 100%;
+  background-color: black;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.5);
+  
+}
+
+form{
+  margin-top: 30px;
+}
+
+a{
+  margin: 15px;
+  font-size: 30px;
+  color:#000000
+}
