@@ -17,7 +17,7 @@ import Help from "./components/Help";
 
 function App() {
 
-  //declaring states and consts
+  //declaring states and  consts
   const [tracks, setTracks] = useState([]);
   const [success, setSuccess] = useState("s");
   const [name, setName] = useState("");
