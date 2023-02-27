@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        
+        console.log(import.meta.env.VITE_BACKEND_URL)
         const response = await fetch(import.meta.env.VITE_BACKEND_URL);
         const data = await response.json();
         setTracks(data);
