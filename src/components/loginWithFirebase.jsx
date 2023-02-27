@@ -16,7 +16,7 @@ export default function LoginWithFirebase(props) {
   const { name } = useParams();
   const { signIn } = UserAuth();
 
-  //this is for simply to renavige if someone wants to enter this enpoint regardless they are loggid in
+  //this is for simply to renavige if someone wants to enter this enpoint regardless they are logged in
   if (user) {
     navigate("/");
   }
