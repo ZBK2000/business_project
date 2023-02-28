@@ -25,7 +25,8 @@ export default function Header (props){
     const navigate = useNavigate()
 
     //declare the function so based on the innerhtml of the button should it navigate to the right place
-    function navigateFunction(e, nameOfUser){
+    //this not work like this on iphone so i create a differernt onclick function for each of them
+    /* function navigateFunction(e, nameOfUser){
         console.log(e.target)
         if (e.target.innerText == "LOGIN"){
             navigate("/login/home")
@@ -43,7 +44,28 @@ export default function Header (props){
             navigate("/user")
         }
         
+    } */
+
+    function navigateToLogin(){
+      navigate("/login/home")
     }
+
+    function navigateToSignUp(){
+      navigate("/signup")
+    }
+
+    function navigateToMain(){
+      navigate("/")
+    }
+
+    function navigateToRegister(){
+      navigate("/register")
+    }
+
+    function navigateToUser(){
+      navigate("/user")
+    }
+
     function navigateToHelp(){
       navigate("/help")
     }
@@ -62,7 +84,7 @@ export default function Header (props){
       <Box sx={{ flexGrow: 1}}>
         <AppBar position="static">
           <Toolbar>
-          <Typography  onClick={(e)=>navigateFunction(e, props.name)} variant="h6" component="div" sx={{ flexGrow: 1, cursor: "pointer" }}>
+          <Typography  onClick={navigateToMain} variant="h6" component="div" sx={{ flexGrow: 1, cursor: "pointer" }}>
           Business
             </Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -70,13 +92,13 @@ export default function Header (props){
             </Typography>
             <Box>
             <Button sx={{ display: { xs: 'none', md: 'inline', marginTop:"5px" }}}  onClick={navigateToHelp} color="inherit"> <HelpOutlineIcon /></Button>
-            {user ?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={(e)=>navigateFunction(e, props.name)} color="inherit">LOGIN</Button>}
-{user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={(e)=>navigateFunction(e, props.name)} color="inherit">SIGN UP</Button> }
+            {user ?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToLogin} color="inherit">LOGIN</Button>}
+{user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUp} color="inherit">SIGN UP</Button> }
 
-{user ?<Button   sx = {{display: { xs: 'none', md: 'inline' }, margin:"15px"}} onClick={(e)=>navigateFunction(e, props.name)} color="inherit">REGISTER TRACK</Button>: "" }
+{user ?<Button   sx = {{display: { xs: 'none', md: 'inline' }, margin:"15px"}} onClick={navigateToRegister} color="inherit">REGISTER TRACK</Button>: "" }
 
 {user? <Button  sx={{ display: { xs: 'none', md: 'inline' }}} onClick={logoutFromUser} color="inherit">LOG OUT</Button>: "" }
-{user? <Button sx={{ display: { xs: 'none', md: 'inline' }}}  onClick={(e)=>navigateFunction(e, props.name)} color="inherit"> <AccountCircle /></Button>: "" }
+{user? <Button sx={{ display: { xs: 'none', md: 'inline' }}}  onClick={navigateToUser} color="inherit"> <AccountCircle /></Button>: "" }
 
 <Button sx={{ display: { xs: 'inline', md: 'none' }}} 
 
@@ -95,10 +117,10 @@ export default function Header (props){
           'aria-labelledby': 'basic-button',
         }}
       >
-       {user ?"":<MenuItem  onClick={(e)=>navigateFunction(e, props.name)} color="inherit">LOGIN</MenuItem>}
-{user?"":<MenuItem  onClick={(e)=>navigateFunction(e, props.name)} color="inherit">SIGN UP</MenuItem> }
-{user ?<MenuItem    onClick={(e)=>navigateFunction(e, props.name)} color="inherit"><AccountCircle /> </MenuItem>: "" }
-{user ?<MenuItem    onClick={(e)=>navigateFunction(e, props.name)} color="inherit">REGISTER TRACK</MenuItem>: "" }
+       {user ?"":<MenuItem  onClick={navigateToLogin} color="inherit">LOGIN</MenuItem>}
+{user?"":<MenuItem  onClick={navigateToSignUp} color="inherit">SIGN UP</MenuItem> }
+{user ?<MenuItem    onClick={navigateToUser} color="inherit"><AccountCircle /> </MenuItem>: "" }
+{user ?<MenuItem    onClick={navigateToRegister} color="inherit">REGISTER TRACK</MenuItem>: "" }
 
 {user? <MenuItem onClick={logoutFromUser} color="inherit"> LOG OUT</MenuItem>: "" }
 <MenuItem    onClick={navigateToHelp} color="inherit"> <HelpOutlineIcon/></MenuItem>
