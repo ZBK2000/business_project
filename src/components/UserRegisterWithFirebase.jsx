@@ -36,6 +36,15 @@ export default function UserRegisterWithFirebase() {
       const accepted = await response.text();
       if (accepted === "successfully registrated") {
         const userInfo = await createUser(email, password, nameOfUser);
+        if(userInfo){
+          await fetch(`${import.meta.env.VITE_BACKEND_URL}/usersave`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        }
       }
       /*      else{
         console.log(accepted)
