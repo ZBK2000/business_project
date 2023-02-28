@@ -328,6 +328,7 @@ export default function CertainTrack(props) {
                 lg={2}
                 xl={1.4}
                 alignItems={"center"}
+              
               >
                 <Paper elevation={3} className="timeline-div">
                   <Box display={"flex"} justifyContent={"space-between"}>
