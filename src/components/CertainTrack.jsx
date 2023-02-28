@@ -281,6 +281,16 @@ export default function CertainTrack(props) {
               </Typography>{" "}
               <Box>
                 <hr />
+                <Typography
+                    variant="h6"
+                    sx={{
+                      margin: "10px",
+                      whiteSpace: "pre-line",
+                      overflowWrap: "anywhere",
+                    }}
+                  >
+                    thewebpage@ofthissite.com
+                  </Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -299,17 +309,9 @@ export default function CertainTrack(props) {
                   >
                     Rating 4,5
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      margin: "10px",
-                      whiteSpace: "pre-line",
-                      overflowWrap: "anywhere",
-                    }}
-                  >
-                    thewebpage@ofthissite.com
-                  </Typography>
+                  
                 </Box>
+         
               </Box>
             </Grid>
           </Grid>
