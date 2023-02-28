@@ -1,7 +1,7 @@
 import Header from "./Header";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import Next7DaysDropdown from "./nextSevenDay";
+import Next7DaysDropdown from "./NextSevenDay";
 import Footer from "./FooterNOTUSED";
 import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
