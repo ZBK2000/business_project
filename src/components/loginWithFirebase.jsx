@@ -51,7 +51,7 @@ export default function LoginWithFirebase(props) {
     }
   } catch (error) {
     console.log(error)
-    if (error.code === 'auth/user-not-found'){
+    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'){
         setLoginError(1)
     } else {
       setLoginError(2)
