@@ -201,7 +201,6 @@ export default function CertainTrack(props) {
       slides[i].style.display = "none";
       count ++
     }
-    console.log(count, currentSlide, currentSlide + plusMinus)
     if (currentSlide + plusMinus == -1 ){
       currentSlide = count-1;
       slides[currentSlide].style.display = "block";
