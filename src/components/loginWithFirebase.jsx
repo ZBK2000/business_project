@@ -29,14 +29,6 @@ export default function LoginWithFirebase(props) {
     //here we first make the sign in with firebase and if that successful, we retrieve data from mongodb
     try {
       await signIn(email, password);
-    } catch (error) {
-      console.log(error)
-      if (error.code === 'auth/user-not-found'){
-          setLoginError(1)
-      } else {
-        setLoginError(2)
-      }
-    }
     
     
     const data = { password: email };
@@ -57,6 +49,14 @@ export default function LoginWithFirebase(props) {
         navigate(`/tracks/${name}`);
       }
     }
+  } catch (error) {
+    console.log(error)
+    if (error.code === 'auth/user-not-found'){
+        setLoginError(1)
+    } else {
+      setLoginError(2)
+    }
+  }
   };
 
   return (
