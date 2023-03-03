@@ -11,6 +11,7 @@ export default function LoginWithFirebase(props) {
   const [password, setPassword] = useState("");
   const [nameOfUser, setNameOfUser] = useState("");
   const [registrateds, setRegistrateds] = useState("");
+  const [loginerror, setLoginError] = useState(0)
   const { user } = UserAuth();
   const navigate = useNavigate();
   const { name } = useParams();
@@ -26,7 +27,18 @@ export default function LoginWithFirebase(props) {
     event.preventDefault();
 
     //here we first make the sign in with firebase and if that successful, we retrieve data from mongodb
-    await signIn(email, password);
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.log(error)
+      if (error.code === 'auth/user-not-found'){
+          setLoginError(1)
+      } else {
+        setLoginError(2)
+      }
+    }
+    
+    
     const data = { password: email };
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
       method: "POST",
@@ -72,6 +84,7 @@ export default function LoginWithFirebase(props) {
                 type="email"
                 id="names"
                 onChange={(e) => setEmail(e.target.value)}
+                style={{borderColor: loginerror==1?"red":""}}
               />
               {/*           <label htmlFor="name"><Typography>Name:</Typography> </label>
             <input
@@ -86,6 +99,7 @@ export default function LoginWithFirebase(props) {
                 type="password"
                 id="prices"
                 onChange={(e) => setPassword(e.target.value)}
+                style={{borderColor: loginerror==1?"red":""}}
               />
               <button>
                 <Typography>LOG IN</Typography>{" "}
@@ -96,24 +110,21 @@ export default function LoginWithFirebase(props) {
       ) : (
         ""
       )}
-      {user ? (
+      {loginerror == 1 ? (
         <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
-          Welcome{" "}
+          wrong email/password 
         </Typography>
       ) : (
         ""
       )}
-
-      <Typography variant="h5" className="success">
-        {registrateds}
-      </Typography>
-      {registrateds == "something went wrong" ? (
-        <Typography variant="h5" className="success">
-          Please try again
+    {loginerror == 2 ? (
+        <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
+          Error please try again
         </Typography>
       ) : (
         ""
       )}
+     
     </div>
   );
 }

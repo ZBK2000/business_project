@@ -12,6 +12,8 @@ import { Box } from "@mui/system";
 import { UserAuth } from "../context/AuthContext";
 import SimpleMap from "./GoogleMapNOTUSED";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export default function CertainTrack(props) {
   //declaring states and consts
@@ -193,13 +195,25 @@ export default function CertainTrack(props) {
   let currentSlide = 0;
   const slides = document.querySelectorAll(".images");
 
-  function changeSlide() {
+  function changeSlide(plusMinus) {
+    let count = 0
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
+      count ++
     }
-
-    currentSlide = (currentSlide + 1) % slides.length;
+    console.log(count, currentSlide, currentSlide + plusMinus)
+    if (currentSlide + plusMinus == -1 ){
+      currentSlide = count-1;
+      slides[currentSlide].style.display = "block";
+    } else if (currentSlide + plusMinus == slides.length ){
+      currentSlide = 0;
+      slides[currentSlide].style.display = "block";
+    }
+     else{
+      currentSlide = currentSlide + plusMinus;
     slides[currentSlide].style.display = "block";
+    }
+    
   }
 
   //here we declare the iconbutton for expanding or collapsing certain timelines
@@ -239,6 +253,7 @@ export default function CertainTrack(props) {
             <Grid
               minWidth={"300px"}
               maxWidth={"400px"}
+              
               xs={12}
               sm={10}
               md={8}
@@ -246,15 +261,20 @@ export default function CertainTrack(props) {
               xl={3}
               className="slider"
             >
+
               {Array.from({ length: img_number }, (_, i) => (
                 <img
                   key={i}
-                  onClick={changeSlide}
+                  
                   src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=${i}`}
                   className="images slide"
                   alt="image"
                 />
               ))}
+                            <ArrowForwardIosIcon onClick={()=>changeSlide(1)} sx={{position:"absolute",  left: "85%",
+  bottom: "45%", fontSize:"45px", color:"#f5f5f5", "&:hover":{ fontSize:"50px", color:"#d1d1d1"}}} />
+   <ArrowBackIosNewIcon onClick={()=>changeSlide(-1)} sx={{position:"absolute",  right: "85%",
+  bottom: "45%", fontSize:"45px", color:"#f5f5f5", "&:hover":{ fontSize:"50px", color:"#d1d1d1"}}} />
             </Grid>{" "}
             <Grid
               flexDirection={"column"}

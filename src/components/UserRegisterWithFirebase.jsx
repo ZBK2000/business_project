@@ -10,6 +10,10 @@ export default function UserRegisterWithFirebase() {
   const [password, setPassword] = useState("");
   const [registrated, setRegistrated] = useState("");
   const [nameOfUser, setNameOfUser] = useState("");
+  const [existingUser, setExinstingUser] = useState(false)
+  const [existingEmail, setExinstingEmail] = useState(false)
+  const [rigthPassword, setRightPassword] = useState(false)
+  const [error, setError] = useState(false)
   const navigate = useNavigate();
   const { createUser } = UserAuth();
   const { user } = UserAuth();
@@ -23,6 +27,8 @@ export default function UserRegisterWithFirebase() {
   //this is the submit form for registering
   const createUserSubmit = async (event) => {
     event.preventDefault();
+ 
+    
     //first saving into mongodb and if thats successful we create the account with firebase
     try {
       const data = { user: nameOfUser, password: email };
@@ -36,6 +42,7 @@ export default function UserRegisterWithFirebase() {
       const accepted = await response.text();
       if (accepted === "successfully registrated") {
         const userInfo = await createUser(email, password, nameOfUser);
+        console.log(userInfo)
         if(userInfo){
           await fetch(`${import.meta.env.VITE_BACKEND_URL}/usersave`, {
             method: "POST",
@@ -45,14 +52,33 @@ export default function UserRegisterWithFirebase() {
             },
           });
         }
-      }
+      } else if (accepted === "username"){
+          setExinstingUser(true)
+          setExinstingEmail(false)
+          
+      } else if (accepted === "username and email"){
+        setExinstingUser(true)
+        setExinstingEmail(true)
+    } else if (accepted === "email"){
+      setExinstingUser(false)
+      setExinstingEmail(true)
+  }
       /*      else{
         console.log(accepted)
        } */
 
       setRegistrated(accepted);
     } catch (error) {
-      console.log("something went wrong");
+      if (error.code === "auth/weak-password"){
+        setExinstingEmail(false)
+        setExinstingUser(false)
+          setRightPassword(true)
+      } else{
+        setExinstingEmail(false)
+        setExinstingUser(false)
+        setError(true)
+      }
+     
     }
   };
   return (
@@ -68,6 +94,7 @@ export default function UserRegisterWithFirebase() {
               type="email"
               id="name"
               onChange={(e) => setEmail(e.target.value)}
+               style={{borderColor: existingEmail?"red":""}}
             />
             <label htmlFor="names">
               <Typography>Name:</Typography>{" "}
@@ -76,14 +103,16 @@ export default function UserRegisterWithFirebase() {
               type="text"
               id="names"
               onChange={(e) => setNameOfUser(e.target.value)}
+              style={{borderColor: existingUser?"red":""}}
             />
             <label htmlFor="price">
-              <Typography>Password:</Typography>{" "}
+              <Typography>Password: [least 6 character]</Typography>{" "}
             </label>
             <input
               type="password"
               id="price"
               onChange={(e) => setPassword(e.target.value)}
+              style={{borderColor: rigthPassword?"red":""}}
             />
             <button>
               <Typography>Create Account</Typography>{" "}
@@ -93,9 +122,29 @@ export default function UserRegisterWithFirebase() {
       ) : (
         ""
       )}
-      {user && (
+      {existingUser && existingEmail && (
         <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
-          successfully created
+          Email and username already used
+        </Typography>
+      )}
+      {existingUser && !existingEmail && (
+        <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
+          username already used
+        </Typography>
+      )}
+      {!existingUser && existingEmail && (
+        <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
+          Email already used
+        </Typography>
+      )}
+       {rigthPassword && (
+        <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
+          Not powerful enough password (please provide at least 6 characters)
+        </Typography>
+      )}
+      {error && (
+        <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
+          Some error occured please try again
         </Typography>
       )}
     </div>

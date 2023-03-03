@@ -8,7 +8,7 @@ export const AuthContextProvider = ({children}) =>{
     const [user, setUser] =useState({})
 
     const createUser = async (email, password, nameOfUser) => {
-        try {
+     
           // Create the user with email and password
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
@@ -19,10 +19,7 @@ export const AuthContextProvider = ({children}) =>{
         
       
           return userCredential.user;
-        } catch (error) {
-          console.error(error);
-          return null;
-        }
+       
       };
 
     useEffect(()=>{
