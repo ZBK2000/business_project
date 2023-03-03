@@ -18,8 +18,6 @@ export default function Help (){
         <Typography margin={"10px"}  variant="h6">NOTE! Since its only a beta/test website, you have to specifiy the max amount of people that can do that sport in a timeline, even if its free</Typography>
         <hr />
         <Typography margin={"10px"}  variant="h6">You can book one week ahead</Typography>
-        <hr />
-        <Typography margin={"10px"}  variant="h6">you can slide the images by clicking them (on the page of a sport location)</Typography>
         </Grid></Grid>
     )
 }
