@@ -258,7 +258,7 @@ export default function CertainTrack(props) {
             <Grid
               minWidth={"300px"}
               maxWidth={"400px"}
-              item
+              
               xs={12}
               sm={10}
               md={8}
