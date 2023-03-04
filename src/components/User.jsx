@@ -31,7 +31,7 @@ export default function User(props) {
 
     setRender(item);
   }
-
+ 
   //this is the function for navigating to a certain tracks page after pressing see button on the user page
   function see(item) {
     navigate(`/tracks/${item.split(":")[0]}`);
@@ -67,7 +67,7 @@ export default function User(props) {
         },
       });
       const data = await response.json();
-
+    
       setUserData({
         booked_tracks: data.booked_tracks.map(function (item) {
           return (
@@ -130,6 +130,79 @@ export default function User(props) {
     fetching_user();
   }, [render]);
 
+  if (!userData){
+    async function fetching_user() {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+        method: "POST",
+        body: JSON.stringify({ id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+     
+      setUserData({
+        booked_tracks: data.booked_tracks.map(function (item) {
+          return (
+            <Paper
+            key={item}
+              sx={{ margin: "10px" }}
+              className="booked-times"
+              elevation={6}
+            >
+              <h2 className="booked-times-h2">
+                <li>{item}</li>
+              </h2>
+              <Button
+                className="cancel-see"
+                onClick={() => cancel(item)}
+                variant="text"
+              >
+                X
+              </Button>
+              <Button
+                onClick={() => see(item)}
+                className="cancel-see"
+                variant="text"
+              >
+                See
+              </Button>
+            </Paper>
+          );
+        }),
+        tracks: data.tracks.map(function (item) {
+          return (
+            <Paper
+            key={item}
+              sx={{ margin: "10px" }}
+              className="booked-times"
+              elevation={6}
+            >
+              <h2 className="booked-times-h2">
+                <li>{item}</li>
+              </h2>
+              <Button
+                className="cancel-see"
+                onClick={() => deleteTrack(item)}
+                variant="text"
+              >
+                X
+              </Button>
+              <Button
+                onClick={() => see(item)}
+                className="cancel-see"
+                variant="text"
+              >
+                See
+              </Button>
+            </Paper>
+          );
+        }),
+      });
+    }
+    fetching_user();
+  }
+
   return (
     <div>
       {" "}
@@ -171,7 +244,7 @@ export default function User(props) {
             </>
           ) : (
             <div>
-              <Typography>error</Typography>
+              <Typography variant="h4">Loading...</Typography>
             </div>
           )}
         </Grid>

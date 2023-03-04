@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log(import.meta.env.VITE_BACKEND_URL)
+     
         const response = await fetch(import.meta.env.VITE_BACKEND_URL);
         const data = await response.json();
         setTracks(data);
@@ -38,6 +38,7 @@ function App() {
     }
     fetchData();
   }, [change]);
+ 
 
   return (
     <AuthContextProvider>
@@ -95,10 +96,11 @@ function App() {
               path="/user"
               element={
                 <ProtectdRoute>
-                  {" "}
+                  
                   <User
                     getDownData={success}
                     getDownData2={name}
+                    
                     getUpData={setChange}
                   />
                 </ProtectdRoute>
@@ -112,6 +114,7 @@ function App() {
       </div>
     </AuthContextProvider>
   );
+  
 }
 
 export default App;

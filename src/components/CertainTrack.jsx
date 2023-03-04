@@ -41,7 +41,7 @@ export default function CertainTrack(props) {
   const [lastClickedId, setLastClickedId] = useState(null);
   const [errorhandler, setErrorHandler] = useState("");
   const [expanded, setExpanded] = useState("");
-
+ 
   //declaring the function, which will be activated when someone join to a timeline
   const handleClick = async (id) => {
     //for checking if the user already in it
@@ -120,14 +120,19 @@ export default function CertainTrack(props) {
         break;
       }
     }
-    const new_slots = Array(parseInt(slot_number)).fill("");
-
+    const new_slots = Array(slot_number).fill("");
+    
     useEffect(() => {
+      
       try {
+        if(props.allTrack && trackNumber){
+         
         if (
           //if its a new day which wasnt declared before we will initialize it here otherwise just retrive the specified date data
+          
           typeof props.allTrack[trackNumber].booked[rightDay] === "undefined"
         ) {
+          
           fetch(`${import.meta.env.VITE_BACKEND_URL}/newDay`, {
             method: "POST",
             body: JSON.stringify({
@@ -177,19 +182,20 @@ export default function CertainTrack(props) {
               "Content-Type": "application/json",
             },
           })
-            .then((response) => response.json)
+            .then((response) => response.json())
             .then((data) => setH3s(data.booked[rightDay]));
         } else {
           setH3s(props.allTrack[trackNumber].booked[rightDay]);
         }
-      } catch (error) {
+      }} catch (error) {
         setErrorHandler("x");
         console.log(error);
       }
-    }, [rightDay, props.allTrack[trackNumber].booked[rightDay]]);
-  } catch (error) {
-    console.log(error);
-  }
+    }, [rightDay, props.allTrack[trackNumber]]);}
+    catch (error) {
+      console.log(error);
+    }
+  
 
   //here we make the image slider which can be activated by clicking
   let currentSlide = 0;
@@ -252,7 +258,7 @@ export default function CertainTrack(props) {
             <Grid
               minWidth={"300px"}
               maxWidth={"400px"}
-              
+              item
               xs={12}
               sm={10}
               md={8}
@@ -281,6 +287,7 @@ export default function CertainTrack(props) {
               className="desc-and-rating"
               minWidth={"300px"}
               maxWidth={"350px"}
+              item
               xs={12}
               sm={10}
               md={8}
@@ -382,7 +389,7 @@ export default function CertainTrack(props) {
                     timeout="auto"
                   >
                     {h3.slots.map((slot) => (
-                      <li className="slots-list-element">{slot}</li>
+                      <li  className="slots-list-element">{slot}</li>
                     ))}
                   </Collapse>
                 </Paper>
