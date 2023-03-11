@@ -50,6 +50,17 @@ export default function register(props) {
 
   //this is the submit function for registering a track
   const registerTrack = async (event) => {
+    event.preventDefault();
+    let latAndLong
+    const response_loc = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${import.meta.env.VITE_GOOGLE_MAPS_API}`);
+      const data_loc = await response_loc.json();
+      
+  
+      if (data_loc.results.length > 0) {
+        const location = data_loc.results[0].geometry.location;
+        latAndLong = [location.lat, location.lng ];
+      }
+
     const slot_places = Array(parseInt(slots)).fill("");
 
     const avalaibleTimes = avalaibleTimes_initial.map((item) => {
@@ -63,7 +74,7 @@ export default function register(props) {
       avalaibleTimesFor7Days[key] = avalaibleTimes;
     });
 
-    event.preventDefault();
+    
 
     let formData = new FormData();
     for (let i = 0; i < img.length; i++) {
@@ -77,6 +88,7 @@ export default function register(props) {
         description,
         slot_number: slots,
         booked: avalaibleTimesFor7Days /* next7Days, */,
+        latAndLong
       },
       user: userName,
     };
@@ -96,11 +108,16 @@ export default function register(props) {
       body: formData,
     });
     const allTrack = await res.json();
+    
+    
+      
+  
     if (allTrack) {
       props.getUpData(allTrack);
       props.getUpData2(slots);
       navigate("/");
     }
+
   };
 
   return (

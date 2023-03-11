@@ -18,13 +18,68 @@ import { useTheme } from "@emotion/react";
 import { UserAuth } from "../context/AuthContext";
 import { Grid } from "@mui/material";
 import SimpleMap from "./GoogleMapNOTUSED";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useMemo } from "react";
+import Sports from "./sportIcons";
+import MapContainer from "./GoogleMapNOTUSED";
+import { Password } from "@mui/icons-material";
+
 export default function MainPage(props) {
   //declaring states and consts
   const { user } = UserAuth();
+  const nameOfUser = user ? user.displayName : "";
   const theme = useTheme();
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [filterItems, setFilterItems] = useState("");
+  const [heart, setHeart] = useState()
+  //let heartList= useMemo(()=>[], [])
+  const [heartList, setHeartList] = useState([])
+  const [favouriteData, setfavouriteData] = useState([]) 
+  const [locations, setLocations] = useState([])
+  const [mapView, setMapView] = useState(false)
+  
+  useEffect(()=>{
+    async function fetchFavourites(){
+      const fav = await fetch(`${import.meta.env.VITE_BACKEND_URL}/favourites`, {
+        method: "POST",
+        body: JSON.stringify({user: nameOfUser, change: false}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const favData = await fav.json()
+      
+      setHeartList(favData)
+    }
+    if(nameOfUser){
+    fetchFavourites()}
+  }, [nameOfUser])
+  
+  
+   async function changeHeart (event, name){
+    event.stopPropagation();
+    if (heartList.includes(name)){
+      let indexToRemove = heartList.indexOf(name);
+      if (indexToRemove !== -1) {
+        heartList.splice(indexToRemove, 1);
+      }
+    } else {
+    heartList.push(name)}
+    setHeart(!heart)
+    
+  
+  const fav = await fetch(`${import.meta.env.VITE_BACKEND_URL}/favourites`, {
+    method: "POST",
+    body: JSON.stringify({user: nameOfUser, change: true, trackName: name}),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const favData = await fav.json()
+  setHeartList(favData)
+}
 
   //to navigate to the track if loggid in otherwise to login page
   function reNavigate(item) {
@@ -35,17 +90,41 @@ export default function MainPage(props) {
     }
   }
 
+  function mapViewFunc() {
+   setMapView(prev => !prev)
+  }
+
   //this section for the filtering based on the uplifted data from the filter component
-  let filteredData = [];
+  
+  //let filteredData = useMemo(()=>[], []);
+  let filteredData =[]
+ let favOrAll=useMemo(()=>[], [])
+ 
+
+  function showFavourite(){
+    if (favouriteData.length !== 0) {setfavouriteData([])}
+    else{
+      let tempList = []
+    props.allTrack.forEach((item)=>{
+      if(heartList.includes(item.name)){
+        tempList.push(item)
+        
+      }})
+      
+      setfavouriteData(tempList)
+    }
+  }
+  
 
   if (filterItems) {
-    props.allTrack.forEach((item) => {
+    favOrAll = (favouriteData.length === 0 ? props.allTrack: favouriteData)
+    favOrAll.forEach((item) => {
       const shouldFilterLocation = filterItems[2] !== "";
       const shouldFilterName = filterItems[3] !== "";
 
       if (
-        (!shouldFilterLocation || item.location === filterItems[2]) &&
-        (!shouldFilterName || item.name === filterItems[3]) &&
+        (!shouldFilterLocation || item.location.includes(filterItems[2])) &&
+        (!shouldFilterName || item.name.includes(filterItems[3])) &&
         item.slot_number < filterItems[0][1] &&
         item.slot_number > filterItems[0][0] &&
         item.price < filterItems[1][1] &&
@@ -65,9 +144,20 @@ export default function MainPage(props) {
       }
     });
   } else {
-    filteredData = props.allTrack;
+    
+    favOrAll = (favouriteData.length === 0 ? props.allTrack: favouriteData)
+    
+    filteredData = favOrAll;
   }
-
+  let allLocation = []
+  for (let location in filteredData){
+    try {
+      allLocation.push([filteredData[location].latAndLong, filteredData[location].name])
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
   const newTracks = filteredData.map(function (item) {
     return (
       <Grid
@@ -82,10 +172,13 @@ export default function MainPage(props) {
       >
         <Card
           className="tracks"
-          sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto" }}
+          sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative" }}
           onClick={() => reNavigate(item)}
           key={item.name}
         >
+          {heartList.includes(item.name) ?<FavoriteIcon  onClick={(e)=>changeHeart(e, item.name)} sx={{position:"absolute", color:"#fb7b7b", left:"85%", top:"5%"}}/>:
+          <FavoriteBorderIcon onClick={(e)=>changeHeart(e, item.name)} sx={{position:"absolute",color:"#fb7b7b", left:"85%", top:"5%"}}/>}
+          
           <CardMedia
             component="img"
             sx={{ height: 140 }}
@@ -93,6 +186,7 @@ export default function MainPage(props) {
             title=""
           />
           <CardContent>
+          
             <Typography gutterBottom variant="h5" component="div">
               {item.name}
             </Typography>
@@ -111,6 +205,8 @@ export default function MainPage(props) {
       </Grid>
     );
   });
+
+  
   return (
     <div>
       <Header
@@ -118,16 +214,20 @@ export default function MainPage(props) {
         success={props.getDownData}
         name={props.getDownData2}
       />
-
+      <Grid display={"flex"} alignItems={"center"}>
+      <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={showFavourite}>{favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
+      <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={mapViewFunc}>{!mapView?"Show map view":"Show detailed view"}</Button>
+      {/* <Sports/> */}
+      </Grid>
       <Filter getUpData={setFilterItems} />
-      <Grid
+      {!mapView? <Grid
         sx={{ marginLeft: "0px", marginRight: "10px", width: 1 }}
         container
         spacing={2}
         className="container"
       >
         {newTracks}
-      </Grid>
+      </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
       {/* 
             <SimpleMap locations={ [
     { lat: 47.497912, lng: 19.040235 }, // Budapest Parliament
@@ -138,6 +238,7 @@ export default function MainPage(props) {
   ]
   }/> 
         */}
+        
     </div>
   );
 }

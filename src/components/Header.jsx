@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { UserAuth } from "../context/AuthContext";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Fab from '@mui/material/Fab';
 ;
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -90,6 +91,8 @@ export default function Header (props){
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {props.title == "Fantastic business"?"": props.title}
             </Typography>
+        {/*     <Fab >Show map</Fab>
+            <Fab>Show Favourites</Fab> */}
             <Box>
             <Button sx={{ display: { xs: 'none', md: 'inline', marginTop:"5px" }}}  onClick={navigateToHelp} color="inherit"> <HelpOutlineIcon /></Button>
             {user ?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToLogin} color="inherit">LOGIN</Button>}

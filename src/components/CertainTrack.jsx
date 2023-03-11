@@ -14,6 +14,7 @@ import SimpleMap from "./GoogleMapNOTUSED";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import RatingSlide from "./ratingSlider";
 
 export default function CertainTrack(props) {
   //declaring states and consts
@@ -262,8 +263,8 @@ export default function CertainTrack(props) {
               xs={12}
               sm={10}
               md={8}
-              lg={5}
-              xl={3}
+              lg={8}
+              xl={4}
               className="slider"
             >
 
@@ -340,6 +341,9 @@ export default function CertainTrack(props) {
          
               </Box>
             </Grid>
+               
+              <RatingSlide title={id}/>
+              
           </Grid>
 
           <Grid container spacing={2} className=" contanier booking-timelines">

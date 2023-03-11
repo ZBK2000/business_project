@@ -13,6 +13,7 @@ export default function User(props) {
   const id = user ? user.displayName : "";
   const [userData, setUserData] = useState(null);
   const [render, setRender] = useState("ha");
+  const [emailAndUser, setEmailAndUser] = useState(null)
 
   //this is the function for cancelling boooked times on the userpage
   async function cancel(item) {
@@ -126,6 +127,7 @@ export default function User(props) {
           );
         }),
       });
+      setEmailAndUser([data.password, data.user])
     }
     fetching_user();
   }, [render]);
@@ -199,13 +201,14 @@ export default function User(props) {
           );
         }),
       });
+      setEmailAndUser([data.password, data.user])
     }
     fetching_user();
   }
 
   return (
     <div>
-      {" "}
+     
       <Header
         title="account info"
         success={props.getDownData}
@@ -216,15 +219,39 @@ export default function User(props) {
         margin={"15px"}
         width={"90%"}
         display={"flex"}
-        flexDirection={"column"}
+        flexDirection={"row"}
+        gap={3}
       >
+      <Grid sx={{
+            backgroundColor: "#ebebeb",
+            borderRadius: "10px",
+            padding: "10px",
+            
+          }}
+          item
+          xs={12}
+        sm={5}
+        
+        xl={4}
+
+          maxWidth={"500px"} >
+          
+        <Typography variant="h5" margin={"10px"}>Your email: {emailAndUser? emailAndUser[0]: "cannot get"}</Typography>
+        <Typography variant="h5" margin={"10px"}>Your username: {emailAndUser? emailAndUser[1]: "cannot get"}</Typography>
+        <Button variant="conatained"  margin={"10px"}>Change password? [not working yet]</Button>
+      </Grid>
         <Grid
           sx={{
             backgroundColor: "#ebebeb",
             borderRadius: "10px",
             padding: "10px",
+            
           }}
           item
+          xs={12}
+        sm={5}
+    
+        xl={4}
           maxWidth={"500px"}
         >
           <Box display={"flex"} justifyContent={"center"}>
