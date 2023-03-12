@@ -45,7 +45,7 @@ export default function LoginWithFirebase(props) {
     props.getUpData(accepted);
     if (accepted) {
       props.getUpData2(accepted.user);
-      if (name != "home") {
+      if (name != "home" && name != "favourite") {
         navigate(`/tracks/${name}`);
       }
     }
@@ -68,9 +68,16 @@ export default function LoginWithFirebase(props) {
       />
       {!user ? (
         <div>
-          {name != "home" ? (
+          {name != "home" && name != "favourite" ? (
             <Typography margin={"15px"}>
               Please log in to see the page of that track!
+            </Typography>
+          ) : (
+            ""
+          )}
+          {name == "favourite" ? (
+            <Typography margin={"15px"}>
+              You have to log in to save favourite tracks
             </Typography>
           ) : (
             ""

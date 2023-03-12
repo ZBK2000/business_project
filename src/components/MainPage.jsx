@@ -60,25 +60,30 @@ export default function MainPage(props) {
   
    async function changeHeart (event, name){
     event.stopPropagation();
-    if (heartList.includes(name)){
-      let indexToRemove = heartList.indexOf(name);
-      if (indexToRemove !== -1) {
-        heartList.splice(indexToRemove, 1);
-      }
-    } else {
-    heartList.push(name)}
-    setHeart(!heart)
+    if (user) {
+      if (heartList.includes(name)){
+        let indexToRemove = heartList.indexOf(name);
+        if (indexToRemove !== -1) {
+          heartList.splice(indexToRemove, 1);
+        }
+      } else {
+      heartList.push(name)}
+      setHeart(!heart)
+      
     
-  
-  const fav = await fetch(`${import.meta.env.VITE_BACKEND_URL}/favourites`, {
-    method: "POST",
-    body: JSON.stringify({user: nameOfUser, change: true, trackName: name}),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const favData = await fav.json()
-  setHeartList(favData)
+    const fav = await fetch(`${import.meta.env.VITE_BACKEND_URL}/favourites`, {
+      method: "POST",
+      body: JSON.stringify({user: nameOfUser, change: true, trackName: name}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const favData = await fav.json()
+    setHeartList(favData)
+    } else {
+      navigate(`/login/favourite`);
+    }
+    
 }
 
   //to navigate to the track if loggid in otherwise to login page
