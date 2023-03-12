@@ -125,10 +125,10 @@ export default function MainPage(props) {
       if (
         (!shouldFilterLocation || item.location.toLowerCase().includes(filterItems[2].toLowerCase())) &&
         (!shouldFilterName || item.name.toLowerCase().includes(filterItems[3].toLowerCase())) &&
-        item.slot_number < filterItems[0][1] &&
-        item.slot_number > filterItems[0][0] &&
-        item.price < filterItems[1][1] &&
-        item.price > filterItems[1][0]
+        item.slot_number <= filterItems[0][1] &&
+        item.slot_number >= filterItems[0][0] &&
+        item.price <= filterItems[1][1] &&
+        item.price >= filterItems[1][0]
       ) {
         filteredData.push(item);
       } else if (
