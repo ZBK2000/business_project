@@ -123,8 +123,8 @@ export default function MainPage(props) {
       const shouldFilterName = filterItems[3] !== "";
 
       if (
-        (!shouldFilterLocation || item.location.includes(filterItems[2])) &&
-        (!shouldFilterName || item.name.includes(filterItems[3])) &&
+        (!shouldFilterLocation || item.location.toLowerCase().includes(filterItems[2].toLowerCase())) &&
+        (!shouldFilterName || item.name.toLowerCase().includes(filterItems[3].toLowerCase())) &&
         item.slot_number < filterItems[0][1] &&
         item.slot_number > filterItems[0][0] &&
         item.price < filterItems[1][1] &&
@@ -172,7 +172,7 @@ export default function MainPage(props) {
       >
         <Card
           className="tracks"
-          sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative" }}
+          sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
           onClick={() => reNavigate(item)}
           key={item.name}
         >
@@ -191,7 +191,7 @@ export default function MainPage(props) {
               {item.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {item.location}
+              {item?.city? item.city : item.location}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {item.price}FT

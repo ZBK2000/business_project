@@ -11,6 +11,7 @@ export default function register(props) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
   const [description, setDescription] = useState("");
   const [slots, setSlots] = useState(4);
   const [img, setImg] = useState("");
@@ -52,12 +53,14 @@ export default function register(props) {
   const registerTrack = async (event) => {
     event.preventDefault();
     let latAndLong
+    
     const response_loc = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${import.meta.env.VITE_GOOGLE_MAPS_API}`);
       const data_loc = await response_loc.json();
       
   
       if (data_loc.results.length > 0) {
         const location = data_loc.results[0].geometry.location;
+        
         latAndLong = [location.lat, location.lng ];
       }
 
@@ -84,7 +87,8 @@ export default function register(props) {
       track: {
         name,
         price,
-        location,
+        location:data_loc?.results[0]?.formatted_address ? data_loc.results[0].formatted_address: location,
+        city,
         description,
         slot_number: slots,
         booked: avalaibleTimesFor7Days /* next7Days, */,
@@ -145,8 +149,16 @@ export default function register(props) {
           id="price"
           onChange={(e) => setPrice(e.target.value)}
         />
+         <label htmlFor="City">
+          <Typography>City:</Typography>
+        </label>
+        <input
+          type="text"
+          id="City"
+          onChange={(e) => setCity(e.target.value)}
+        />
         <label htmlFor="location">
-          <Typography>Location:</Typography>
+          <Typography>Exact Address:</Typography>
         </label>
         <input
           type="text"

@@ -110,6 +110,7 @@ export default function CertainTrack(props) {
   let trackNumber;
   let img_number;
   let slot_number;
+  let location
   try {
     for (let track in props.allTrack) {
       if (props.allTrack[track].name == id) {
@@ -117,6 +118,7 @@ export default function CertainTrack(props) {
         nameOfTrack = props.allTrack[track].name;
         img_number = props.allTrack[track].img_urls.length;
         slot_number = props.allTrack[track].slot_number;
+        location = props.allTrack[track].location
         trackNumber = track;
         break;
       }
@@ -316,7 +318,7 @@ export default function CertainTrack(props) {
                       overflowWrap: "anywhere",
                     }}
                   >
-                    thewebpage@ofthissite.com
+                    {location}
                   </Typography>
                 <Box
                   sx={{

@@ -32,6 +32,7 @@ function MapContainer(props) {
     const response_loc = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${center}&key=${import.meta.env.VITE_GOOGLE_MAPS_API}`);
       const data_loc = await response_loc.json();
       
+      
   
       if (data_loc.results.length > 0) {
         const location = data_loc.results[0].geometry.location;
@@ -112,6 +113,7 @@ function MapContainer(props) {
        {hoveredMarker && (
           <InfoWindow
             position={{lat: hoveredMarker.lat, lng: hoveredMarker.lng }}
+            
            
           >
            <Grid
@@ -122,11 +124,12 @@ function MapContainer(props) {
       md={4}
       lg={3}
       xl={2.2}
-      width={"100%"}
+      width={"250px"}
       height={"100%"}
     >
       <Card
         className="tracks"
+        width={"200px"}
         sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative" }}
         onClick={() => navigateToTrack(hoveredTrack.name)}
         key={hoveredTrack.name}
