@@ -1,5 +1,5 @@
 import Header from "./Header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import Next7DaysDropdown from "./NextSevenDay";
 import Footer from "./FooterNOTUSED";
@@ -18,6 +18,7 @@ import RatingSlide from "./ratingSlider";
 
 export default function CertainTrack(props) {
   //declaring states and consts
+  const navigate = useNavigate()
   const today = new Date();
   const nextDay = new Date(today.getTime());
   nextDay.setDate(today.getDate());
@@ -244,6 +245,24 @@ export default function CertainTrack(props) {
     }
   };
 
+   async function generateRandomLinkPath(trackName, slots, loc, time, date, user) {
+    slots = Array(slots).fill("")
+    slots[slots.indexOf("")] = user
+    const dataForLink = {trackName, slots, location: loc, time: `${date} ${time}`,user  }
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/customLink`, {
+      method: "POST",
+      body: JSON.stringify(dataForLink),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const linkData = await response.json();
+    if (linkData.msg === "success"){
+
+      navigate(`/tracks/${trackName}/${linkData.linkId}`)
+    }
+  }
+
   return (
     <div>
       <Header title={id} success={props.getDownData} name={nameOfUser} />
@@ -379,8 +398,17 @@ export default function CertainTrack(props) {
                         h3.color === "red" ? () => {} : () => handleClick(h3.id)
                       }
                     >
+                      
                       <AddIcon />
                     </Fab>
+                    <Fab
+                      style={{ width: "36px", height: "20px", margin: "3px" }}
+                      color="primary"
+                      aria-label="add"
+                      onClick={()=>generateRandomLinkPath(id, slot_number, location, h3.text, rightDay, nameOfUser)}
+                      
+                      
+                    >link</Fab>
                   </Box>
                   <ExpandMore
                     expand={expanded == h3.id ? true : false}

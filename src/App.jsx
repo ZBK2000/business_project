@@ -12,6 +12,7 @@ import LoginWithFirebase from "./components/loginWithFirebase";
 import ProtectdRoute from "./components/ProtectedRoute";
 import NeedToLogIn from "./components/NeedToLogIn";
 import Help from "./components/Help";
+import CustomLink from "./components/CustomLink";
 
 
 
@@ -82,7 +83,7 @@ function App() {
                 </ProtectdRoute>
               }
             />
-            <Route path="/signup" element={<UserRegisterWithFirebase />} />
+            <Route path="/signup/:name" element={<UserRegisterWithFirebase />} />
             <Route
               path="/login/:name"
               element={
@@ -109,6 +110,13 @@ function App() {
 
             <Route path="/needtologin" element={<NeedToLogIn />} />
             <Route path="/help" element={<Help />} />
+            <Route
+              path="/tracks/:id/:hashcode"
+              element={
+                <CustomLink
+            
+                />}/>
+
           </Routes>
         </div>
       </div>

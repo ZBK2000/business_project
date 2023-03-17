@@ -45,9 +45,9 @@ export default function LoginWithFirebase(props) {
     props.getUpData(accepted);
     if (accepted) {
       props.getUpData2(accepted.user);
-      if (name != "home" && name != "favourite") {
+      if (name != "home" && name != "favourite" ) {
         navigate(`/tracks/${name}`);
-      }
+      } 
     }
   } catch (error) {
     console.log(error)

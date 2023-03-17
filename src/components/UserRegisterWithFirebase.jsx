@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function UserRegisterWithFirebase() {
   //declaring states
@@ -18,6 +18,8 @@ export default function UserRegisterWithFirebase() {
   const { createUser } = UserAuth();
   const { user } = UserAuth();
   const { logout } = UserAuth();
+
+  const {name} = useParams()
   
   //this is for simply to renavige if someone wants to enter this enpoint regardless they are loggid in
   if (user) {
@@ -51,6 +53,9 @@ export default function UserRegisterWithFirebase() {
               "Content-Type": "application/json",
             },
           });
+          if(name){
+            navigate(`/tracks/${name}`)
+          }
         }
       } else if (accepted === "username"){
           setExinstingUser(true)
@@ -80,6 +85,7 @@ export default function UserRegisterWithFirebase() {
       }
      
     }
+    
   };
   return (
     <div>

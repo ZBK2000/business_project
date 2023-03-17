@@ -14,6 +14,7 @@ export default function User(props) {
   const [userData, setUserData] = useState(null);
   const [render, setRender] = useState("ha");
   const [emailAndUser, setEmailAndUser] = useState(null)
+  const [links, setLinks] = useState([])
 
   //this is the function for cancelling boooked times on the userpage
   async function cancel(item) {
@@ -128,6 +129,12 @@ export default function User(props) {
         }),
       });
       setEmailAndUser([data.password, data.user])
+      try {
+        setLinks(data.customLinks)
+      } catch (error) {
+        console.log(error)
+      }
+      
     }
     fetching_user();
   }, [render]);
@@ -202,10 +209,15 @@ export default function User(props) {
         }),
       });
       setEmailAndUser([data.password, data.user])
+      try {
+        setLinks(data.customLinks)
+      } catch (error) {
+        console.log(error)
+      }
     }
     fetching_user();
   }
-
+   console.log(links)
   return (
     <div>
      
@@ -232,7 +244,7 @@ export default function User(props) {
           xs={12}
         sm={5}
         
-        xl={4}
+        xl={3.5}
 
           maxWidth={"500px"} >
           
@@ -268,6 +280,63 @@ export default function User(props) {
               </Typography>
               {userData.booked_tracks}
               <div></div>
+            </>
+          ) : (
+            <div>
+              <Typography variant="h4">Loading...</Typography>
+            </div>
+          )}
+        </Grid>
+
+        <Grid
+          sx={{
+            backgroundColor: "#ebebeb",
+            borderRadius: "10px",
+            padding: "10px",
+            
+          }}
+          item
+          xs={12}
+        sm={5}
+    
+        xl={4}
+          maxWidth={"500px"}
+        >
+          <Box display={"flex"} justifyContent={"center"}>
+            <Typography sx={{ marginBottom: "15px" }} variant="h4">
+              Custom Links:
+            </Typography>
+          </Box>
+          {links ? (
+            <>
+              {links.map((link)=>{
+                return(
+                 <Paper
+                 key={link}
+                   sx={{ margin: "10px" }}
+                   className="booked-times"
+                   elevation={6}
+                 >
+                   <h2 className="booked-times-h2">
+                     <li>{link[1]}:{link[2]}</li>
+                   </h2>
+                   <Button
+                     className="cancel-see"
+                     /* onClick={() => deleteTrack(item)} */
+                     variant="text"
+                   >
+                     X
+                   </Button>
+                   <Button
+                     onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                     className="cancel-see"
+                     variant="text"
+                   >
+                     See
+                   </Button>
+                 </Paper>)
+              })}
+             
             </>
           ) : (
             <div>
