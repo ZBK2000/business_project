@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 
 const CountdownTimer = ({ targetDateStr }) => {
   const [countdown, setCountdown] = useState({});
-  
+
   useEffect(() => {
-    const [dateStr, timeStr] = targetDateStr.split(" ");
-    const timeStrWithColons = timeStr.split("-")[0] + ":00";
-    const targetDate = new Date(`${dateStr} ${timeStrWithColons}`).getTime();
-
+    const newTargetDate =  targetDateStr.split(" ")[0] + targetDateStr.split(" ")[1].split("-")
+    const targetDate = moment(newTargetDate, "YYYY-MM-DD HH");
     const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
+      const now = moment();
+      const duration = moment.duration(targetDate.diff(now));
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setCountdown({ days, hours, minutes, seconds });
+      setCountdown({
+        days: duration.days(),
+        hours: duration.hours(),
+        minutes: duration.minutes(),
+        seconds: duration.seconds(),
+      });
     }, 1000);
 
     return () => clearInterval(interval);
