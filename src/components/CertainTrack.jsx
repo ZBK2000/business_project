@@ -379,7 +379,7 @@ export default function CertainTrack(props) {
                 md={3}
                 lg={2}
                 xl={1.4}
-                alignItems={"center"}
+                alignItems={"start"}
                 display={"flex"}
                 justifyContent={"center"}
               
