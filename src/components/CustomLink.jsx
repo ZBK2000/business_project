@@ -16,6 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
    const encodedString = encodeURIComponent(`${id}/${hashcode}`);
    const navigate = useNavigate()
     const [linkData, setLinkData] = useState({})
+    
    const {user} = UserAuth()
     console.log(id, hashcode)
 
@@ -90,6 +91,19 @@ import PersonIcon from '@mui/icons-material/Person';
     </ListItem>
   )): ""
   console.log(liSlotsList)
+  let dateObj
+  let now
+    if(linkData?.time){
+     const baseDate = linkData.time.split(" ")[0] + " "+linkData.time.split(" ")[1].split("-")[0]
+     const [date, time] = baseDate.split(' ');
+     const [year, month, day] = date.split('-');
+     const [hour] = time.split(':');
+      dateObj = new Date(year, month - 1, day, hour);
+       now = new Date();
+      console.log(dateObj,now)
+    
+    } 
+  
   return (<Grid>
     <Header title="Custom Group"/>
     <Grid sx={{ 
@@ -121,14 +135,32 @@ import PersonIcon from '@mui/icons-material/Person';
         <Typography variant="h6" component="h1" gutterBottom >
           Location: {linkData.location}
         </Typography>
-        {user? <Box display={"flex"} gap={3}> <Button onClick={join}  variant="contained" color="primary" sx={{ width: '100px' }}>
-          {linkData?.slots ? linkData.slots.includes(user.displayName) ? "Leave" : "Join" : "error"}
-        </Button>  {linkData?.time && <CountdownTimer targetDateStr={linkData.time}/>}  </Box>: <Box> <Button variant="contained" onClick={()=>navigate(`/login/${encodedString}`)} color="primary" sx={{ width: '100px' }}>
-          Log in
-        </Button> <Button onClick={()=>navigate(`/signup/${encodedString}`)} variant="contained" color="primary" sx={{ width: '100px' }}>
-          sign up
-        </Button> {linkData?.time && <CountdownTimer targetDateStr={linkData.time}/>} </Box>
-        }
+        {dateObj >= now ? (
+  user ? (
+    <Box display={"flex"} gap={3}>
+      <Button onClick={join} variant="contained" color="primary" sx={{ width: '100px' }}>
+        {linkData?.slots ? (linkData.slots.includes(user.displayName) ? "Leave" : "Join") : "error"}
+      </Button>
+      {linkData?.time && <CountdownTimer targetDateStr={linkData.time} />}
+    </Box>
+  ) : (
+    <Box>
+      <Button variant="contained" onClick={() => navigate(`/login/${encodedString}`)} color="primary" sx={{ width: '100px' }}>
+        Log in
+      </Button>
+      <Button onClick={() => navigate(`/signup/${encodedString}`)} variant="contained" color="primary" sx={{ width: '100px' }}>
+        sign up
+      </Button>
+      {linkData?.time && <CountdownTimer targetDateStr={linkData.time} />}
+    </Box>
+  )
+) : (
+  <Typography variant={"h5"}>
+    Sorry, this activity already happened, so you cannot join anymore. If you participated in it, We hope it was fun!
+  </Typography>
+)}
+
+        
         <List sx={{ listStyle: 'none', margin: '0', padding: '0' }}>
           { liSlotsList }
         </List>
