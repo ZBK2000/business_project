@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import { Fab, Grid, IconButton, Typography } from "@mui/material";
+import { Fab, Grid, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { UserAuth } from "../context/AuthContext";
 import SimpleMap from "./GoogleMapNOTUSED";
@@ -15,6 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RatingSlide from "./ratingSlider";
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function CertainTrack(props) {
   //declaring states and consts
@@ -379,6 +380,8 @@ export default function CertainTrack(props) {
                 lg={2}
                 xl={1.4}
                 alignItems={"center"}
+                display={"flex"}
+                justifyContent={"center"}
               
               >
                 <Paper elevation={3} className="timeline-div">
@@ -422,9 +425,14 @@ export default function CertainTrack(props) {
                     in={expanded == h3.id ? true : false}
                     timeout="auto"
                   >
+                    <List>
                     {h3.slots.map((slot) => (
-                      <li  className="slots-list-element">{slot}</li>
+                      <ListItem sx={{margin:"0px"}}  className="slots-list-element">
+                        <PersonIcon/>
+                        <ListItemText sx={{margin:"0px 10px"}}>{slot}</ListItemText>
+                        </ListItem>
                     ))}
+                    </List>
                   </Collapse>
                 </Paper>
               </Grid>
