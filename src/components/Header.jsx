@@ -52,7 +52,7 @@ export default function Header (props){
     }
 
     function navigateToSignUp(){
-      navigate("/signup")
+      navigate("/signup/home")
     }
 
     function navigateToMain(){

@@ -53,7 +53,7 @@ export default function UserRegisterWithFirebase() {
               "Content-Type": "application/json",
             },
           });
-          if(name){
+          if(name != "home"){
             navigate(`/tracks/${name}`)
           }
         }
