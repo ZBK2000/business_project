@@ -82,8 +82,8 @@ export default function User(props) {
           const time_interval = date_components[1];
 
           // Extract the start time and end time from the time interval
-          const [start_time, end_time] = time_interval.split("-").map(Number);
-
+          let [start_time, end_time] = time_interval.split("-").map(Number);
+          start_time = String(start_time).padStart(2, '0');
           // Convert the date and time components to Date objects
           const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
           const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
@@ -181,8 +181,8 @@ export default function User(props) {
           const time_interval = date_components[1];
 
           // Extract the start time and end time from the time interval
-          const [start_time, end_time] = time_interval.split("-").map(Number);
-
+          let [start_time, end_time] = time_interval.split("-").map(Number);
+          start_time = String(start_time).padStart(2, '0');
           // Convert the date and time components to Date objects
           const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
           const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
@@ -358,13 +358,13 @@ export default function User(props) {
           const time_interval = date_components[1];
 
           // Extract the start time and end time from the time interval
-          const [start_time, end_time] = time_interval.split("-").map(Number);
-
+          let [start_time, end_time] = time_interval.split("-").map(Number);
+           start_time = String(start_time).padStart(2, '0');
           // Convert the date and time components to Date objects
           const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
           const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
           const current_datetime = new Date();
-          console.log(activity_start_datetime,current_datetime)
+          console.log(activity_start_datetime,current_datetime, start_time)
           // Compare the activity start time with the current time
           if (activity_start_datetime >= current_datetime) {
             console.log(true); // Activity has started

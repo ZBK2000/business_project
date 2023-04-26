@@ -65,7 +65,7 @@ import PersonIcon from '@mui/icons-material/Person';
             "Content-Type": "application/json",
           },
       })
-        const newData = await response2.json()
+        const newData = await response.json()
    }
    useEffect(()=>{
     async function getLink(){
