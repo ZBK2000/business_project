@@ -18,6 +18,7 @@ import RatingSlide from "./ratingSlider";
 import PersonIcon from '@mui/icons-material/Person';
 import Button from "@mui/material/Button";
 import PrivateTeams from "./privateTeams";
+import NoFreePlace from "./NoFreePlace";
 
 export default function CertainTrack(props) {
   //declaring states and consts
@@ -48,6 +49,7 @@ export default function CertainTrack(props) {
   const [expanded, setExpanded] = useState("");
   const [subTrack, setSubTrack] = useState("")
   const [privateTeamIndicator, setPrivateTeamIndicator] = useState(false)
+  const [isFreePlace, setIsFreePlace] = useState(true)
  
   //declaring the function, which will be activated when someone join to a timeline
   const handleClick = async (id, subTrackName) => {
@@ -102,6 +104,9 @@ export default function CertainTrack(props) {
         },
       });
       const trackData = await response.json();
+      if (response.status ===403){
+          setIsFreePlace(false)
+      }
       try {
         setH3s(trackData.booked[subTrackName][rightDay]);
         props.getUpData(newh3s);
@@ -489,6 +494,7 @@ export default function CertainTrack(props) {
       )}
 
       {privateTeamIndicator&&<PrivateTeams indicator={setPrivateTeamIndicator}></PrivateTeams>}
+      {!isFreePlace&&<NoFreePlace indicator={setIsFreePlace}></NoFreePlace>}
     </div>
   );
 }
