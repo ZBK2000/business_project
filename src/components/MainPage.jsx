@@ -203,7 +203,7 @@ export default function MainPage(props) {
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
-              {item.slot_number}P
+              {item.slot_number.join('P, ')}P
             </Typography>
           </CardContent>
         </Card>
@@ -222,7 +222,7 @@ export default function MainPage(props) {
       <Grid display={"flex"} alignItems={"center"}>
       <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={showFavourite}>{favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
       <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={mapViewFunc}>{!mapView?"Show map view":"Show detailed view"}</Button>
-      {/* <Sports/> */}
+       {/*<Sports/> */}
       </Grid>
       <Filter getUpData={setFilterItems} />
       {!mapView? <Grid
@@ -243,7 +243,6 @@ export default function MainPage(props) {
   ]
   }/> 
         */}
-        
     </div>
   );
 }

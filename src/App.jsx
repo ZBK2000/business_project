@@ -13,6 +13,7 @@ import ProtectdRoute from "./components/ProtectedRoute";
 import NeedToLogIn from "./components/NeedToLogIn";
 import Help from "./components/Help";
 import CustomLink from "./components/CustomLink";
+import Footer from "./components/FooterNOTUSED";
 
 
 

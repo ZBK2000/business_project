@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 
-import { TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { UserAuth } from "../context/AuthContext";
 
 export default function register(props) {
@@ -13,11 +13,13 @@ export default function register(props) {
   const [location, setLocation] = useState("");
   const [city, setCity] = useState("");
   const [description, setDescription] = useState("");
-  const [slots, setSlots] = useState(4);
+  const [slots, setSlots] = useState([]);
   const [img, setImg] = useState("");
+  const [trackName, setTrackName] = useState([])
+  const [trackCounter, setTrackCounter] = useState([""])
   const { user } = UserAuth();
   const userName = user ? user.displayName : "";
-
+ console.log(slots, trackName)
   const avalaibleTimes_initial = [
     { id: 1, text: "8-10 ", color: "black", slots: ["", "", "", ""] },
     { id: 2, text: "10-12 ", color: "black", slots: ["", "", "", ""] },
@@ -63,21 +65,27 @@ export default function register(props) {
         
         latAndLong = [location.lat, location.lng ];
       }
+      let slot_places
+      const timelinesForSubTracks = {}
 
-    const slot_places = Array(parseInt(slots)).fill("");
+    for(let place in slots){
+     slot_places = Array(parseInt(slots[place])).fill("");
+      console.log(slot_places)
 
     const avalaibleTimes = avalaibleTimes_initial.map((item) => {
       item.slots = [...slot_places];
       return item;
     });
-
+    console.log(avalaibleTimes)
     const avalaibleTimesFor7Days = {};
     const next7Days = getNext7Days();
     next7Days.forEach((key) => {
-      avalaibleTimesFor7Days[key] = avalaibleTimes;
+      avalaibleTimesFor7Days[key] = JSON.parse(JSON.stringify(avalaibleTimes));
     });
-
-    
+    console.log(avalaibleTimesFor7Days)
+    timelinesForSubTracks[trackName[place]] =  JSON.parse(JSON.stringify(avalaibleTimesFor7Days))
+  }
+    console.log(timelinesForSubTracks)
 
     let formData = new FormData();
     for (let i = 0; i < img.length; i++) {
@@ -91,8 +99,9 @@ export default function register(props) {
         city,
         description,
         slot_number: slots,
-        booked: avalaibleTimesFor7Days /* next7Days, */,
-        latAndLong
+        booked: timelinesForSubTracks /* next7Days, */,
+        latAndLong,
+        trackName,
       },
       user: userName,
     };
@@ -165,15 +174,44 @@ export default function register(props) {
           id="location"
           onChange={(e) => setLocation(e.target.value)}
         />
-        <label htmlFor="slots">
-          <Typography>Maximum slots:</Typography>
-        </label>
-        <input
-          type="number"
-          step="1"
-          id="slots"
-          onChange={(e) => setSlots(e.target.value)}
-        />
+        <Grid >
+        {trackCounter.map((track, index)=>{
+          return(
+            <Grid borderRadius={"10px"} backgroundColor={"white"} margin={"10px"} padding={"10px"}>
+            <Typography>Activity/track {index+1}:</Typography>
+            <label htmlFor="location">
+              <Typography>Name of track/activity:</Typography>
+            </label>
+            <input
+              type="text"
+              id="location"
+              onChange={(e) => setTrackName(prev => {
+                const updatedTracks = [...prev];
+                updatedTracks[index] = e.target.value;
+                return updatedTracks;
+              })}
+            />
+            <label htmlFor="slots">
+            
+              <Typography>Maximum slots:</Typography>
+            </label>
+            <input
+              type="number"
+              step="1"
+              id="slots"
+              onChange={(e) => setSlots(prev => {
+                const updatedTracks = [...prev];
+                updatedTracks[index] = e.target.value;
+                return updatedTracks;
+              })}
+              
+            />
+           
+            </Grid>
+          )
+        })}
+       </Grid>
+       <Button variant="fulfilled" onClick={()=>setTrackCounter(prev=>[...prev, ""])}>Add additional track/activity</Button>
         <label htmlFor="img">
           <Typography>Images:</Typography>
         </label>

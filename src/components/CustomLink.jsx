@@ -128,6 +128,9 @@ import PersonIcon from '@mui/icons-material/Person';
         </Typography>}
         <Typography variant="h6" component="h1" gutterBottom >
           Name of location/activity: {linkData.trackName}
+          <Typography variant="h6" component="h1" gutterBottom >
+          Name of subTrack: {linkData.subTrackName}
+          </Typography>
         </Typography>
         <Typography variant="h6" component="h1" gutterBottom >
           Date: {linkData.time}

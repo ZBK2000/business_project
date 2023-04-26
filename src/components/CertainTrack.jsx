@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import { Fab, Grid, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Fab, Grid, IconButton, List, ListItem, ListItemText, MenuItem, Select, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { UserAuth } from "../context/AuthContext";
 import SimpleMap from "./GoogleMapNOTUSED";
@@ -16,6 +16,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RatingSlide from "./ratingSlider";
 import PersonIcon from '@mui/icons-material/Person';
+import Button from "@mui/material/Button";
+import PrivateTeams from "./privateTeams";
 
 export default function CertainTrack(props) {
   //declaring states and consts
@@ -44,9 +46,11 @@ export default function CertainTrack(props) {
   const [lastClickedId, setLastClickedId] = useState(null);
   const [errorhandler, setErrorHandler] = useState("");
   const [expanded, setExpanded] = useState("");
+  const [subTrack, setSubTrack] = useState("")
+  const [privateTeamIndicator, setPrivateTeamIndicator] = useState(false)
  
   //declaring the function, which will be activated when someone join to a timeline
-  const handleClick = async (id) => {
+  const handleClick = async (id, subTrackName) => {
     //for checking if the user already in it
     let ifNotSameName = true;
 
@@ -83,6 +87,7 @@ export default function CertainTrack(props) {
     if (ifNotSameName) {
       const data = {
         rightDay: rightDay,
+        subTrackName,
         h3s: newh3s,
         id: nameOfTrack,
         user: nameOfUser,
@@ -98,7 +103,7 @@ export default function CertainTrack(props) {
       });
       const trackData = await response.json();
       try {
-        setH3s(trackData.booked[rightDay]);
+        setH3s(trackData.booked[subTrackName][rightDay]);
         props.getUpData(newh3s);
       } catch (error) {}
     }
@@ -113,7 +118,9 @@ export default function CertainTrack(props) {
   let img_number;
   let slot_number;
   let location
-  try {
+  let subtrackNames = []
+  let subTrackName
+  try { 
     for (let track in props.allTrack) {
       if (props.allTrack[track].name == id) {
         desc = props.allTrack[track].description;
@@ -121,21 +128,34 @@ export default function CertainTrack(props) {
         img_number = props.allTrack[track].img_urls.length;
         slot_number = props.allTrack[track].slot_number;
         location = props.allTrack[track].location
+        subtrackNames = props.allTrack[track].trackName
         trackNumber = track;
+        console.log(slot_number, subtrackNames)
         break;
       }
     }
-    const new_slots = Array(slot_number).fill("");
+    subTrackName = subTrack? subtrackNames[subTrack]: subtrackNames[0]
+    console.log(slot_number, subTrack)
+    let new_slots = Array(Number(4)).fill("")
+    if (slot_number){
+
+      new_slots = Array(Number(slot_number[0])).fill("");
+    }
+    if (subTrack){
+      new_slots = Array(Number(slot_number[subTrack])).fill("");
+    }
+    console.log(new_slots)
+
     
     useEffect(() => {
       
       try {
         if(props.allTrack && trackNumber){
-         
+          console.log(subTrack)
         if (
           //if its a new day which wasnt declared before we will initialize it here otherwise just retrive the specified date data
           
-          typeof props.allTrack[trackNumber].booked[rightDay] === "undefined"
+          typeof props.allTrack[trackNumber].booked[subTrackName][rightDay] === "undefined"
         ) {
           
           fetch(`${import.meta.env.VITE_BACKEND_URL}/newDay`, {
@@ -143,6 +163,7 @@ export default function CertainTrack(props) {
             body: JSON.stringify({
               id: nameOfTrack,
               rightDay: rightDay,
+              subTrackName,
               h3s: [
                 { id: 1, text: "8-10 ", color: "black", slots: [...new_slots] },
                 {
@@ -188,15 +209,15 @@ export default function CertainTrack(props) {
             },
           })
             .then((response) => response.json())
-            .then((data) => setH3s(data.booked[rightDay]));
+            .then((data) => setH3s(data.booked[subTrackName][rightDay]));
         } else {
-          setH3s(props.allTrack[trackNumber].booked[rightDay]);
+          setH3s(props.allTrack[trackNumber].booked[subTrackName][rightDay]);
         }
       }} catch (error) {
         setErrorHandler("x");
         console.log(error);
       }
-    }, [rightDay, props.allTrack[trackNumber]]);}
+    }, [rightDay, props.allTrack[trackNumber], subTrack]);}
     catch (error) {
       console.log(error);
     }
@@ -245,11 +266,14 @@ export default function CertainTrack(props) {
       setExpanded(id);
     }
   };
-
-   async function generateRandomLinkPath(trackName, slots, loc, time, date, user) {
-    slots = Array(slots).fill("")
+  // generating link numbers for custom path
+   async function generateRandomLinkPath(trackName, slots, loc, time, date, user, subTrackName) {
+    slots = Array(Number(slots[subtrackNames.indexOf(subTrackName)])).fill("")
+    console.log(slots)
     slots[slots.indexOf("")] = user
-    const dataForLink = {trackName, slots, location: loc, time: `${date} ${time}`,user  }
+    console.log(subTrackName)
+    const dataForLink = {trackName, slots, location: loc, time: `${date} ${time}`,user, subTrackName }
+    console.log(dataForLink)
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/customLink`, {
       method: "POST",
       body: JSON.stringify(dataForLink),
@@ -264,6 +288,11 @@ export default function CertainTrack(props) {
     }
   }
 
+  //selecting rigth subtrack
+  function subTrackFunc (e){
+    setSubTrack(e.target.value)
+    console.log(e.target.value, subTrack, subtrackNames)
+  }
   return (
     <div>
       <Header title={id} success={props.getDownData} name={nameOfUser} />
@@ -281,7 +310,7 @@ export default function CertainTrack(props) {
             <Grid
               minWidth={"300px"}
               maxWidth={"400px"}
-              
+              item
               xs={12}
               sm={10}
               md={8}
@@ -348,6 +377,19 @@ export default function CertainTrack(props) {
                   }}
                 >
                   <Next7DaysDropdown getUpData={setRightDay} />
+                  <Box sx={{ minWidth: 120 }}>
+      
+        {subtrackNames !=[] ?
+        <Select sx={{border:"none"}}
+           labelId="demo-simple-select-label" id="demo-simple-select" label="Date" onChange={(e)=>subTrackFunc(e)} value={subTrack? subTrack: 0}>
+        {subtrackNames.map((date, index) => (
+          <MenuItem key={date} value={index}>
+            {date}
+          </MenuItem>
+        ))}
+      </Select>:""}
+     
+    </Box> 
                   <Typography
                     variant="h6"
                     sx={{
@@ -398,7 +440,7 @@ export default function CertainTrack(props) {
                       color="primary"
                       aria-label="add"
                       onClick={
-                        h3.color === "red" ? () => {} : () => handleClick(h3.id)
+                        h3.color === "red" ? () => {} : () => handleClick(h3.id, subTrackName)
                       }
                     >
                       
@@ -408,19 +450,24 @@ export default function CertainTrack(props) {
                       style={{ width: "36px", height: "20px", margin: "3px" }}
                       color="primary"
                       aria-label="add"
-                      onClick={()=>generateRandomLinkPath(id, slot_number, location, h3.text, rightDay, nameOfUser)}
+                      onClick={()=>generateRandomLinkPath(id, slot_number, location, h3.text, rightDay, nameOfUser, subTrackName)}
                       
                       
                     >link</Fab>
                   </Box>
+                  <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
                   <ExpandMore
+                   style={{margin: "3px" }}
                     expand={expanded == h3.id ? true : false}
                     onClick={() => handleExpandClick(h3.id)}
                     aria-expanded={expanded}
                     aria-label="show more"
                   >
                     <ExpandMoreIcon />
+                    
                   </ExpandMore>
+                  <Button variant="contained" style={{ width: "150px", height: "20px", margin: "3px" }} onClick={()=>setPrivateTeamIndicator(prev=>!prev)}>Private teams</Button>
+                  </Box>
                   <Collapse
                     in={expanded == h3.id ? true : false}
                     timeout="auto"
@@ -440,6 +487,8 @@ export default function CertainTrack(props) {
           </Grid>
         </div>
       )}
+
+      {privateTeamIndicator&&<PrivateTeams indicator={setPrivateTeamIndicator}></PrivateTeams>}
     </div>
   );
 }

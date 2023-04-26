@@ -19,12 +19,14 @@ export default function User(props) {
   //this is the function for cancelling boooked times on the userpage
   async function cancel(item) {
     const nameOfTrack = item.split(": ")[0];
-    const timeline = item.split(": ")[1].split(" ").slice(1).join(" ");
+    //const timeline = item.split(": ")[1].split(" ").slice(1).join(" ");
+    const timeline = item.split(": ")[1].split(" ")[1];
     const rightDay = item.split(": ")[1].split(" ")[0];
-
+    const subTrack = item.split(": ")[1].split(" ").slice(2).join(" ");
+    console.log( item,subTrack)
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cancel`, {
       method: "POST",
-      body: JSON.stringify({ nameOfTrack, timeline, id, rightDay }),
+      body: JSON.stringify({ nameOfTrack, timeline, id, rightDay, subTrack }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -72,6 +74,25 @@ export default function User(props) {
     
       setUserData({
         booked_tracks: data.booked_tracks.map(function (item) {
+          const date_string = item.split(": ")[1].split(" ").slice(0,2).join(" ");
+          console.log(date_string)
+          // Extract the date and time components from the date string
+          const date_components = date_string.split(" ");
+          const date = date_components[0];
+          const time_interval = date_components[1];
+
+          // Extract the start time and end time from the time interval
+          const [start_time, end_time] = time_interval.split("-").map(Number);
+
+          // Convert the date and time components to Date objects
+          const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
+          const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
+          const current_datetime = new Date();
+          console.log(activity_start_datetime,current_datetime)
+          // Compare the activity start time with the current time
+          if (activity_start_datetime >= current_datetime) {
+            console.log(true); // Activity has started
+          
           return (
             <Paper
             key={item}
@@ -98,7 +119,7 @@ export default function User(props) {
               </Button>
             </Paper>
           );
-        }),
+        }}),
         tracks: data.tracks.map(function (item) {
           return (
             <Paper
@@ -152,6 +173,24 @@ export default function User(props) {
      
       setUserData({
         booked_tracks: data.booked_tracks.map(function (item) {
+          const date_string = item.split(": ")[1].split(" ").slice(0,2).join(" ");
+          console.log(date_string)
+          // Extract the date and time components from the date string
+          const date_components = date_string.split(" ");
+          const date = date_components[0];
+          const time_interval = date_components[1];
+
+          // Extract the start time and end time from the time interval
+          const [start_time, end_time] = time_interval.split("-").map(Number);
+
+          // Convert the date and time components to Date objects
+          const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
+          const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
+          const current_datetime = new Date();
+          console.log(activity_start_datetime,current_datetime)
+          // Compare the activity start time with the current time
+          if (activity_start_datetime >= current_datetime) {
+            console.log(true); // Activity has started
           return (
             <Paper
             key={item}
@@ -178,7 +217,7 @@ export default function User(props) {
               </Button>
             </Paper>
           );
-        }),
+        }}),
         tracks: data.tracks.map(function (item) {
           return (
             <Paper
@@ -276,7 +315,7 @@ export default function User(props) {
               <Typography variant="h5">your tracks:</Typography>
               {userData.tracks}
               <Typography variant="h5" marginTop={"20px"}>
-                booked tracks:
+                Upcomming activites:
               </Typography>
               {userData.booked_tracks}
               <div></div>
@@ -286,6 +325,7 @@ export default function User(props) {
               <Typography variant="h4">Loading...</Typography>
             </div>
           )}
+          <Button variant="contained">See previous activities</Button>
         </Grid>
 
         <Grid
@@ -304,15 +344,33 @@ export default function User(props) {
         >
           <Box display={"flex"} justifyContent={"center"}>
             <Typography sx={{ marginBottom: "15px" }} variant="h4">
-              Custom Links:
+              Live Custom Groups:
             </Typography>
           </Box>
           {links ? (
             <>
-              {links.map((link)=>{
+              {links.map((link, index)=>{
+                 const date_string = link[2].slice(0,-1);
+          console.log(date_string, "ha")
+          // Extract the date and time components from the date string
+          const date_components = date_string.split(" ");
+          const date = date_components[0];
+          const time_interval = date_components[1];
+
+          // Extract the start time and end time from the time interval
+          const [start_time, end_time] = time_interval.split("-").map(Number);
+
+          // Convert the date and time components to Date objects
+          const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
+          const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
+          const current_datetime = new Date();
+          console.log(activity_start_datetime,current_datetime)
+          // Compare the activity start time with the current time
+          if (activity_start_datetime >= current_datetime) {
+            console.log(true); // Activity has started
                 return(
                  <Paper
-                 key={link}
+                 key={index}
                    sx={{ margin: "10px" }}
                    className="booked-times"
                    elevation={6}
@@ -335,7 +393,7 @@ export default function User(props) {
                      See
                    </Button>
                  </Paper>)
-              })}
+              }})}
              
             </>
           ) : (
@@ -343,7 +401,9 @@ export default function User(props) {
               <Typography variant="h4">Loading...</Typography>
             </div>
           )}
+          <Button variant="contained">See previous custom groups</Button>
         </Grid>
+        
       </Grid>
     </div>
   );

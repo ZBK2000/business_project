@@ -13,18 +13,18 @@ import { Grid } from '@mui/material';
 export default function Sports (){
 
     return(
-        <Grid margin={"15px"} padding={'10px'} gap={"20px"} display={'flex'} justifyContent={"center"} 
-        sx={{  position: 'relative',
-        '&::before': {
+        <Grid margin={"15px"} padding={'10px'} gap={"20px"} display={'flex'} justifyContent={"flex-start"} 
+        sx={{   
+        
           content: '""',
-          position: 'absolute',
+          
           top: 0,
           left: 0,
-          width: '100%',
+         
           height: '100%',
           boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
           borderRadius: 'inherit',
-        },borderRadius:"10px", overflowX: 'scroll',
+        borderRadius:"10px", overflowX: 'scroll',
         '-webkit-overflow-scrolling': 'touch', 
         '&::-webkit-scrollbar': { display: 'none'} 
         }}>
