@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
@@ -113,9 +113,18 @@ function RatingSlide(props) {
       <SentimentNeutralIcon onClick={()=>setRating("n")}  sx={{fontSize:"35px", margin:"5px 10px", color:(rating==="n"?"black":"#c9c3c3"), "&:hover":{color:"black"}}}/>
       <SentimentSatisfiedIcon onClick={()=>setRating("s")}  sx={{fontSize:"35px", margin:"5px 10px", color:(rating==="s"?"black":"#c9c3c3"), "&:hover":{color:"black"}}}/>
       <SentimentSatisfiedAltIcon onClick={()=>setRating("vs")} sx={{fontSize:"35px", margin:"5px 10px", color:(rating==="vs"?"black":"#c9c3c3") ,  "&:hover":{color:"black"}}}/>
+      <Box display={"flex"} gap={2}>
+
       <Button variant='contained' type='submit'>Leave review</Button>
+      <Typography variant="h6"> Rating 4,5 </Typography>
+      </Box>
+    
       </form>
-    </Grid>: <Button variant='contained'>Edit review? [currently not working]</Button>}
+    </Grid>: 
+    <Box display={"flex"} gap={2}>
+    <Button variant='contained'>Edit review? [currently not working]</Button>
+    <Typography variant="h6" > Rating 4,5 </Typography>
+    </Box>}
     
     {allReviewJSX}
 

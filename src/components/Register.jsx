@@ -142,6 +142,7 @@ export default function register(props) {
       />
 
       <form onSubmit={registerTrack}>
+        
         <label htmlFor="name">
           <Typography>Name:</Typography>
         </label>

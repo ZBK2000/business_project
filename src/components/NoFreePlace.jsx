@@ -15,7 +15,7 @@ return (
     justifyContent: 'center',
     zIndex: 9999, // Higher z-index to make sure it's above everything else
   }}>
-    <Box sx={{width:"400px", height:"400px", backgroundColor:"white", borderRadius:"10px", padding:"10px"}}>
+    <Box sx={{width:"300px", height:"370px", backgroundColor:"white", borderRadius:"10px", padding:"10px"}}>
   <Typography variant="h4">Sorry someone was faster than you, and grab your place :(, we hope you find another appropriate time or check back later in case a place got freed up</Typography>
 
   </Box>

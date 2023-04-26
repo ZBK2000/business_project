@@ -66,7 +66,7 @@ export default function Filter(props) {
             alignItems: "center",
           }}
         >
-          <Grid container spacing={4} className="container">
+          <Grid container spacing={4} width={"100%"} className="container">
             <Grid
               item
               style={{ width: "50%" }}
@@ -135,12 +135,13 @@ export default function Filter(props) {
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
+                  zIndex:9999
                 }}
                 id="outlined-basic"
                 onChange={(e) => setLocation(e.target.value)}
                 value={location}
                 label="Location"
-                variant="outlined"
+                variant="filled"
               />
             </Grid>
             <Grid
@@ -155,19 +156,20 @@ export default function Filter(props) {
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
+                  zIndex: 9999
                 }}
                 id="outlined-basic"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
                 label="Name"
-                variant="outlined"
+                variant="filled"
               />
             </Grid>
             <Grid item padding={0} xs={12} sm={2} md={1.5}>
               <Button
                 sx={{ color: "black" }}
                 onClick={getUpData}
-                variant="text"
+                variant="contained"
               >
                 Filter
               </Button>

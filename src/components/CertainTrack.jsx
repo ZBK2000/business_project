@@ -311,6 +311,8 @@ export default function CertainTrack(props) {
             sx={{ margin: "0", marginTop: "20px", marginBottom: "20px" }}
             spacing={2}
             className="images-and-descr"
+            
+            justifyContent={"center"}
           >
             <Grid
               minWidth={"300px"}
@@ -322,6 +324,8 @@ export default function CertainTrack(props) {
               lg={8}
               xl={4}
               className="slider"
+              sx={{padding:"0px !important", margin:"10px"}}
+              
             >
 
               {Array.from({ length: img_number }, (_, i) => (
@@ -377,7 +381,7 @@ export default function CertainTrack(props) {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "space-around",
                     alignItems: "center",
                   }}
                 >
@@ -395,16 +399,7 @@ export default function CertainTrack(props) {
       </Select>:""}
      
     </Box> 
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      margin: "10px",
-                      whiteSpace: "pre-line",
-                      overflowWrap: "anywhere",
-                    }}
-                  >
-                    Rating 4,5
-                  </Typography>
+               
                   
                 </Box>
          
@@ -415,7 +410,7 @@ export default function CertainTrack(props) {
               
           </Grid>
 
-          <Grid container spacing={2} className=" contanier booking-timelines">
+          <Grid container spacing={2} justifyContent={"center"} className=" contanier booking-timelines">
             {h3s.map((h3) => (
               <Grid
                 item
