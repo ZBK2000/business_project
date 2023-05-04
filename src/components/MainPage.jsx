@@ -188,10 +188,7 @@ export default function MainPage(props) {
             component="img"
             sx={{ height: 140 }}
             src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${item.name}&number=${0}`}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "../public/sporttogether.png";
-            }}
+           
             title=""
           />
           <CardContent>
@@ -250,10 +247,7 @@ export default function MainPage(props) {
             sx={{ height: 140 }}
             src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${item._id}&number=${0}&event=${true}`}
             title={`community activity - ${item.sportType}`}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "../public/sporttogether.png";
-            }}
+            
           />
           <CardContent>
           
