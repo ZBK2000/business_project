@@ -68,21 +68,18 @@ function RatingSlide(props) {
   }; */
  
   const allReviewJSX = allReview.map((item)=>(
-    <Grid  backgroundColor={"#e1e1e1"} margin={' 15px'} borderRadius={"15px"}>
-      <Grid margin={"-5px 15px"} display={"flex"} alignItems={"center"}>
+    <Grid display={"flex"} backgroundColor={"#e1e1e1"} margin={' 15px'} borderRadius={"15px"}>
+     
       <Typography variant='h6' margin={"0px 15px"}>{item[0]}</Typography>
       {item[2]==="vds"? <SentimentVeryDissatisfiedIcon sx={{fontSize:'28px'}} />:undefined}
       {item[2]==="ds"? <SentimentDissatisfiedIcon sx={{fontSize:'28px'}}/>:undefined}
       {item[2]==="n"? <SentimentNeutralIcon sx={{fontSize:'28px'}}/>:undefined}
       {item[2]==="s"? <SentimentSatisfiedIcon sx={{fontSize:'28px'}}/>:undefined}
       {item[2]==="vs"? <SentimentSatisfiedAltIcon sx={{fontSize:'28px'}}/>:undefined}
-      </Grid>
-      <Grid>
-        <hr/>
-      </Grid>
-      <Grid>
-      <Typography margin={"0px 15px"}>{item[1]}</Typography>
-      </Grid>
+      
+     
+      <Typography variant='h6' margin={"0px 15px"}>"{item[1]}"</Typography>
+      
       </Grid> 
   ))
   
@@ -92,10 +89,10 @@ function RatingSlide(props) {
       position: 'relative',
       width: "100%",
       height: 350,
-      backgroundColor:'white',
+      backgroundColor:'#e1e1e1',
       overflow: 'auto',
       borderRadius:"15px",
-      margin:"15px"
+      margin:"35px 0px"
       }}
       
     item

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 export default  function Next7DaysDropdown(props) {
   //this function creates an array with the next seven days in it
+  const [selectedDate, setSelectedDate] = useState(0);
+
     function getNext7Days() {
         const next7Days = [];
         const today = new Date();
@@ -20,7 +22,7 @@ export default  function Next7DaysDropdown(props) {
         return next7Days;
       } 
       const next7Days = getNext7Days();
-  const [selectedDate, setSelectedDate] = useState(0);
+  
   
 
   //this is the function for the select component
@@ -31,7 +33,7 @@ export default  function Next7DaysDropdown(props) {
     
   };
   useEffect(()=>{props.getUpData(next7Days[selectedDate])}, [selectedDate])
-    
+  console.log(next7Days[selectedDate])
   return (
 
         <Box sx={{ minWidth: 120 }}>

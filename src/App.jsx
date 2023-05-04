@@ -14,6 +14,9 @@ import NeedToLogIn from "./components/NeedToLogIn";
 import Help from "./components/Help";
 import CustomLink from "./components/CustomLink";
 import Footer from "./components/FooterNOTUSED";
+import CertainTrack2 from "./components/CertainTrack copy";
+import BusinessRegistration from "./components/businessRegistration";
+import CommunityEvent from "./components/communityEventForm";
 
 
 
@@ -21,6 +24,7 @@ function App() {
 
   //declaring states and  consts
   const [tracks, setTracks] = useState([]);
+  const [links, setLinks] =useState([])
   const [success, setSuccess] = useState("s");
   const [name, setName] = useState("");
   const [change, setChange] = useState("");
@@ -33,7 +37,8 @@ function App() {
      
         const response = await fetch(import.meta.env.VITE_BACKEND_URL);
         const data = await response.json();
-        setTracks(data);
+        setTracks(data.allTrack);
+        setLinks(data.allLinks)
       } catch (error) {
         console.error(error);
       }
@@ -54,6 +59,7 @@ function App() {
               element={
                 <MainPage
                   allTrack={tracks}
+                  allLinks={links}
                   getDownData={success}
                   getDownData2={name}
                 />
@@ -76,6 +82,19 @@ function App() {
               element={
                 <ProtectdRoute>
                   <CertainTrack
+                    allTrack={tracks}
+                    getDownData={success}
+                    getDownData2={name}
+                    /* getDownData3={slots}  */ getUpData={setChange}
+                  />
+                </ProtectdRoute>
+              }
+            />
+             <Route
+              path="/tracks/:id/2"
+              element={
+                <ProtectdRoute>
+                  <CertainTrack2
                     allTrack={tracks}
                     getDownData={success}
                     getDownData2={name}
@@ -117,7 +136,12 @@ function App() {
                 <CustomLink
             
                 />}/>
-
+             <Route path="/businessRegister" element={<BusinessRegistration   getUpData={setTracks}
+                  getUpData2={setSlots}
+                  getDownData={success}
+                  getDownData2={name}/>} />
+            <Route path="/communityEvent" element={<CommunityEvent/>  }
+         />
           </Routes>
         </div>
       </div>

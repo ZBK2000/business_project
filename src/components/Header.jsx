@@ -70,6 +70,9 @@ export default function Header (props){
     function navigateToHelp(){
       navigate("/help")
     }
+    function navigateToSignUpBusiness(){
+      navigate("/businessRegister")
+    }
 
     //declaring things for the menu on mobile size
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -84,24 +87,28 @@ export default function Header (props){
     return (
       <Box sx={{ flexGrow: 1}}>
         <AppBar position="static">
-          <Toolbar>
-          <Typography  onClick={navigateToMain} variant="h6" component="div" sx={{ flexGrow: 1, cursor: "pointer" }}>
-          Business
+          <Box display={"flex"} justifyContent={"center"}>
+          <Box sx={{ width: props?.startOfHeader ?"1152px":"100%", padding:props?.startOfHeader ?"0px":"0 10px"}} >
+          <Toolbar sx={{padding:"0px !important"}}>
+          <Typography  onClick={navigateToMain} variant="h7" component="div" sx={{ flexGrow: 1, cursor: "pointer"}}>
+          SPORT - <span style={{color:"red"}}>TOGETHER</span>
             </Typography>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {props.title == "Fantastic business"?"": props.title}
-            </Typography>
+            {/*<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          {props.title == "Fantastic business"?"": props.title} 
+            </Typography>*/}
         {/*     <Fab >Show map</Fab>
             <Fab>Show Favourites</Fab> */}
             <Box>
             <Button sx={{ display: { xs: 'none', md: 'inline', marginTop:"5px" }}}  onClick={navigateToHelp} color="inherit"> <HelpOutlineIcon /></Button>
             {user ?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToLogin} color="inherit">LOGIN</Button>}
 {user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUp} color="inherit">SIGN UP</Button> }
+{user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUpBusiness} color="inherit">SIGN UP AS A BUSINESS</Button> }
 
 {user ?<Button   sx = {{display: { xs: 'none', md: 'inline' }, margin:"15px"}} onClick={navigateToRegister} color="inherit">REGISTER TRACK</Button>: "" }
 
 {user? <Button  sx={{ display: { xs: 'none', md: 'inline' }}} onClick={logoutFromUser} color="inherit">LOG OUT</Button>: "" }
 {user? <Button sx={{ display: { xs: 'none', md: 'inline' }}}  onClick={navigateToUser} color="inherit"> <AccountCircle /></Button>: "" }
+
 
 <Button sx={{ display: { xs: 'inline', md: 'none' }}} 
 
@@ -130,6 +137,8 @@ export default function Header (props){
       </Menu>
             </Box>
           </Toolbar>
+          </Box>
+          </Box>
         </AppBar>
       </Box>
     );

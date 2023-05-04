@@ -264,15 +264,19 @@ export default function User(props) {
         title="account info"
         success={props.getDownData}
         name={props.getDownData2}
+        startOfHeader={true}
       ></Header>
+      <Grid display={"flex"} justifyContent={"center"}>
+      
       <Grid
         container
         margin={"15px"}
-        width={"90%"}
+        width={"1152px"}
         display={"flex"}
         flexDirection={"row"}
         gap={3}
       >
+        <Typography variant="h4"> Hi {id} </Typography>
       <Grid sx={{
             backgroundColor: "#ebebeb",
             borderRadius: "10px",
@@ -281,9 +285,7 @@ export default function User(props) {
           }}
           item
           xs={12}
-        sm={5}
-        
-        xl={3.5}
+       
 
           maxWidth={"500px"} >
           
@@ -300,23 +302,21 @@ export default function User(props) {
           }}
           item
           xs={12}
-        sm={5}
-    
-        xl={4}
+  
           maxWidth={"500px"}
         >
-          <Box display={"flex"} justifyContent={"center"}>
-            <Typography sx={{ marginBottom: "15px" }} variant="h4">
-              Hi {id}
-            </Typography>
-          </Box>
+
           {userData ? (
             <>
-              <Typography variant="h5">your tracks:</Typography>
-              {userData.tracks}
-              <Typography variant="h5" marginTop={"20px"}>
-                Upcomming activites:
+              {/*<Typography variant="h5">your tracks:</Typography>
+              {userData.tracks} */}
+              <Box display={"flex"} justifyContent={"space-between"}>
+
+              <Typography variant="h5" >
+                Upcomming activites which you are interested in:
               </Typography>
+              <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous activities</Button>
+              </Box>
               {userData.booked_tracks}
               <div></div>
             </>
@@ -325,7 +325,7 @@ export default function User(props) {
               <Typography variant="h4">Loading...</Typography>
             </div>
           )}
-          <Button variant="contained">See previous activities</Button>
+          
         </Grid>
 
         <Grid
@@ -337,19 +337,19 @@ export default function User(props) {
           }}
           item
           xs={12}
-        sm={5}
-    
-        xl={4}
+       
           maxWidth={"500px"}
         >
-          <Box display={"flex"} justifyContent={"center"}>
-            <Typography sx={{ marginBottom: "15px" }} variant="h4">
-              Live Custom Groups:
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography variant="h5">
+              Upcomming activities which your are joined:
             </Typography>
+            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous groups</Button>
           </Box>
           {links ? (
             <>
               {links.map((link, index)=>{
+                if(link.slice(-1) != user.displayName){
                  const date_string = link[2].slice(0,-1);
           console.log(date_string, "ha")
           // Extract the date and time components from the date string
@@ -393,17 +393,95 @@ export default function User(props) {
                      See
                    </Button>
                  </Paper>)
-              }})}
+              }}})}
              
             </>
+            
           ) : (
             <div>
               <Typography variant="h4">Loading...</Typography>
             </div>
           )}
-          <Button variant="contained">See previous custom groups</Button>
+         
         </Grid>
-        
+        <Grid
+          sx={{
+            backgroundColor: "#ebebeb",
+            borderRadius: "10px",
+            padding: "10px",
+            
+          }}
+          item
+          xs={12}
+       
+          maxWidth={"500px"}
+        >
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography variant="h5">
+              Upcomming activities which your are organizing:
+            </Typography>
+            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous groups</Button>
+          </Box>
+          {links ? (
+            <>
+              {links.map((link, index)=>{
+                console.log(link.slice(-1), user.displayName)
+                if (link.slice(-1) == user.displayName){
+                 const date_string = link[2].slice(0,-1);
+          console.log(date_string, "ha")
+          // Extract the date and time components from the date string
+          const date_components = date_string.split(" ");
+          const date = date_components[0];
+          const time_interval = date_components[1];
+
+          // Extract the start time and end time from the time interval
+          let [start_time, end_time] = time_interval.split("-").map(Number);
+           start_time = String(start_time).padStart(2, '0');
+          // Convert the date and time components to Date objects
+          const activity_start_datetime = new Date(`${date}T${start_time}:00:00`);
+          const activity_end_datetime = new Date(`${date}T${end_time}:00:00`);
+          const current_datetime = new Date();
+          console.log(activity_start_datetime,current_datetime, start_time)
+          // Compare the activity start time with the current time
+          if (activity_start_datetime >= current_datetime) {
+            console.log(true); // Activity has started
+                return(
+                 <Paper
+                 key={index}
+                   sx={{ margin: "10px" }}
+                   className="booked-times"
+                   elevation={6}
+                 >
+                   <h2 className="booked-times-h2">
+                     <li>{link[1]}:{link[2]}</li>
+                   </h2>
+                   <Button
+                     className="cancel-see"
+                     /* onClick={() => deleteTrack(item)} */
+                     variant="text"
+                   >
+                     X
+                   </Button>
+                   <Button
+                     onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                     className="cancel-see"
+                     variant="text"
+                   >
+                     See
+                   </Button>
+                 </Paper>)}
+              }})}
+             
+            </>
+            
+          ) : (
+            <div>
+              <Typography variant="h4">Loading...</Typography>
+            </div>
+          )}
+         
+        </Grid>
+      </Grid>
       </Grid>
     </div>
   );

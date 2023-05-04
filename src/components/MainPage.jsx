@@ -89,7 +89,7 @@ export default function MainPage(props) {
   //to navigate to the track if loggid in otherwise to login page
   function reNavigate(item) {
     if (user) {
-      navigate(`/tracks/${item.name}`);
+      navigate(`/tracks/${item.name}/2`);
     } else {
       navigate(`/login/${item.name}`);
     }
@@ -188,6 +188,10 @@ export default function MainPage(props) {
             component="img"
             sx={{ height: 140 }}
             src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${item.name}&number=${0}`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "../public/sporttogether.png";
+            }}
             title=""
           />
           <CardContent>
@@ -211,7 +215,71 @@ export default function MainPage(props) {
     );
   });
 
-  
+  console.log(props.allLinks)
+  const liveActivities =props?.allLinks? props.allLinks.map(function (item) {
+    if (item.isopen){
+      const count = item.slots.reduce((acc, curr) => {
+        if (curr === "") {
+          return acc + 1;
+        } else {
+          return acc;
+        }
+      }, 0);
+      
+    return (
+      <Grid
+      
+        item
+        padding={"8px !important"}
+        xs={12}
+        sm={6}
+        md={4}
+        lg={3}
+        xl={2.2}
+      >
+        <Card
+          className="tracks"
+          sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
+          onClick={() => navigate(`/tracks/${item.name}/${item._id}`)}
+          key={item.name}
+        >
+          
+          
+          <CardMedia
+            component="img"
+            sx={{ height: 140 }}
+            src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${item._id}&number=${0}&event=${true}`}
+            title={`community activity - ${item.sportType}`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "../public/sporttogether.png";
+            }}
+          />
+          <CardContent>
+          
+            <Typography gutterBottom variant="h5" component="div">
+              {item.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item.city}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item.time}
+            </Typography>
+           
+            <Typography variant="body2" color="text.secondary">
+              {item.isLimited? `${item.slots.length}P (remaining ${count}P)`: "unlimited"}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item.sportType?item.sportType:"-"}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  }}) : []
+
+
   return (
     <div>
       <Header
@@ -219,20 +287,34 @@ export default function MainPage(props) {
         success={props.getDownData}
         name={props.getDownData2}
       />
-      <Grid display={"flex"} alignItems={"center"}>
+      
+      
+      <Grid display={"flex"} alignItems={"center"} >
       <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={showFavourite}>{favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
       <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={mapViewFunc}>{!mapView?"Show map view":"Show detailed view"}</Button>
+      <Button onClick={()=>navigate("/communityEvent")} margin={"15px !important"} sx={{height:"80%", margin:"10px", backgroundColor:'green'}} variant="contained">Let's organize an event</Button>
        {/*<Sports/> */}
       </Grid>
       <Filter getUpData={setFilterItems} />
+      <Typography variant="h5" sx={{margin:"20px"}}>Partners</Typography>
       {!mapView? <Grid
-        sx={{ marginLeft: "0px", marginRight: "10px", width: 1 }}
+        sx={{ marginLeft: "0px", marginRight: "10px", width: 1, marginBottom:"30px"}}
         container
         spacing={2}
         className="container"
       >
         {newTracks}
       </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
+      <Typography variant="h5" sx={{margin:"20px"}}>Community events</Typography>
+      <Grid
+        sx={{ marginLeft: "0px", marginRight: "10px", width: 1 }}
+        container
+        spacing={2}
+        className="container"
+      >
+
+      {liveActivities}
+      </Grid>
       {/* 
             <SimpleMap locations={ [
     { lat: 47.497912, lng: 19.040235 }, // Budapest Parliament
@@ -243,6 +325,8 @@ export default function MainPage(props) {
   ]
   }/> 
         */}
+        
+       
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "./FooterNOTUSED";
@@ -83,6 +83,19 @@ export default function LoginWithFirebase(props) {
             ""
           )}
           <form onSubmit={SignInUser}>
+          <Box display={"flex"} flexDirection={'column'} justifyContent={"center"} alignItems={"center"}>
+
+<Typography variant="h5">Log in to your account</Typography>
+<Typography sx={{textAlign:"center",marginBottom:"25px", marginTop:"10px"}} variant="h7">Welcome back, please enter your details</Typography>
+<Button variant="outlined" sx={{color:"black", borderColor:"#d6d6d6", width:'100%', margin:"10px"}}>Continue with Google</Button>
+<Button variant="outlined" sx={{color:"black",borderColor:"#38569E", width:'100%', margin:"10px", color:"#38569E"}}>Continue with Facebook</Button>
+
+<Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
+<hr style={{  backgroundColor: "#d6d6d6",width:"100px",boxShadow:"none"  }}/>
+  <Typography margin={"10px"} sx={{color:"#d6d6d6"}}>OR</Typography>
+  <hr style={{  backgroundColor: "#d6d6d6",width:"100px",boxShadow:"none" }} />
+</Box>
+</Box>
             <div>
               <label htmlFor="names">
                 <Typography>Email:</Typography>{" "}
@@ -108,9 +121,9 @@ export default function LoginWithFirebase(props) {
                 onChange={(e) => setPassword(e.target.value)}
                 style={{borderColor: loginerror==1?"red":""}}
               />
-              <button>
-                <Typography>LOG IN</Typography>{" "}
-              </button>
+               <Button type="submit" variant="outlined" sx={{width:"100%", color:"black", marginTop:"20px",backgroundColor:"#d6d6d6"}}>
+              <Typography>Log in</Typography>{" "}
+               </Button>
             </div>
           </form>
         </div>

@@ -23,7 +23,7 @@ export default function Sports (){
          
           height: '100%',
           boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
-          borderRadius: 'inherit',
+        
         borderRadius:"10px", overflowX: 'scroll',
         '-webkit-overflow-scrolling': 'touch', 
         '&::-webkit-scrollbar': { display: 'none'} 
