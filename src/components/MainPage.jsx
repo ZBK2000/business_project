@@ -16,7 +16,7 @@ import Filter from "./Filter";
 import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
 import { UserAuth } from "../context/AuthContext";
-import { Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import SimpleMap from "./GoogleMapNOTUSED";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -24,6 +24,12 @@ import { useMemo } from "react";
 import Sports from "./sportIcons";
 import MapContainer from "./GoogleMapNOTUSED";
 import { Password } from "@mui/icons-material";
+import LoginWithFirebase from "./loginWithFirebase";
+import CommunityEvent from "./communityEventForm";
+import TelegramIcon from '@mui/icons-material/Telegram';
+import UserRegisterWithFirebase from "./UserRegisterWithFirebase";
+import ProvideUserName from './ProvideUserName';
+
 
 export default function MainPage(props) {
   //declaring states and consts
@@ -39,6 +45,12 @@ export default function MainPage(props) {
   const [favouriteData, setfavouriteData] = useState([]) 
   const [locations, setLocations] = useState([])
   const [mapView, setMapView] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [provideUserName, setProvideUserName] = useState(false)
+  const [showEventForm, setShowEventForm] = useState(false)
+  const [currentSport, setCurrentSport] = useState("")
+  const [community, setCommunity] = useState(false)
   
   useEffect(()=>{
     async function fetchFavourites(){
@@ -55,6 +67,7 @@ export default function MainPage(props) {
     }
     if(nameOfUser){
     fetchFavourites()}
+    
   }, [nameOfUser])
   
   
@@ -81,7 +94,7 @@ export default function MainPage(props) {
     const favData = await fav.json()
     setHeartList(favData)
     } else {
-      navigate(`/login/favourite`);
+      setShowRegister(true);
     }
     
 }
@@ -91,7 +104,8 @@ export default function MainPage(props) {
     if (user) {
       navigate(`/tracks/${item.name}/2`);
     } else {
-      navigate(`/login/${item.name}`);
+      //navigate(`/login/${item.name}`);
+      setShowRegister(true)
     }
   }
 
@@ -164,6 +178,7 @@ export default function MainPage(props) {
     
   }
   const newTracks = filteredData.map(function (item) {
+    if(currentSport== item.activity | !currentSport){
     return (
       <Grid
       
@@ -173,12 +188,13 @@ export default function MainPage(props) {
         sm={6}
         md={4}
         lg={3}
-        xl={2.2}
+        xl={2.4}
       >
         <Card
           className="tracks"
           sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
-          onClick={() => reNavigate(item)}
+         onClick={() => reNavigate(item)}
+         //onClick={() => setShowLogin(true)}
           key={item.name}
         >
           {heartList.includes(item.name) ?<FavoriteIcon  onClick={(e)=>changeHeart(e, item.name)} sx={{position:"absolute", color:"#fb7b7b", left:"85%", top:"5%"}}/>:
@@ -206,15 +222,30 @@ export default function MainPage(props) {
             <Typography variant="body2" color="text.secondary">
               {item.slot_number.join('P, ')}P
             </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item?.activity?item?.activity:"-"}
+            </Typography>
           </CardContent>
         </Card>
       </Grid>
     );
-  });
+  }});
 
   console.log(props.allLinks)
   const liveActivities =props?.allLinks? props.allLinks.map(function (item) {
     if (item.isopen){
+      const date_components = item.time.split(" ");
+      const date = date_components[0];
+      const time_interval = date_components[1];
+
+      // Extract the start time and end time from the time interval
+      let [start_time, end_time] = time_interval.split("-").map(Number);
+      start_time = String(start_time).padStart(2, '0');
+      const current_datetime = new Date();
+      // Convert the date and time components to Date objects
+      const activity_start_datetime = new Date(`${date}T${start_time}:00:00`)
+      if (activity_start_datetime >= current_datetime) {
+        if(currentSport== item.sportType | !currentSport){
       const count = item.slots.reduce((acc, curr) => {
         if (curr === "") {
           return acc + 1;
@@ -232,12 +263,12 @@ export default function MainPage(props) {
         sm={6}
         md={4}
         lg={3}
-        xl={2.2}
+        xl={2.4}
       >
         <Card
           className="tracks"
           sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
-          onClick={() => navigate(`/tracks/${item.name}/${item._id}`)}
+          onClick={user?() => navigate(`/tracks/${item.name}/${item._id}`):()=>setShowRegister(true)}
           key={item.name}
         >
           
@@ -252,10 +283,10 @@ export default function MainPage(props) {
           <CardContent>
           
             <Typography gutterBottom variant="h5" component="div">
-              {item.name}
+              {item.trackName}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {item.city}
+              {item?.city? item.city:"-"}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {item.time}
@@ -271,45 +302,53 @@ export default function MainPage(props) {
         </Card>
       </Grid>
     );
-  }}) : []
+  }}}}) : []
 
 
   return (
-    <div>
+    <Grid display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
+      
       <Header
         title="Fantastic business"
         success={props.getDownData}
         name={props.getDownData2}
+        setShowRegister={setShowRegister}
+        setShowLogin={setShowLogin}
       />
-      
+      <Grid width={'95%'}>
+      <Sports setCurrentSport={setCurrentSport} sport={currentSport}/> 
       
       <Grid display={"flex"} alignItems={"center"} >
-      <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={showFavourite}>{favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
+     {/* <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={showFavourite}>{favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
       <Button margin={"15px !important"} sx={{height:"80%", margin:"10px"}} variant="contained" onClick={mapViewFunc}>{!mapView?"Show map view":"Show detailed view"}</Button>
-      <Button onClick={()=>navigate("/communityEvent")} margin={"15px !important"} sx={{height:"80%", margin:"10px", backgroundColor:'green'}} variant="contained">Let's organize an event</Button>
-       {/*<Sports/> */}
+      <Button /*onClick={()=>navigate("/communityEvent")} onClick={()=>setShowEventForm(true)} margin={"15px !important"} sx={{height:"80%", margin:"10px", backgroundColor:'green',color:"#0BF763"}} variant="contained">
+        <TelegramIcon sx={{color:"#0BF763"}}/> Let's organize an event</Button>  */} 
+       
       </Grid>
-      <Filter getUpData={setFilterItems} />
-      <Typography variant="h5" sx={{margin:"20px"}}>Partners</Typography>
+      <Filter getUpData={setFilterItems} showFavourite={showFavourite} mapViewFunc={mapViewFunc} setShowEventForm={setShowEventForm} setShowRegister={setShowRegister} favouriteData={favouriteData} mapView={mapView}/>
+      <Box display={"flex"}><Typography onClick={()=>setCommunity(false)} variant="h5" sx={{color:community?"grey":"black",margin:"-10px 8px 20px",width:"108px", borderRight:"1px solid black", cursor:"pointer"}}>Partners</Typography>
+      <Typography onClick={()=>setCommunity(true)} variant="h5" sx={{color:community?"black":"grey",margin:"-10px 8px 20px", cursor:"pointer"}}>Community events</Typography></Box>
       {!mapView? <Grid
-        sx={{ marginLeft: "0px", marginRight: "10px", width: 1, marginBottom:"30px"}}
+        sx={{ marginLeft: "0px", marginRight: "0px", width: "100%", marginBottom:"30px"}}
         container
+        
         spacing={2}
         className="container"
       >
-        {newTracks}
+        {community? liveActivities: newTracks}
       </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
-      <Typography variant="h5" sx={{margin:"20px"}}>Community events</Typography>
+     {/*  <Typography variant="h5" sx={{margin:"-10px 8px 20px"}}>Community events</Typography>
       <Grid
-        sx={{ marginLeft: "0px", marginRight: "10px", width: 1 }}
+        sx={{ margin:"0px",marginTop:"-16px" ,width: "100%" }}
         container
+        justify="center !important" alignItems="center !important"
         spacing={2}
         className="container"
       >
 
       {liveActivities}
       </Grid>
-      {/* 
+      
             <SimpleMap locations={ [
     { lat: 47.497912, lng: 19.040235 }, // Budapest Parliament
     
@@ -320,7 +359,11 @@ export default function MainPage(props) {
   }/> 
         */}
         
-       
-    </div>
+      {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
+     {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
+      {showEventForm &&<CommunityEvent indicator={setShowEventForm}/>} 
+      {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
+      </Grid>
+    </Grid>
   );
 }

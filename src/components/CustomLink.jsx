@@ -14,6 +14,8 @@ import { useLocation } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Conversation from './ratingSlider copy';
+import CancelEvent from './CancelEvent';
+import VerifyEmail from './verifyEmail';
 
 
  export default function CustomLink() {
@@ -22,9 +24,10 @@ import Conversation from './ratingSlider copy';
    const encodedString = encodeURIComponent(`${id}/${hashcode}`);
    const navigate = useNavigate()
     const [linkData, setLinkData] = useState({})
-    
+  const [cancelEvent, setCancelEvent] = useState(false)
+  const [verifyEmail, setVerifyEmail] = useState(false)
    const {user} = UserAuth()
-    console.log(id, hashcode)
+    console.log(id, hashcode, user)
  
 
     useEffect(() => {
@@ -184,15 +187,16 @@ import Conversation from './ratingSlider copy';
       }}>
       
         {!user? <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-        you were invited to an activity by {linkData.user} you have to log in to participate 
+         {linkData.description} 
         </Typography> : user.displayName === linkData.user ? <Box display={"flex"} justifyContent={"space-between"}>
         <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-          Hi {user.displayName}, you created this activity
-        </Typography> <Button variant='outlined' sx={{color:"black", borderColor:"black"}}>Finalize/Book event</Button> </Box> :
-        <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-           Hi {user.displayName}, you were invited to this activity by {linkData.user}
+        {linkData.description}
+        </Typography>  </Box> :
+        <Typography variant="h5" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+           {linkData.description} 
         </Typography>}
-        <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex", gap:6}}>
+        <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex",justifyContent:"space-between", gap:6}}>
+          <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex", gap:6}}>
           <Box>
         <Typography variant="h6" component="h1" gutterBottom >
           Name of location/activity: 
@@ -234,6 +238,16 @@ import Conversation from './ratingSlider copy';
         </Typography>
         </Box>
         </Box>
+        {user.displayName === linkData.user?<Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+          You Are the organizer 
+        </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
+        <Button variant='outlined' sx={{color:"black", borderColor:"black",marginTop:"5px"}}>Finalize/Book event</Button></Box>:
+        <Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+        Organizer 
+      </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
+      {linkData.user}
+      </Typography></Box>}
+        </Box>
         {linkData?.description && <Typography variant='h5'>{linkData?.description}</Typography>}
          
         {linkData?.slots? linkData.slots.includes(user.displayName)? <CopyToClipboardButton datetime={linkData.time}/> :"":""}
@@ -243,9 +257,9 @@ import Conversation from './ratingSlider copy';
         {dateObj >= now ? (
   user ? (
     <Box display={"flex"} gap={3}>
-      <Button onClick={join} variant="contained" color="primary" sx={{ width: '100px' }}>
+      {user.displayName === linkData.user ?"":<Button onClick={user.emailVerified?join:()=>setVerifyEmail(true)} variant="contained" color="primary" sx={{ width: '100px' }}>
         {linkData?.slots ? (linkData.slots.includes(user.displayName) ? "Leave" : "Join") : "error"}
-      </Button>
+      </Button>}
       {linkData?.time && <CountdownTimer targetDateStr={linkData.time} />}
     </Box>
   ) : (
@@ -265,7 +279,7 @@ import Conversation from './ratingSlider copy';
   </Typography>
 )}
 <Box display={"flex"} justifyContent={"space-between"}>
-        <Box sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:"50%"}}>
+        <Box className="element" sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:"50%", height:"300px", overflow:"auto", margin:"10px 10px 10px 0px"}}>
           <Typography variant='h5' sx={{margin:"20px"}}>Participants</Typography>
         <List sx={{ listStyle: 'none', margin: '0', padding: '0' }}>
           { liSlotsList }
@@ -283,7 +297,7 @@ import Conversation from './ratingSlider copy';
               lg={8}
               xl={4}
               className="slider"
-              sx={{padding:"0px !important", margin:"10px"}}
+              sx={{padding:"0px !important", margin:"10px 0px 10px 10px"}}
               
             >
               {linkData?.img_urls ? <Box> {Array.from({ length: linkData.img_urls.length}, (_, i) => (
@@ -312,7 +326,8 @@ import Conversation from './ratingSlider copy';
       </Grid>
       
       </Grid>
-     
+     {cancelEvent && <CancelEvent indicator={setCancelEvent}/>}
+     {verifyEmail && <VerifyEmail indicator={setVerifyEmail}/>}
       </Grid>
   );
 }

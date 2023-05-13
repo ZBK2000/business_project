@@ -4,7 +4,7 @@ import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function UserRegisterWithFirebase() {
+export default function UserRegisterWithFirebase(props) {
   //declaring states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,18 +13,17 @@ export default function UserRegisterWithFirebase() {
   const [existingUser, setExinstingUser] = useState(false)
   const [existingEmail, setExinstingEmail] = useState(false)
   const [rigthPassword, setRightPassword] = useState(false)
+  
   const [error, setError] = useState(false)
   const navigate = useNavigate();
   const { createUser } = UserAuth();
   const { user } = UserAuth();
   const { logout } = UserAuth();
-
+const {googleSignIn} = UserAuth()
   const {name} = useParams()
   
   //this is for simply to renavige if someone wants to enter this enpoint regardless they are loggid in
-  if (user) {
-    navigate("/");
-  }
+  
 
   //this is the submit form for registering
   const createUserSubmit = async (event) => {
@@ -51,11 +50,12 @@ export default function UserRegisterWithFirebase() {
             body: JSON.stringify(data),
             headers: {
               "Content-Type": "application/json",
-            },
+            }, 
           });
-          if(name != "home"){
-            navigate(`/tracks/${name}`)
-          }
+          
+            props.indicator(false)
+            navigate(`/`)
+          
         }
       } else if (accepted === "username"){
           setExinstingUser(true)
@@ -87,9 +87,66 @@ export default function UserRegisterWithFirebase() {
     }
     
   };
+
+  const handleGoogleSignIn = async ()=>{
+    try {
+      const user1 =  await googleSignIn()
+      console.log(user1)
+      const data = { password: user1.email };
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/GoogleSignIn`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const accepted = await response.json();
+      console.log(accepted)
+      if(JSON.stringify(accepted.msg)==JSON.stringify("successful login")){
+        await update(user1, accepted.userName)
+        props.indicator(false)
+       
+        navigate(`/`)
+      } else if(accepted.msg=="successfully registrated"){
+        props.indicator(false)
+          props.setProvideUserName(true)
+          
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function closePopup(e){
+    if (e.target === e.currentTarget) {
+      // Clicked on the parent element, not on any of its descendants
+      props.indicator(false)
+    } 
+  }
+  function openLogin(e){
+    
+      // Clicked on the parent element, not on any of its descendants
+      props.indicator(false)
+      props.indicatorforLogin(true)
+    
+  }
+
+
   return (
+    <Box  onClick={(e)=>closePopup(e)} sx={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      bgcolor: 'rgba(0, 0, 0, 0.5)', // Background color with opacity
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999, // Higher z-index to make sure it's above everything else
+    }}>
+      <Box sx={{width:"400px",height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"10px"}}>
     <div>
-      <Header title="Create your account" />
       {!user ? (
         
         <form onSubmit={createUserSubmit}>
@@ -99,7 +156,7 @@ export default function UserRegisterWithFirebase() {
 
             <Typography variant="h5">Create your account</Typography>
             <Typography sx={{textAlign:"center",marginBottom:"25px", marginTop:"10px"}} variant="h7">Sign up now and join others in various activities</Typography>
-            <Button variant="outlined" sx={{color:"black", borderColor:"#d6d6d6", width:'100%', margin:"10px"}}>Sign up with Google</Button>
+            <Button onClick={handleGoogleSignIn} variant="outlined" sx={{color:"black", borderColor:"#d6d6d6", width:'100%', margin:"10px"}}>Sign up with Google</Button>
             <Button variant="outlined" sx={{color:"black",borderColor:"#38569E", width:'100%', margin:"10px", color:"#38569E"}}>Sign up with Facebook</Button>
             
             <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
@@ -136,9 +193,10 @@ export default function UserRegisterWithFirebase() {
               onChange={(e) => setPassword(e.target.value)}
               style={{borderColor: rigthPassword?"red":""}}
             />
-            <Button variant="outlined" sx={{width:"100%", color:"black", marginTop:"20px",backgroundColor:"#d6d6d6"}}>
-              <Typography>Get Started</Typography>{" "}
+            <Button variant="outlined" type="submit" sx={{width:"100%", color:"black", marginTop:"20px",backgroundColor:"#d6d6d6"}}>
+              <Typography >Get Started</Typography>{" "}
             </Button>
+            <Typography sx={{width:"100%", textAlign:"center", marginTop:"10px", cursor:"pointer"}} onClick={(e)=>openLogin(e)}> <u>Already have an account</u></Typography>
           </Grid>
          {/* </Grid>*/}
         </form>
@@ -171,5 +229,8 @@ export default function UserRegisterWithFirebase() {
         </Typography>
       )}
     </div>
+    </Box>
+
+    </Box>
   );
 }

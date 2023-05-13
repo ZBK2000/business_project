@@ -26,7 +26,7 @@ export default function CommunityEvent(props) {
   const { user } = UserAuth();
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const userName = user ? user.displayName : "";
- console.log(slots, trackName, isOpen)
+ console.log(slots, trackName, isOpen, sportType)
 
 
   async function generateRandomLinkPath(trackName, slots, loc, time, user, subTrackName,description, isopen, city, sportType, exactDate, isLimited, organizer, img) {
@@ -65,15 +65,30 @@ export default function CommunityEvent(props) {
     }
   }
  console.log(exactDate, description)
+
+ function closePopup(e){
+  if (e.target === e.currentTarget) {
+    // Clicked on the parent element, not on any of its descendants
+    props.indicator(false)
+  } }
   return (
-    <div>
-      <Header
-        title="new track registration"
-        success={props.getDownData}
-        name={props.getDownData2}
-      />
-      <Typography sx={{margin:"20px"}} variant="h5">Lets organize a cool event and have fun with others</Typography>
-      <Grid width={"500px"} margin={"40px"}>
+    <Box  onClick={(e)=>closePopup(e)} sx={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      bgcolor: 'rgba(0, 0, 0, 0.5)', // Background color with opacity
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999, // Higher z-index to make sure it's above everything else
+    }}>
+      <Box className={"element"} sx={{width:"600px",height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"40px", overflow:"auto"}}>
+    
+      
+      <Typography sx={{margin:"0px 0px 20px"}} variant="h5">Lets organize a cool event and have fun with others</Typography>
+      
         
         <label htmlFor="name">
           <Typography>Name of the Activity:</Typography>
@@ -83,8 +98,14 @@ export default function CommunityEvent(props) {
           id="name"
           onChange={(e) => setName(e.target.value)}
         />
-
+  <Box display={"flex"} justifyContent={"space-around"} margin={'10px'}>
+  <Box>
+  <Typography>Choose Date:</Typography>
+        <StaticDatePickerCollapsible getUpData={setExactDate} />
+        </Box>
   <SportsSelect sportType={setSportType}/>
+  
+  </Box>
   <label htmlFor="location">
           <Typography>City:</Typography>
         </label>
@@ -101,8 +122,7 @@ export default function CommunityEvent(props) {
           id="location"
           onChange={(e) => setLocation(e.target.value)}
         />
-         <Typography>Choose Date:</Typography>
-        <StaticDatePickerCollapsible getUpData={setExactDate} />
+         
        <label htmlFor="location">
           <Typography>time:</Typography>
         </label>
@@ -134,10 +154,12 @@ export default function CommunityEvent(props) {
         <Typography sx={{color:"black"}}>Open it for the community [you can do this later as well]</Typography>
         <Switch {...label} onChange={()=>setIsOpen(prev=>!prev)} sx={{backgroundColor:"grey", borderRadius:"10px"}}/>
         </Box>
-        <button onClick={()=>generateRandomLinkPath(name,slots,location, timeLine, user.displayName,"-", description, isOpen,city, sportType, exactDate, isLimited, userName, img)}>
+        <Button variant="outlined" sx={{color:"black",backgroundColor:"#d6d6d6", width:'100%', marginTop:'10px'}} onClick={()=>generateRandomLinkPath(name,slots,location, timeLine, user.displayName,"-", description, isOpen,city, sportType, exactDate, isLimited, userName, img)}>
           <Typography >Submit</Typography>
-        </button>
-        </Grid>
-    </div>
+        </Button>
+        
+   
+    </Box>
+    </Box>
   );
 }

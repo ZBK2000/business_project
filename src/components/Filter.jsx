@@ -14,6 +14,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { margin } from "@mui/system";
+import TelegramIcon from '@mui/icons-material/Telegram';
+import { UserAuth } from "../context/AuthContext";
+import VerifyEmail from "./verifyEmail";
 
 export default function Filter(props) {
   //declaring states and consts
@@ -22,6 +25,8 @@ export default function Filter(props) {
   const [location, setLocation] = React.useState("");
   const [name, setName] = React.useState("");
   const [expanded, setExpanded] = React.useState(false);
+  const { user } = UserAuth();
+  const [verifyEmail, setVerifyEmail] = React.useState(false)
 
   const marks = [
     {
@@ -49,12 +54,16 @@ export default function Filter(props) {
   };
 
   return (
-    <Box sx={{ margin: "10px", "& > :not(style)": { m: 1 } }}>
-      <Button onClick={handleExpandClick} variant="extended">
+    <Box sx={{ margin: "8px", "& > :not(style)": { m: 1 } }}>
+      <Button sx={{height:"80%", margin:"10px",marginLeft:"0px !important",backgroundColor:"#d6d6d6"}} onClick={handleExpandClick} variant="extended">
         {!expanded ? <FilterAltOffIcon /> : <FilterAltIcon />}
       </Button>
-
-      <Collapse sx={{ width: "100%" }} in={expanded} timeout="auto">
+      <Button margin={"15px !important"} sx={{height:"80%", margin:"10px",backgroundColor:"#d6d6d6"}} variant="fullfilled" onClick={user?props.showFavourite:()=>props.setShowRegister(true)}>{props.favouriteData.length ===0 ?"show favourites only":"show all"}</Button>
+      <Button margin={"15px !important"} sx={{height:"80%", margin:"10px",backgroundColor:"#d6d6d6"}} variant="fullfilled" onClick={props.mapViewFunc}>{!props.mapView?"Show map view":"Show detailed view"}</Button>
+      <Button /*onClick={()=>navigate("/communityEvent")}*/ onClick={user?user.emailVerified?()=>props.setShowEventForm(true):()=>setVerifyEmail(true):()=>props.setShowRegister(true)} margin={"15px !important"} sx={{height:"80%", margin:"10px", backgroundColor:'green',color:"#0BF763", "&:hover":{backgroundColor:'#2f9b14'}}} variant="fullfilled">
+      <TelegramIcon sx={{color:"#0BF763"}}/> Let's organize an event
+      </Button>
+      <Collapse sx={{ width: "100%" , marginTop:"45px !important"}} in={expanded} timeout="auto">
         <Box
           sx={{
             padding: 0,
@@ -167,9 +176,9 @@ export default function Filter(props) {
             </Grid>
             <Grid item padding={0} xs={12} sm={2} md={1.5}>
               <Button
-                sx={{ color: "black" }}
+                sx={{ backgroundColor: "#d6d6d6" }}
                 onClick={getUpData}
-                variant="contained"
+                variant="fulfilled"
               >
                 Filter
               </Button>
@@ -177,6 +186,7 @@ export default function Filter(props) {
           </Grid>
         </Box>
       </Collapse>
+      {verifyEmail && <VerifyEmail indicator={setVerifyEmail}/>}
     </Box>
   );
 }

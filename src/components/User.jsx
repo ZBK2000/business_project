@@ -5,6 +5,11 @@ import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import Header from "./Header";
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import {sendEmailVerification} from "firebase/auth"
 
 export default function User(props) {
   //declaring const and states
@@ -15,7 +20,8 @@ export default function User(props) {
   const [render, setRender] = useState("ha");
   const [emailAndUser, setEmailAndUser] = useState(null)
   const [links, setLinks] = useState([])
-
+  console.log(user)
+  console.log(user.emailVerified)
   //this is the function for cancelling boooked times on the userpage
   async function cancel(item) {
     const nameOfTrack = item.split(": ")[0];
@@ -73,8 +79,9 @@ export default function User(props) {
       const data = await response.json();
     
       setUserData({
-        booked_tracks: data.booked_tracks.map(function (item) {
-          const date_string = item.split(": ")[1].split(" ").slice(0,2).join(" ");
+        booked_tracks: data.booked_tracks.map(function (item, index) {
+          console.log(item)
+          const date_string = item.slice(1,3).join(" ");
           console.log(date_string)
           // Extract the date and time components from the date string
           const date_components = date_string.split(" ");
@@ -95,30 +102,50 @@ export default function User(props) {
           
           return (
             <Paper
-            key={item}
-              sx={{ margin: "10px" }}
+            key={index}
+              sx={{ margin: "10px"}}
               className="booked-times"
               elevation={6}
             >
-              <h2 className="booked-times-h2">
-                <li>{item}</li>
-              </h2>
+             <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
+              <Typography variant="h6" className="booked-times-h2">
+                {item[0]}
+              </Typography>
+              </Box>
+              <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
+               <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
+              <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+               <DateRangeIcon/>
+              <Typography> {`${item[1]} `}{item[2]}</Typography>
+              </Box>
+              <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+              <LocationOnIcon/> 
+              <Typography> {item[3]}</Typography>
+              </Box>
+              <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+              <DirectionsRunOutlinedIcon/> 
+              <Typography> {item[4]}{` - ${item[5]}`}</Typography>
+              </Box></Box>
+<Box display={"flex"} alignItems={"center"}>
               <Button
                 className="cancel-see"
-                onClick={() => cancel(item)}
+                /* onClick={() => deleteTrack(item)} */
                 variant="text"
               >
                 X
               </Button>
               <Button
-                onClick={() => see(item)}
+                onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
                 className="cancel-see"
                 variant="text"
               >
                 See
               </Button>
-            </Paper>
-          );
+              </Box>
+              </Box>
+            </Paper>);
         }}),
         tracks: data.tracks.map(function (item) {
           return (
@@ -172,8 +199,9 @@ export default function User(props) {
       const data = await response.json();
      
       setUserData({
-        booked_tracks: data.booked_tracks.map(function (item) {
-          const date_string = item.split(": ")[1].split(" ").slice(0,2).join(" ");
+        booked_tracks: data.booked_tracks.map(function (item, index) {
+          console.log(item)
+          const date_string = item.slice(1,3).join(" ");
           console.log(date_string)
           // Extract the date and time components from the date string
           const date_components = date_string.split(" ");
@@ -193,30 +221,50 @@ export default function User(props) {
             console.log(true); // Activity has started
           return (
             <Paper
-            key={item}
-              sx={{ margin: "10px" }}
+            key={index}
+              sx={{ margin: "10px"}}
               className="booked-times"
               elevation={6}
             >
-              <h2 className="booked-times-h2">
-                <li>{item}</li>
-              </h2>
+             <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
+              <Typography variant="h6" className="booked-times-h2">
+                {item.split(": ")[0]}
+              </Typography>
+              </Box>
+              <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
+               <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
+              <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+               <DateRangeIcon/>
+              <Typography> {date_string}</Typography>
+              </Box>
+              <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+              <LocationOnIcon/> 
+              <Typography>  -</Typography>
+              </Box>
+              <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+              <DirectionsRunOutlinedIcon/> 
+              <Typography> -</Typography>
+              </Box></Box>
+<Box display={"flex"} alignItems={"center"}>
               <Button
                 className="cancel-see"
-                onClick={() => cancel(item)}
+                /* onClick={() => deleteTrack(item)} */
                 variant="text"
               >
                 X
               </Button>
               <Button
-                onClick={() => see(item)}
+                onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
                 className="cancel-see"
                 variant="text"
               >
                 See
               </Button>
-            </Paper>
-          );
+              </Box>
+              </Box>
+            </Paper>);
         }}),
         tracks: data.tracks.map(function (item) {
           return (
@@ -257,6 +305,12 @@ export default function User(props) {
     fetching_user();
   }
    console.log(links)
+
+
+
+
+
+
   return (
     <div>
      
@@ -281,6 +335,7 @@ export default function User(props) {
             backgroundColor: "#ebebeb",
             borderRadius: "10px",
             padding: "10px",
+            paddingLeft:"0px"
             
           }}
           item
@@ -288,10 +343,26 @@ export default function User(props) {
        
 
           maxWidth={"500px"} >
-          
-        <Typography variant="h5" margin={"10px"}>Your email: {emailAndUser? emailAndUser[0]: "cannot get"}</Typography>
-        <Typography variant="h5" margin={"10px"}>Your username: {emailAndUser? emailAndUser[1]: "cannot get"}</Typography>
-        <Button variant="conatained"  margin={"10px"}>Change password? [not working yet]</Button>
+          <Box display={"flex"}>
+
+        <Typography variant="h5" margin={"10px"} width={"200px"}>Your email:</Typography>
+        <Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[0]: "cannot get"}</Typography>
+        <EditIcon/>
+          </Box>
+         {!user.emailVerified && <Box display={"flex"} alignItems={"center"}><Typography sx={{color:"red"}}>your email is not verified! You have to verify it to be able to join or organize activites:</Typography>
+       <Button onClick={()=>sendEmailVerification(user)} variant="outlined" sx={{color:"Red"}}>resend verification email</Button>  </Box>}
+          <Box display={"flex"}>
+
+<Typography variant="h5" margin={"10px"} width={"200px"}>Your username:</Typography>
+<Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[1]: "cannot get"}</Typography>
+<EditIcon/>
+  </Box>
+  <Box display={"flex"}>
+
+<Typography variant="h5" margin={"10px"} width={"200px"}>Password:</Typography>
+<Typography variant="h5" margin={"10px"} width={"300px"}>**********</Typography>
+<EditIcon/>
+  </Box>
       </Grid>
         <Grid
           sx={{
@@ -344,12 +415,12 @@ export default function User(props) {
             <Typography variant="h5">
               Upcomming activities which your are joined:
             </Typography>
-            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous groups</Button>
+            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous Activites</Button>
           </Box>
           {links ? (
             <>
               {links.map((link, index)=>{
-                if(link.slice(-1) != user.displayName){
+                if(link.slice(-3,-2) != user.displayName){
                  const date_string = link[2].slice(0,-1);
           console.log(date_string, "ha")
           // Extract the date and time components from the date string
@@ -371,13 +442,32 @@ export default function User(props) {
                 return(
                  <Paper
                  key={index}
-                   sx={{ margin: "10px" }}
+                   sx={{ margin: "10px"}}
                    className="booked-times"
                    elevation={6}
                  >
-                   <h2 className="booked-times-h2">
-                     <li>{link[1]}:{link[2]}</li>
-                   </h2>
+                  <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
+                   <Typography variant="h6" className="booked-times-h2">
+                     {link[1]}
+                   </Typography>
+                   </Box>
+                   <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
+                    <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
+                   <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                    <DateRangeIcon/>
+                   <Typography> {link[2]}</Typography>
+                   </Box>
+                   <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+                   <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                   <LocationOnIcon/> 
+                   <Typography>  {link.slice(-2,-1)}</Typography>
+                   </Box>
+                   <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+                   <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                   <DirectionsRunOutlinedIcon/> 
+                   <Typography> {link.slice(-1)}</Typography>
+                   </Box></Box>
+<Box>
                    <Button
                      className="cancel-see"
                      /* onClick={() => deleteTrack(item)} */
@@ -392,6 +482,8 @@ export default function User(props) {
                    >
                      See
                    </Button>
+                   </Box>
+                   </Box>
                  </Paper>)
               }}})}
              
@@ -420,13 +512,13 @@ export default function User(props) {
             <Typography variant="h5">
               Upcomming activities which your are organizing:
             </Typography>
-            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous groups</Button>
+            <Button size="small" variant="outlined" sx={{color:"black", borderColor:"black"}}>previous Activites</Button>
           </Box>
           {links ? (
             <>
               {links.map((link, index)=>{
-                console.log(link.slice(-1), user.displayName)
-                if (link.slice(-1) == user.displayName){
+                console.log(link.slice(-3,-2), user.displayName)
+                if (link.slice(-3,-2) == user.displayName){
                  const date_string = link[2].slice(0,-1);
           console.log(date_string, "ha")
           // Extract the date and time components from the date string
@@ -445,31 +537,52 @@ export default function User(props) {
           // Compare the activity start time with the current time
           if (activity_start_datetime >= current_datetime) {
             console.log(true); // Activity has started
-                return(
-                 <Paper
-                 key={index}
-                   sx={{ margin: "10px" }}
-                   className="booked-times"
-                   elevation={6}
-                 >
-                   <h2 className="booked-times-h2">
-                     <li>{link[1]}:{link[2]}</li>
-                   </h2>
-                   <Button
-                     className="cancel-see"
-                     /* onClick={() => deleteTrack(item)} */
-                     variant="text"
-                   >
-                     X
-                   </Button>
-                   <Button
-                     onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
-                     className="cancel-see"
-                     variant="text"
-                   >
-                     See
-                   </Button>
-                 </Paper>)}
+            return(
+              <Paper
+              key={index}
+                sx={{ margin: "10px"}}
+                className="booked-times"
+                elevation={6}
+              >
+               <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
+                <Typography variant="h6" className="booked-times-h2">
+                  {link[1]}
+                </Typography>
+                </Box>
+                <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
+                 <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
+                <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                 <DateRangeIcon/>
+                <Typography> {link[2]}</Typography>
+                </Box>
+                <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                <LocationOnIcon/> 
+                <Typography>  {link.slice(-2,-1)}</Typography>
+                </Box>
+                <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                <DirectionsRunOutlinedIcon/> 
+                <Typography> {link.slice(-1)}</Typography>
+                </Box></Box>
+<Box>
+                <Button
+                  className="cancel-see"
+                  /* onClick={() => deleteTrack(item)} */
+                  variant="text"
+                >
+                  X
+                </Button>
+                <Button
+                  onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                  className="cancel-see"
+                  variant="text"
+                >
+                  See
+                </Button>
+                </Box>
+                </Box>
+              </Paper>)}
               }})}
              
             </>

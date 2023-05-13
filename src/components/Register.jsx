@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { UserAuth } from "../context/AuthContext";
+import SportsSelect from "./sportSelect";
 
 export default function register(props) {
   //declaring states and consts
@@ -15,6 +16,7 @@ export default function register(props) {
   const [description, setDescription] = useState("");
   const [slots, setSlots] = useState([]);
   const [img, setImg] = useState("");
+  const [activity, setActivity] = useState("");
   const [trackName, setTrackName] = useState([])
   const [trackCounter, setTrackCounter] = useState([""])
   const { user } = UserAuth();
@@ -102,6 +104,7 @@ export default function register(props) {
         booked: timelinesForSubTracks /* next7Days, */,
         latAndLong,
         trackName,
+        activity
       },
       user: userName,
     };
@@ -151,6 +154,8 @@ export default function register(props) {
           id="name"
           onChange={(e) => setName(e.target.value)}
         />
+       
+        <SportsSelect sportType={setActivity}/>
         <label htmlFor="price">
           <Typography>Price:</Typography>
         </label>
@@ -214,7 +219,7 @@ export default function register(props) {
        </Grid>
        <Button variant="fulfilled" onClick={()=>setTrackCounter(prev=>[...prev, ""])}>Add additional track/activity</Button>
         <label htmlFor="img">
-          <Typography>Images:</Typography>
+          <Typography>Images (least 3):</Typography>
         </label>
         <input
           type="file"

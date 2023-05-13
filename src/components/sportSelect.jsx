@@ -1,4 +1,4 @@
-
+  {/*
 import React, { useState } from 'react';
 
 import Select from '@mui/material/Select';
@@ -116,4 +116,97 @@ const OtherSportMenuItem = ({ onClick }) => {
   };
   
   export default SportsSelect;
-  
+ */}
+
+ import * as React from 'react';
+ import TextField from '@mui/material/TextField';
+ import Autocomplete from '@mui/material/Autocomplete';
+ 
+ const sportsList = [
+  { name: 'Soccer' },
+  { name: 'Basketball' },
+  { name: 'Baseball' },
+  { name: 'Tennis' },
+  { name: 'Volleyball' },
+  { name: 'Golf' },
+  { name: 'Swimming' },
+  { name: 'Cycling' },
+  { name: 'Boxing' },
+  { name: 'MMA' },
+  { name: 'Hockey' },
+  { name: 'Football' },
+  { name: 'Rugby' },
+  { name: 'Cricket' },
+  { name: 'Track and Field' },
+  { name: 'Gymnastics' },
+  { name: 'Figure Skating' },
+  { name: 'Skiing' },
+  { name: 'Snowboarding' },
+  { name: 'Ice Skating' },
+  { name: 'Table Tennis' },
+  { name: 'Badminton' },
+  { name: 'Frisbee' },
+  { name: 'Hiking' },
+  { name: 'Camping' },
+  { name: 'Rock Climbing' },
+  { name: 'Yoga' },
+  { name: 'Pilates' },
+  { name: 'Zumba' },
+  { name: 'Dancing' },
+  { name: 'Martial Arts' },
+  { name: 'Gym' },
+  { name: 'Jogging' },
+  { name: 'Running' },
+  { name: 'Walking' },
+  { name: 'Swimming Lessons' },
+  { name: 'Cycling Tours' },
+  { name: 'Kayaking' },
+  { name: 'Canoeing' },
+  { name: 'Sailing' },
+  { name: 'Surfing' },
+  { name: 'Paddleboarding' },
+  { name: 'Scuba Diving' },
+  { name: 'Snorkeling' },
+  { name: 'Fishing' },
+  { name: 'Photography' },
+  { name: 'Painting' },
+  { name: 'Drawing' },
+  { name: 'Cooking' },
+  { name: 'Board Games' },
+  { name: 'Card Games' },
+  { name: 'Chess' },
+  { name: 'Trivia' },
+  { name: 'Karaoke' },
+  { name: 'Concerts' },
+  { name: 'Movies' },
+  { name: 'Theater' },
+  { name: 'Museums' },
+  { name: 'Art Galleries' },
+  { name: 'Wine Tasting' },
+  { name: 'Beer Tasting' },
+  { name: 'Coffee Shops' },
+  { name: 'Book Clubs' },
+  { name: 'Language Exchange' },
+  { name: 'Volunteering' },
+  { name: 'Charity Events' },
+  { name: 'Networking' },
+];
+
+ 
+ export default function SportsSelect(props) {
+  const handleSelectedValueChange = (event, newValue) => {
+    props.sportType(newValue.name)}
+
+   return (
+     <Autocomplete
+       disablePortal
+       id="combo-box-demo"
+       options={sportsList}
+       sx={{ width: 300 }}
+       getOptionLabel={(option) => option.name} // use the name property of each object
+       onChange={handleSelectedValueChange} 
+       renderInput={(params) => <TextField {...params} label="Sport" />}
+     />
+   );
+ }
+ 

@@ -48,11 +48,11 @@ export default function Header (props){
     } */
 
     function navigateToLogin(){
-      navigate("/login/home")
+      props.setShowLogin(true)
     }
 
     function navigateToSignUp(){
-      navigate("/signup/home")
+      props.setShowRegister(true)
     }
 
     function navigateToMain(){
@@ -85,10 +85,10 @@ export default function Header (props){
   };
 
     return (
-      <Box sx={{ flexGrow: 1}}>
-        <AppBar position="static">
-          <Box display={"flex"} justifyContent={"center"}>
-          <Box sx={{ width: props?.startOfHeader ?"1152px":"100%", padding:props?.startOfHeader ?"0px":"0 10px"}} >
+      <Box sx={{ flexGrow: 1, width:"100%"}}>
+        <AppBar position="static" >
+          <Box display={"flex"} justifyContent={"center"} margin={"0% 2.5%"}>
+          <Box sx={{ width: props?.startOfHeader ?"1152px":"100%", padding:props?.startOfHeader ?"0px":"0px"}} >
           <Toolbar sx={{padding:"0px !important"}}>
           <Typography  onClick={navigateToMain} variant="h7" component="div" sx={{ flexGrow: 1, cursor: "pointer"}}>
           SPORT - <span style={{color:"red"}}>TOGETHER</span>
@@ -102,7 +102,7 @@ export default function Header (props){
             <Button sx={{ display: { xs: 'none', md: 'inline', marginTop:"5px" }}}  onClick={navigateToHelp} color="inherit"> <HelpOutlineIcon /></Button>
             {user ?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToLogin} color="inherit">LOGIN</Button>}
 {user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUp} color="inherit">SIGN UP</Button> }
-{user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUpBusiness} color="inherit">SIGN UP AS A BUSINESS</Button> }
+{/*user?"":<Button sx={{ display: { xs: 'none', md: 'inline' }}} onClick={navigateToSignUpBusiness} color="inherit">SIGN UP AS A BUSINESS</Button>*/ }
 
 {user ?<Button   sx = {{display: { xs: 'none', md: 'inline' }, margin:"15px"}} onClick={navigateToRegister} color="inherit">REGISTER TRACK</Button>: "" }
 

@@ -97,7 +97,7 @@ function Conversation(props) {
       backgroundColor:'#e1e1e1',
       overflow: 'auto',
       borderRadius:"15px",
-      margin:"35px 0px"
+      margin:"0px 0px"
       }}
       
     item

@@ -1,5 +1,5 @@
 import Header from "./Header";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import Next7DaysDropdown from "./NextSevenDay";
 import Footer from "./FooterNOTUSED";
@@ -56,10 +56,13 @@ export default function CertainTrack2(props) {
   const [timeInterval, setTimeInterval] = useState(0)
   const [players, setPlayers] = useState(false)
   const [imageIndicator, setImageIndicator] = useState(false)
+  const { pathname } = useLocation();
 
- 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   //declaring the function, which will be activated when someone join to a timeline
-  const handleClick = async (id, subTrackName) => {
+  const handleClick = async (id, subTrackName, city, sportType) => {
     console.log(id, subTrackName)
     //for checking if the user already in it
     let ifNotSameName = true;
@@ -102,6 +105,8 @@ export default function CertainTrack2(props) {
         id: nameOfTrack,
         user: nameOfUser,
         time_id: id,
+        city,
+        sportType
       };
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tracks`, {
@@ -135,6 +140,7 @@ export default function CertainTrack2(props) {
   let subTrackName
   let city
   let img_urls
+  let sportType
   try { 
     for (let track in props.allTrack) {
       if (props.allTrack[track].name == id) {
@@ -146,6 +152,7 @@ export default function CertainTrack2(props) {
         location = props.allTrack[track].location
         subtrackNames = props.allTrack[track].trackName
         city = props.allTrack[track].city
+        sportType = props.allTrack[track].activity
         trackNumber = track;
         console.log(slot_number, subtrackNames)
         break;
@@ -242,10 +249,11 @@ export default function CertainTrack2(props) {
 
   //here we make the image slider which can be activated by clicking
   let currentSlide = 0;
-  const slides = document.querySelectorAll(".images");
+  
 
   function changeSlide(event, plusMinus) {
     event.stopPropagation();
+    const slides = document.querySelectorAll(".images");
     let count = 0
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
@@ -285,12 +293,12 @@ export default function CertainTrack2(props) {
     }
   };
   // generating link numbers for custom path
-   async function generateRandomLinkPath(trackName, slots, loc, time, date, user, subTrackName, city, organizer, img_urls) {
+   async function generateRandomLinkPath(trackName, slots, loc, time, date, user, subTrackName, city, organizer, img_urls, sportType) {
     slots = Array(Number(slots[subtrackNames.indexOf(subTrackName)])).fill("")
     console.log(slots)
     slots[slots.indexOf("")] = user
     console.log(subTrackName)
-    const dataForLink = {trackName, slots, location: loc, time: `${date} ${time}`,user, subTrackName, description: "", isopen: false, city, isLimited: true, organizer, img_urls}
+    const dataForLink = {trackName, slots, location: loc, time: `${date} ${time}`,user, subTrackName, description: "", isopen: false, city, isLimited: true, organizer, img_urls, sportType}
     console.log(dataForLink)
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/customLink`, {
       method: "POST",
@@ -316,6 +324,7 @@ export default function CertainTrack2(props) {
 console.log(timeInterval)
 
 
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
   return (
@@ -324,12 +333,16 @@ console.log(timeInterval)
       
       <Grid width={"1152px"} height={"450px"} margin={"30px auto"}>
       <Typography variant="h4" sx={{margin:"20px 0px", }}>{id} </Typography>
-      <Typography variant="h5" sx={{margin:"20px 0px", }}>{desc} </Typography>
+      <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px 15px"}}>
+      <Typography variant="h5" sx={{marginBottom:"10px", }}>{desc} </Typography>
+      <Typography variant="h5" sx={{margin:"0px", }}> Activity Type: {sportType} </Typography>
+      </Box>
       <Grid width={"1152px"} height={"450px"} margin={"30px auto"} display={"flex"} justifyContent={"space-between"} onClick={()=>setImageIndicator(true)} >
         <Box sx={{width:"49.5%"}} >
       <img
                   
                   src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=0`}
+                 
                   className="images2 slide left"
                   alt="image"
                 />
@@ -338,7 +351,8 @@ console.log(timeInterval)
                   <Box sx={{ height:"48.5%"}}>
       <img
                   
-                  src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=0`}
+                  src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=1`}
+                 
                   className="images2 slide righttop"
                   alt="image"
                 />
@@ -346,7 +360,8 @@ console.log(timeInterval)
                 <Box sx={{ height:"48.5%"}}>
       <img
                   
-                  src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=0`}
+                  src={`${import.meta.env.VITE_BACKEND_URL}/img?user_id=${id}&number=2`}
+                  
                   className="images2 slide rightbottom"
                   alt="image"
                 />
@@ -430,7 +445,7 @@ console.log(timeInterval)
                 <Box sx={{borderRadius:"10px",backgroundColor:"#ffffff",width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center"}}><Typography>I'M INTERESTED TO PLAY AT THAT TIME</Typography></Box>*/}
                 <Button  onClick={()=>setPlayers(true)} sx={{borderRadius:"10px", width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center", color:"black",backgroundColor:"#ffffff","&:hover": {
           backgroundColor: "white"}}}>CHECK THE PLAYERS WHO ARE INTERESTED</Button>
-                <Button    onClick={() => handleClick(timeInterval, subTrackName) }
+                <Button    onClick={() => handleClick(timeInterval, subTrackName, city, sportType) }
                 sx={{borderRadius:"10px", width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center", backgroundColor:"#ffffff", color:"black", borderColor:"#e0e0e0", "&:hover": {
           backgroundColor: "white"}}}>I'M INTERESTED TO PLAY AT THAT TIME</Button>
               </Box>
@@ -440,7 +455,7 @@ console.log(timeInterval)
               <Box display={"flex"} justifyContent={"space-around"} sx={{padding:"10px"}}>
                 <Box sx={{borderRadius:"10px",width:"40%",padding:"10px 0px", display:"flex" ,alignItems:"center", justifyContent:"center"}}><Typography>Do you want to organize a match with your friends in a closed event?</Typography> </Box> 
                 {/*<Box sx={{borderRadius:"10px",backgroundColor:"#ffffff",width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center"}}><Typography>ORGANIZE A MATCH IN THIS TIMESLOT</Typography></Box>*/}
-                <Button  onClick={()=>generateRandomLinkPath(id, slot_number, location,h3s.find((obj) => obj.id === timeInterval)?.text, rightDay, nameOfUser, subTrackName, city, nameOfUser, img_urls)} sx={{borderRadius:"10px", width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center", backgroundColor:"#ffffff", color:"black", "&:hover": {
+                <Button  onClick={()=>generateRandomLinkPath(id, slot_number, location,h3s.find((obj) => obj.id === timeInterval)?.text, rightDay, nameOfUser, subTrackName, city, nameOfUser, img_urls, sportType)} sx={{borderRadius:"10px", width:"40%",padding:"10px",display:"flex" ,alignItems:"center", justifyContent:"center", backgroundColor:"#ffffff", color:"black", "&:hover": {
           backgroundColor: "white"}}}>ORGANIZE A MATCH IN THIS TIMESLOT</Button>
               </Box>
             </Box>
