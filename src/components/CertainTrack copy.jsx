@@ -331,13 +331,13 @@ console.log(timeInterval)
     <div>
       <Header title={id} success={props.getDownData} name={nameOfUser} startOfHeader={true}/>
       
-      <Grid width={"1152px"} height={"450px"} margin={"30px auto"}>
+      <Grid width={{md:"1152px", xs:"100%"}} height={"450px"} margin={"30px auto"}>
       <Typography variant="h4" sx={{margin:"20px 0px", }}>{id} </Typography>
       <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px 15px"}}>
       <Typography variant="h5" sx={{marginBottom:"10px", }}>{desc} </Typography>
       <Typography variant="h5" sx={{margin:"0px", }}> Activity Type: {sportType} </Typography>
       </Box>
-      <Grid width={"1152px"} height={"450px"} margin={"30px auto"} display={"flex"} justifyContent={"space-between"} onClick={()=>setImageIndicator(true)} >
+      <Grid width={{md:"1152px", xs:"100%"}} height={"450px"} margin={"30px auto"} display={"flex"} justifyContent={"space-between"} onClick={()=>setImageIndicator(true)} >
         <Box sx={{width:"49.5%"}} >
       <img
                   
@@ -380,8 +380,8 @@ console.log(timeInterval)
       </Box>
      {/* <Next7DaysDropdown getUpData={setRightDay} />*/} 
       <StaticDatePickerLandscape getUpData={setRightDay} />
-      <Box display={"flex"}  sx={{height:"60%"}} justifyContent={"space-between"} >
-      <Box sx={{ overflow:"auto"}}>
+      <Box display={{md:"flex"}}  sx={{height:{md:"60%"}}} justifyContent={"space-between"} >
+      <Box sx={{ overflow:"auto", height:{xs:"300px"}}}>
       {h3s.map((h3) => (
               <Grid
                 key={(h3.text)}

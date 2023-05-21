@@ -84,7 +84,7 @@ function RatingSlide(props) {
   ))
   
   return (
-    <Grid marginLeft={"50px"}
+    <Grid 
     sx={{
       position: 'relative',
       width: "100%",
@@ -92,7 +92,7 @@ function RatingSlide(props) {
       backgroundColor:'#e1e1e1',
       overflow: 'auto',
       borderRadius:"15px",
-      margin:"35px 0px"
+      margin:{md:"35px 0px",xs:"15px 0px"}
       }}
       
     item

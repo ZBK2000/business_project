@@ -3,6 +3,7 @@ import { useState } from "react";
 import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion"
 
 export default function UserRegisterWithFirebase(props) {
   //declaring states
@@ -19,6 +20,7 @@ export default function UserRegisterWithFirebase(props) {
   const { createUser } = UserAuth();
   const { user } = UserAuth();
   const { logout } = UserAuth();
+  const { update } = UserAuth();
 const {googleSignIn} = UserAuth()
   const {name} = useParams()
   
@@ -52,7 +54,7 @@ const {googleSignIn} = UserAuth()
               "Content-Type": "application/json",
             }, 
           });
-          
+            
             props.indicator(false)
             navigate(`/`)
           
@@ -133,6 +135,7 @@ const {googleSignIn} = UserAuth()
 
 
   return (
+    
     <Box  onClick={(e)=>closePopup(e)} sx={{
       position: 'fixed',
       top: 0,
@@ -145,6 +148,10 @@ const {googleSignIn} = UserAuth()
       justifyContent: 'center',
       zIndex: 9999, // Higher z-index to make sure it's above everything else
     }}>
+      <motion.div
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}>
       <Box sx={{width:"400px",height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"10px"}}>
     <div>
       {!user ? (
@@ -201,7 +208,7 @@ const {googleSignIn} = UserAuth()
          {/* </Grid>*/}
         </form>
       ) : (
-        ""
+        <Typography>Loading..., please wait</Typography>
       )}
       {existingUser && existingEmail && (
         <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
@@ -231,6 +238,7 @@ const {googleSignIn} = UserAuth()
     </div>
     </Box>
 
+    </motion.div>
     </Box>
   );
 }

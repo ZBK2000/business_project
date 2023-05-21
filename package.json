@@ -19,10 +19,12 @@
     "@react-google-maps/api": "^2.18.1",
     "dayjs": "^1.11.7",
     "firebase": "^9.17.1",
+    "framer-motion": "^10.12.11",
     "google-map-react": "^2.2.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-loading-skeleton": "^3.3.1",
     "react-router-dom": "^6.7.0",
     "react-transition-group": "^4.4.5",
     "styled-components": "^5.3.6"

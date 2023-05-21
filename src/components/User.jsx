@@ -102,50 +102,51 @@ export default function User(props) {
           
           return (
             <Paper
-            key={index}
-              sx={{ margin: "10px"}}
-              className="booked-times"
-              elevation={6}
-            >
-             <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
-              <Typography variant="h6" className="booked-times-h2">
-                {item[0]}
-              </Typography>
-              </Box>
-              <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
-               <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
-              <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
-               <DateRangeIcon/>
-              <Typography> {`${item[1]} `}{item[2]}</Typography>
-              </Box>
-              <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
-              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-              <LocationOnIcon/> 
-              <Typography> {item[3]}</Typography>
-              </Box>
-              <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
-              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-              <DirectionsRunOutlinedIcon/> 
-              <Typography> {item[4]}{` - ${item[5]}`}</Typography>
-              </Box></Box>
-<Box display={"flex"} alignItems={"center"}>
-              <Button
-                className="cancel-see"
-                /* onClick={() => deleteTrack(item)} */
-                variant="text"
-              >
-                X
-              </Button>
-              <Button
-                onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
-                className="cancel-see"
-                variant="text"
-              >
-                See
-              </Button>
-              </Box>
-              </Box>
-            </Paper>);
+                  key={index}
+                    sx={{ margin: "10px", display:{md:"flex"}}}
+                    className="booked-times"
+                    elevation={6}
+                  >
+                   <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
+                    <Typography variant="h6" className="booked-times-h2">
+                      {item[0]}
+                    </Typography>
+                    </Box>
+                    <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
+                     <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
+                    <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                     <DateRangeIcon/>
+                    <Typography> {item[2]}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <LocationOnIcon/> 
+                    <Typography>  {item.slice(-2,-1)}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <DirectionsRunOutlinedIcon/> 
+                    <Typography> {item.slice(-1)}</Typography>
+                    </Box></Box>
+    <Box display={"flex"} justifyContent={"center"}>
+                    <Button
+                      className="cancel-see"
+                      /* onClick={() => deleteTrack(item)} */
+                      variant="text"
+                      
+                    >
+                      X
+                    </Button>
+                    <Button
+                      onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                      className="cancel-see"
+                      variant="text"
+                    >
+                      See
+                    </Button>
+                    </Box>
+                    </Box>
+                  </Paper>);
         }}),
         tracks: data.tracks.map(function (item) {
           return (
@@ -221,50 +222,51 @@ export default function User(props) {
             console.log(true); // Activity has started
           return (
             <Paper
-            key={index}
-              sx={{ margin: "10px"}}
-              className="booked-times"
-              elevation={6}
-            >
-             <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
-              <Typography variant="h6" className="booked-times-h2">
-                {item.split(": ")[0]}
-              </Typography>
-              </Box>
-              <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
-               <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
-              <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
-               <DateRangeIcon/>
-              <Typography> {date_string}</Typography>
-              </Box>
-              <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
-              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-              <LocationOnIcon/> 
-              <Typography>  -</Typography>
-              </Box>
-              <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
-              <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-              <DirectionsRunOutlinedIcon/> 
-              <Typography> -</Typography>
-              </Box></Box>
-<Box display={"flex"} alignItems={"center"}>
-              <Button
-                className="cancel-see"
-                /* onClick={() => deleteTrack(item)} */
-                variant="text"
-              >
-                X
-              </Button>
-              <Button
-                onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
-                className="cancel-see"
-                variant="text"
-              >
-                See
-              </Button>
-              </Box>
-              </Box>
-            </Paper>);
+                  key={index}
+                    sx={{ margin: "10px", display:{md:"flex"}}}
+                    className="booked-times"
+                    elevation={6}
+                  >
+                   <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
+                    <Typography variant="h6" className="booked-times-h2">
+                      {item[0]}
+                    </Typography>
+                    </Box>
+                    <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
+                     <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
+                    <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                     <DateRangeIcon/>
+                    <Typography> {item[2]}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <LocationOnIcon/> 
+                    <Typography>  {item.slice(-2,-1)}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <DirectionsRunOutlinedIcon/> 
+                    <Typography> {item.slice(-1)}</Typography>
+                    </Box></Box>
+    <Box display={"flex"} justifyContent={"center"}>
+                    <Button
+                      className="cancel-see"
+                      /* onClick={() => deleteTrack(item)} */
+                      variant="text"
+                      
+                    >
+                      X
+                    </Button>
+                    <Button
+                      onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                      className="cancel-see"
+                      variant="text"
+                    >
+                      See
+                    </Button>
+                    </Box>
+                    </Box>
+                  </Paper>);
         }}),
         tracks: data.tracks.map(function (item) {
           return (
@@ -325,10 +327,11 @@ export default function User(props) {
       <Grid
         container
         margin={"15px"}
-        width={"1152px"}
+        
         display={"flex"}
         flexDirection={"row"}
         gap={3}
+        sx={{width:{md:"1152px", xs:"100%"}}}
       >
         <Typography variant="h4"> Hi {id} </Typography>
       <Grid sx={{
@@ -343,7 +346,7 @@ export default function User(props) {
        
 
           maxWidth={"500px"} >
-          <Box display={"flex"}>
+          <Box display={{md:"flex"}}>
 
         <Typography variant="h5" margin={"10px"} width={"200px"}>Your email:</Typography>
         <Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[0]: "cannot get"}</Typography>
@@ -351,13 +354,13 @@ export default function User(props) {
           </Box>
          {!user.emailVerified && <Box display={"flex"} alignItems={"center"}><Typography sx={{color:"red"}}>your email is not verified! You have to verify it to be able to join or organize activites:</Typography>
        <Button onClick={()=>sendEmailVerification(user)} variant="outlined" sx={{color:"Red"}}>resend verification email</Button>  </Box>}
-          <Box display={"flex"}>
+          <Box display={{md:"flex"}}>
 
 <Typography variant="h5" margin={"10px"} width={"200px"}>Your username:</Typography>
 <Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[1]: "cannot get"}</Typography>
 <EditIcon/>
   </Box>
-  <Box display={"flex"}>
+  <Box display={{md:"flex"}}>
 
 <Typography variant="h5" margin={"10px"} width={"200px"}>Password:</Typography>
 <Typography variant="h5" margin={"10px"} width={"300px"}>**********</Typography>
@@ -440,51 +443,52 @@ export default function User(props) {
           if (activity_start_datetime >= current_datetime) {
             console.log(true); // Activity has started
                 return(
-                 <Paper
-                 key={index}
-                   sx={{ margin: "10px"}}
-                   className="booked-times"
-                   elevation={6}
-                 >
-                  <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
-                   <Typography variant="h6" className="booked-times-h2">
-                     {link[1]}
-                   </Typography>
-                   </Box>
-                   <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
-                    <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
-                   <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
-                    <DateRangeIcon/>
-                   <Typography> {link[2]}</Typography>
-                   </Box>
-                   <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
-                   <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-                   <LocationOnIcon/> 
-                   <Typography>  {link.slice(-2,-1)}</Typography>
-                   </Box>
-                   <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
-                   <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
-                   <DirectionsRunOutlinedIcon/> 
-                   <Typography> {link.slice(-1)}</Typography>
-                   </Box></Box>
-<Box>
-                   <Button
-                     className="cancel-see"
-                     /* onClick={() => deleteTrack(item)} */
-                     variant="text"
-                   >
-                     X
-                   </Button>
-                   <Button
-                     onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
-                     className="cancel-see"
-                     variant="text"
-                   >
-                     See
-                   </Button>
-                   </Box>
-                   </Box>
-                 </Paper>)
+                  <Paper
+                  key={index}
+                    sx={{ margin: "10px", display:{md:"flex"}}}
+                    className="booked-times"
+                    elevation={6}
+                  >
+                   <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
+                    <Typography variant="h6" className="booked-times-h2">
+                      {link[1]}
+                    </Typography>
+                    </Box>
+                    <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
+                     <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
+                    <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                     <DateRangeIcon/>
+                    <Typography> {link[2]}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <LocationOnIcon/> 
+                    <Typography>  {link.slice(-2,-1)}</Typography>
+                    </Box>
+                    <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <DirectionsRunOutlinedIcon/> 
+                    <Typography> {link.slice(-1)}</Typography>
+                    </Box></Box>
+    <Box display={"flex"} justifyContent={"center"}>
+                    <Button
+                      className="cancel-see"
+                      /* onClick={() => deleteTrack(item)} */
+                      variant="text"
+                      
+                    >
+                      X
+                    </Button>
+                    <Button
+                      onClick={() => navigate(`/tracks/${link[1]}/${link[0]}`)} 
+                      className="cancel-see"
+                      variant="text"
+                    >
+                      See
+                    </Button>
+                    </Box>
+                    </Box>
+                  </Paper>)
               }}})}
              
             </>
@@ -540,17 +544,17 @@ export default function User(props) {
             return(
               <Paper
               key={index}
-                sx={{ margin: "10px"}}
+                sx={{ margin: "10px", display:{md:"flex"}}}
                 className="booked-times"
                 elevation={6}
               >
-               <Box  sx={{padding:"10px", borderRight:"1px solid #7B8FA1", width:"200px", marginRight:"10px"}}>
+               <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
                 <Typography variant="h6" className="booked-times-h2">
                   {link[1]}
                 </Typography>
                 </Box>
-                <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
-                 <Box display={"flex"} gap={3} width={"70%"} alignItems={"center"} justifyContent={"space-around"}>
+                <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
+                 <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
                 <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
                  <DateRangeIcon/>
                 <Typography> {link[2]}</Typography>
@@ -565,11 +569,12 @@ export default function User(props) {
                 <DirectionsRunOutlinedIcon/> 
                 <Typography> {link.slice(-1)}</Typography>
                 </Box></Box>
-<Box>
+<Box display={"flex"} justifyContent={"center"}>
                 <Button
                   className="cancel-see"
                   /* onClick={() => deleteTrack(item)} */
                   variant="text"
+                  
                 >
                   X
                 </Button>

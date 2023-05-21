@@ -6,6 +6,7 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { UserAuth } from "../context/AuthContext";
 import SportsSelect from "./sportSelect";
 import StaticDatePickerCollapsible from "./NextSevenDay copy";
+import { motion } from "framer-motion"
 
 export default function CommunityEvent(props) {
   //declaring states and consts
@@ -84,6 +85,10 @@ export default function CommunityEvent(props) {
       justifyContent: 'center',
       zIndex: 9999, // Higher z-index to make sure it's above everything else
     }}>
+       <motion.div
+    initial={{ x:"-100vh"}}
+    animate={{ x:0 }}
+    transition={{type:"spring", duration: 1.5, bounce:0.5 }}>
       <Box className={"element"} sx={{width:"600px",height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"40px", overflow:"auto"}}>
     
       
@@ -160,6 +165,7 @@ export default function CommunityEvent(props) {
         
    
     </Box>
+    </motion.div>
     </Box>
   );
 }

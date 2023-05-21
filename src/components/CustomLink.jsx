@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Typography, Button, Grid, List, ListItem, ListItemText } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,7 +16,9 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Conversation from './ratingSlider copy';
 import CancelEvent from './CancelEvent';
 import VerifyEmail from './verifyEmail';
-
+import Skeleton from 'react-loading-skeleton'
+import { Example } from './framerTest';
+import { motion } from "framer-motion";
 
  export default function CustomLink() {
   const { pathname } = useLocation();
@@ -27,6 +29,8 @@ import VerifyEmail from './verifyEmail';
   const [cancelEvent, setCancelEvent] = useState(false)
   const [verifyEmail, setVerifyEmail] = useState(false)
    const {user} = UserAuth()
+   const constraintsRef = useRef(null);
+   
     console.log(id, hashcode, user)
  
 
@@ -129,6 +133,15 @@ import VerifyEmail from './verifyEmail';
       <ListItemText sx={{margin:"0px 10px"}}>{slot}</ListItemText>
     </ListItem>
   )): ""
+
+  const liSlotsList2 = linkData?.slots ? linkData.slots.map((slot, index) => (
+    <motion.div style={{height:"30px", display:"flex", justifyContent:"center", alignItems:"center", zIndex:9999, cursor:"pointer"}} drag dragConstraints={constraintsRef} >
+   
+      <PersonIcon sx={{color:"#727272"}} />
+      <Typography sx={{margin:"0px 10px"}}>{slot}</Typography>
+    </motion.div>
+  )): ""
+
   console.log(liSlotsList)
   let dateObj
   let now
@@ -179,7 +192,7 @@ import VerifyEmail from './verifyEmail';
     <Grid sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        width:"1152px",
+        width:{md:"1152px", xs:"100%"},
         gap: '16px',
         backgroundColor: 'white',
         borderRadius: '8px',
@@ -195,6 +208,7 @@ import VerifyEmail from './verifyEmail';
         <Typography variant="h5" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
            {linkData.description} 
         </Typography>}
+
         <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex",justifyContent:"space-between", gap:6}}>
           <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex", gap:6}}>
           <Box>
@@ -238,7 +252,7 @@ import VerifyEmail from './verifyEmail';
         </Typography>
         </Box>
         </Box>
-        {user.displayName === linkData.user?<Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+        {user.displayName === linkData.user?<Box sx={{display:{md:"flex",xs:"none"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
           You Are the organizer 
         </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
         <Button variant='outlined' sx={{color:"black", borderColor:"black",marginTop:"5px"}}>Finalize/Book event</Button></Box>:
@@ -248,7 +262,16 @@ import VerifyEmail from './verifyEmail';
       {linkData.user}
       </Typography></Box>}
         </Box>
-        {linkData?.description && <Typography variant='h5'>{linkData?.description}</Typography>}
+        {user.displayName === linkData.user?<Box sx={{display:{md:"none",xs:"flex"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+          You Are the organizer 
+        </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
+        <Button variant='outlined' sx={{color:"black", borderColor:"black",marginTop:"5px"}}>Finalize/Book event</Button></Box>:
+        <Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+        Organizer 
+      </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
+      {linkData.user}
+      </Typography></Box>}
+        
          
         {linkData?.slots? linkData.slots.includes(user.displayName)? <CopyToClipboardButton datetime={linkData.time}/> :"":""}
       { user.displayName === linkData.user ?  !linkData.isopen? <Button onClick={openActivity} variant='outlined' sx={{color:"black", borderColor:"black"}}>Open the activity for the community</Button>: 
@@ -278,17 +301,32 @@ import VerifyEmail from './verifyEmail';
     Sorry, this activity already happened, so you cannot join anymore. If you participated in it, We hope it was fun!
   </Typography>
 )}
-<Box display={"flex"} justifyContent={"space-between"}>
-        <Box className="element" sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:"50%", height:"300px", overflow:"auto", margin:"10px 10px 10px 0px"}}>
+<Box  justifyContent={"space-between"} sx={{display:"flex", flexDirection:{md:"row", xs:"column"}, alignItems:"center"}}>
+        <Box className="element" sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:{md:"50%"}, height:"300px", overflow:"auto", margin:"10px 10px 10px 0px"}}>
           <Typography variant='h5' sx={{margin:"20px"}}>Participants</Typography>
         <List sx={{ listStyle: 'none', margin: '0', padding: '0' }}>
           { liSlotsList }
         </List>
       {!linkData.isLimited && <Typography sx={{margin:"20px"}}><AddIcon/><PersonIcon/></Typography>}
         </Box>
+        <div className="example-container">
+
+   
+     <>
+      <motion.div className="drag-area" ref={constraintsRef} style={{border:"1px solid #dbdbdb", borderRadius:"10px", boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',}} >
+
+      
+      
+          { liSlotsList2 }
+      </motion.div>
+        
+    </>
+     </div>
+
         <Grid
               minWidth={"50%"}
               maxWidth={"600px"}
+              maxHeight={"300px"}
               height={"300px"}
               item
               xs={12}
@@ -297,7 +335,7 @@ import VerifyEmail from './verifyEmail';
               lg={8}
               xl={4}
               className="slider"
-              sx={{padding:"0px !important", margin:"10px 0px 10px 10px"}}
+              sx={{padding:"0px !important", margin:{md:"10px 0px 10px 10px",xs:"0px"}, minWidth:{md:"50%", xs:'100%'}, display:"flex", alignItems:"center"}}
               
             >
               {linkData?.img_urls ? <Box> {Array.from({ length: linkData.img_urls.length}, (_, i) => (
@@ -328,6 +366,7 @@ import VerifyEmail from './verifyEmail';
       </Grid>
      {cancelEvent && <CancelEvent indicator={setCancelEvent}/>}
      {verifyEmail && <VerifyEmail indicator={setVerifyEmail}/>}
+     
       </Grid>
   );
 }

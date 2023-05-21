@@ -29,6 +29,7 @@ import CommunityEvent from "./communityEventForm";
 import TelegramIcon from '@mui/icons-material/Telegram';
 import UserRegisterWithFirebase from "./UserRegisterWithFirebase";
 import ProvideUserName from './ProvideUserName';
+import SkeletonComponent from "./skeleton";
 
 
 export default function MainPage(props) {
@@ -304,7 +305,7 @@ export default function MainPage(props) {
     );
   }}}}) : []
 
-
+  console.log(props.allTrack)
   return (
     <Grid display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
       
@@ -335,7 +336,7 @@ export default function MainPage(props) {
         spacing={2}
         className="container"
       >
-        {community? liveActivities: newTracks}
+        {community? liveActivities?liveActivities:<SkeletonComponent/> : filteredData!=[]? newTracks: <SkeletonComponent/>}
       </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
      {/*  <Typography variant="h5" sx={{margin:"-10px 8px 20px"}}>Community events</Typography>
       <Grid
@@ -364,6 +365,7 @@ export default function MainPage(props) {
       {showEventForm &&<CommunityEvent indicator={setShowEventForm}/>} 
       {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
       </Grid>
+      
     </Grid>
   );
 }

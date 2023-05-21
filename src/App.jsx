@@ -17,6 +17,9 @@ import Footer from "./components/FooterNOTUSED";
 import CertainTrack2 from "./components/CertainTrack copy";
 import BusinessRegistration from "./components/businessRegistration";
 import CommunityEvent from "./components/communityEventForm";
+import { SkeletonTheme } from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
+
 
 
 
@@ -48,6 +51,8 @@ function App() {
  
 
   return (
+    <SkeletonTheme baseColor="#c4c4c4" highlightColor="#fff">
+       
     <AuthContextProvider>
       <div>
         <div className="App">
@@ -146,6 +151,7 @@ function App() {
         </div>
       </div>
     </AuthContextProvider>
+    </SkeletonTheme>
   );
   
 }
