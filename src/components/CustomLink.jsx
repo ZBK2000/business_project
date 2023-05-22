@@ -281,7 +281,7 @@ import ProvideUserName from './ProvideUserName';
       </Typography></Box>}
         
          
-        {user? linkData?.slots? linkData.slots.includes(user.displayName)? <CopyToClipboardButton datetime={linkData.time}/> :"":"":""}
+        {user?  <CopyToClipboardButton datetime={linkData.time}/> :""}
       {user? user.displayName === linkData.user ?  !linkData.isopen? <Button onClick={openActivity} variant='outlined' sx={{color:"black", borderColor:"black"}}>Open the activity for the community</Button>: 
       <Typography variant='h6' sx={{color:"green"}}>You opened this activity for the community</Typography>:"":""}
       
@@ -370,7 +370,7 @@ import ProvideUserName from './ProvideUserName';
             </Grid>
 
             </Box>
-          {user?linkData?.slots? linkData.slots.includes(user.displayName)?<Conversation _id={linkData._id}/> :"" : "":""}  
+          {user?<Conversation _id={linkData._id}/> :"" }  
       </Grid>
       
       </Grid>
