@@ -53,6 +53,7 @@ export default function MainPage(props) {
   const [currentSport, setCurrentSport] = useState("")
   const [community, setCommunity] = useState(false)
   
+  
   useEffect(()=>{
     async function fetchFavourites(){
       const fav = await fetch(`${import.meta.env.VITE_BACKEND_URL}/favourites`, {
@@ -137,16 +138,22 @@ export default function MainPage(props) {
   
 
   if (filterItems) {
+    console.log(filterItems)
     favOrAll = (favouriteData.length === 0 ? props.allTrack: favouriteData)
     favOrAll.forEach((item) => {
+      console.log(item)
       const shouldFilterLocation = filterItems[2] !== "";
       const shouldFilterName = filterItems[3] !== "";
+      const shouldFilterSportType = filterItems[4] !== "";
+      console.log(shouldFilterSportType, filterItems[4], item.activity, item.activity === filterItems[4])
 
       if (
         (!shouldFilterLocation || item.location.toLowerCase().includes(filterItems[2].toLowerCase())) &&
         (!shouldFilterName || item.name.toLowerCase().includes(filterItems[3].toLowerCase())) &&
-        item.slot_number <= filterItems[0][1] &&
-        item.slot_number >= filterItems[0][0] &&
+        (!shouldFilterSportType || item.activity === filterItems[4])&&
+        item.slot_number.every(slotNumber => 
+          slotNumber <= filterItems[0][1] && slotNumber >= filterItems[0][0])&&
+        
         item.price <= filterItems[1][1] &&
         item.price >= filterItems[1][0]
       ) {
@@ -154,8 +161,9 @@ export default function MainPage(props) {
       } else if (
         !shouldFilterLocation &&
         !shouldFilterName &&
-        item.slot_number <= filterItems[0][1] &&
-        item.slot_number >= filterItems[0][0] &&
+        !shouldFilterSportType&&
+        item.slot_number.every(slotNumber => 
+          slotNumber <= filterItems[0][1] && slotNumber >= filterItems[0][0])&&
         item.price <= filterItems[1][1] &&
         item.price >= filterItems[1][0]
       ) {
@@ -233,7 +241,62 @@ export default function MainPage(props) {
   }});
 
   console.log(props.allLinks)
-  const liveActivities =props?.allLinks? props.allLinks.map(function (item) {
+  //let filteredDataCommunity=useMemo(()=>[], [])
+  let filteredDataCommunity = []
+  if (filterItems) {
+    
+      console.log(filterItems)
+    props.allLinks.forEach((item) => {
+      try {
+      console.log(item)
+      const shouldFilterLocation = filterItems[2] !== "";
+      const shouldFiltertrackName = filterItems[3] !== "";
+      const shouldFilterSportType = filterItems[4] !== "";
+      const filterdatefrom = filterItems[5] !== "" ? new Date(filterItems[5]) :"";
+      const filterdateto = filterItems[6] !== ""? new Date(filterItems[6]) :"";
+      const actualDate = new Date(item.time.split(" ")[0])
+  
+      
+
+      if (
+        (!shouldFilterLocation || item.city.toLowerCase().includes(filterItems[2].toLowerCase())) &&
+        (!shouldFiltertrackName || item.trackName.toLowerCase().includes(filterItems[3].toLowerCase())) &&
+        (!shouldFilterSportType || item.sportType.toLowerCase().includes(filterItems[4].toLowerCase())) &&
+        (filterdatefrom? actualDate >= filterdatefrom:true) && (filterdateto? actualDate <= filterdateto:true) &&
+        item.slots.length <= filterItems[0][1] &&
+        item.slots.length >= filterItems[0][0]
+        
+        
+      ) {
+        filteredDataCommunity.push(item);
+        console.log("ha")
+      } else if (
+        !shouldFilterLocation &&
+        !shouldFiltertrackName &&
+        !shouldFilterSportType&&
+        (filterdatefrom? actualDate >= filterdatefrom:true) && (filterdateto? actualDate <= filterdateto:true) &&
+        item.slots.length <= filterItems[0][1] &&
+        item.slots.length >= filterItems[0][0]
+    
+      ) {
+        // if both filter criteria are empty, include the item in the filtered data
+        filteredDataCommunity.push(item);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    });
+  if(filteredDataCommunity.length === 0){
+    filteredDataCommunity = "empty"
+  }
+    
+  }
+
+  console.log(filteredDataCommunity.length, filteredDataCommunity )
+  const validLinks = filteredDataCommunity ==="empty" ? []: filteredDataCommunity.length >0  ? filteredDataCommunity: props.allLinks 
+  let activityCounter = 0
+  console.log(validLinks, props.allLinks)
+  const liveActivities =validLinks.map(function (item) {
     if (item.isopen){
       const date_components = item.time.split(" ");
       const date = date_components[0];
@@ -254,7 +317,7 @@ export default function MainPage(props) {
           return acc;
         }
       }, 0);
-      
+      activityCounter ++
     return (
       <Grid
       
@@ -303,8 +366,13 @@ export default function MainPage(props) {
         </Card>
       </Grid>
     );
-  }}}}) : []
+  }}}}) 
 
+
+
+
+
+  
   console.log(props.allTrack)
   return (
     <Grid display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
@@ -326,7 +394,7 @@ export default function MainPage(props) {
         <TelegramIcon sx={{color:"#0BF763"}}/> Let's organize an event</Button>  */} 
        
       </Grid>
-      <Filter getUpData={setFilterItems} showFavourite={showFavourite} mapViewFunc={mapViewFunc} setShowEventForm={setShowEventForm} setShowRegister={setShowRegister} favouriteData={favouriteData} mapView={mapView}/>
+      <Filter getUpData={setFilterItems} showFavourite={showFavourite} mapViewFunc={mapViewFunc} setShowEventForm={setShowEventForm} setShowRegister={setShowRegister} favouriteData={favouriteData} mapView={mapView} communityLength={activityCounter} partnersLength={filteredData.length} community={community}/>
       <Box display={"flex"}><Typography onClick={()=>setCommunity(false)} variant="h5" sx={{color:community?"grey":"black",margin:"-10px 8px 20px",width:"108px", borderRight:"1px solid black", cursor:"pointer"}}>Partners</Typography>
       <Typography onClick={()=>setCommunity(true)} variant="h5" sx={{color:community?"black":"grey",margin:"-10px 8px 20px", cursor:"pointer"}}>Community events</Typography></Box>
       {!mapView? <Grid
@@ -336,7 +404,7 @@ export default function MainPage(props) {
         spacing={2}
         className="container"
       >
-        {community? liveActivities?liveActivities:<SkeletonComponent/> : filteredData!=[]? newTracks: <SkeletonComponent/>}
+        {community? validLinks !=[]?liveActivities:<SkeletonComponent/> : filteredData!=[]? newTracks: <SkeletonComponent/>}
       </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
      {/*  <Typography variant="h5" sx={{margin:"-10px 8px 20px"}}>Community events</Typography>
       <Grid

@@ -89,7 +89,7 @@ export default function CommunityEvent(props) {
     initial={{ x:"-100vh"}}
     animate={{ x:0 }}
     transition={{type:"spring", duration: 1.5, bounce:0.5 }}>
-      <Box className={"element"} sx={{width:"600px",height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"40px", overflow:"auto"}}>
+      <Box className={"element"} sx={{width:{md:"600px",sx:"80%"},height:"600px", backgroundColor:"white", borderRadius:"10px", padding:"40px", overflow:"auto"}}>
     
       
       <Typography sx={{margin:"0px 0px 20px"}} variant="h5">Lets organize a cool event and have fun with others</Typography>
@@ -103,7 +103,7 @@ export default function CommunityEvent(props) {
           id="name"
           onChange={(e) => setName(e.target.value)}
         />
-  <Box display={"flex"} justifyContent={"space-around"} margin={'10px'}>
+  <Box display={{md:"flex"}} justifyContent={"space-around"} margin={'10px'}>
   <Box>
   <Typography>Choose Date:</Typography>
         <StaticDatePickerCollapsible getUpData={setExactDate} />

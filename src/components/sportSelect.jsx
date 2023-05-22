@@ -193,20 +193,26 @@ const OtherSportMenuItem = ({ onClick }) => {
 ];
 
  
- export default function SportsSelect(props) {
+export default function SportsSelect(props) {
   const handleSelectedValueChange = (event, newValue) => {
-    props.sportType(newValue.name)}
+    if (newValue === null || newValue === undefined) {
+      props.sportType(""); // Set the sport type to an empty value
+    } else {
+      props.sportType(newValue.name); // Set the sport type to the selected value's name
+    }
+  };
 
-   return (
-     <Autocomplete
-       disablePortal
-       id="combo-box-demo"
-       options={sportsList}
-       sx={{ width: 300 }}
-       getOptionLabel={(option) => option.name} // use the name property of each object
-       onChange={handleSelectedValueChange} 
-       renderInput={(params) => <TextField {...params} label="Sport" />}
-     />
-   );
- }
+  return (
+    <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={sportsList}
+      sx={{ width: 300 }}
+      getOptionLabel={(option) => option.name} // use the name property of each object
+      onChange={handleSelectedValueChange}
+      renderInput={(params) => <TextField {...params} label="Choose activity" />}
+    />
+  );
+}
+
  

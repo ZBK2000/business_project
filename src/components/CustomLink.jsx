@@ -302,7 +302,7 @@ import { motion } from "framer-motion";
   </Typography>
 )}
 <Box  justifyContent={"space-between"} sx={{display:"flex", flexDirection:{md:"row", xs:"column"}, alignItems:"center"}}>
-        <Box className="element" sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:{md:"50%"}, height:"300px", overflow:"auto", margin:"10px 10px 10px 0px"}}>
+        <Box className="element" sx={{border: '1px solid #dbdbdb', borderRadius:"10px", width:{md:"50%", xs:"80%"}, height:"300px", overflow:"auto", margin:"10px 10px 10px 0px"}}>
           <Typography variant='h5' sx={{margin:"20px"}}>Participants</Typography>
         <List sx={{ listStyle: 'none', margin: '0', padding: '0' }}>
           { liSlotsList }

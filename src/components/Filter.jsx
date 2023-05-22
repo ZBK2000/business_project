@@ -17,6 +17,11 @@ import { margin } from "@mui/system";
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { UserAuth } from "../context/AuthContext";
 import VerifyEmail from "./verifyEmail";
+import Sports from "./sportIcons";
+import SportsSelect from "./sportSelect";
+import StaticDatePickerCollapsible from "./NextSevenDay copy";
+import zIndex from "@mui/material/styles/zIndex";
+import DateRangePickerValue from "./DateRange";
 
 export default function Filter(props) {
   //declaring states and consts
@@ -27,6 +32,9 @@ export default function Filter(props) {
   const [expanded, setExpanded] = React.useState(false);
   const { user } = UserAuth();
   const [verifyEmail, setVerifyEmail] = React.useState(false)
+  const [sportType,setSportType] = React.useState("")
+  const [exactDateFrom, setExactDateFrom] = React.useState("")
+  const [exactDateTo, setExactDateTo] = React.useState("")
 
   const marks = [
     {
@@ -50,11 +58,11 @@ export default function Filter(props) {
     setExpanded(!expanded);
   };
   const getUpData = () => {
-    props.getUpData([value, value2, location, name]);
+    props.getUpData([value, value2, location, name, sportType, exactDateFrom, exactDateTo]);
   };
 
   return (
-    <Box sx={{ margin: "8px", "& > :not(style)": { m: 1 } }}>
+    <Box sx={{ margin: "8px", marginBottom:"25px", "& > :not(style)": { m: 1 } }}>
       <Button sx={{height:"80%", margin:"10px",marginLeft:"0px !important",backgroundColor:"#d6d6d6"}} onClick={handleExpandClick} variant="extended">
         {!expanded ? <FilterAltOffIcon /> : <FilterAltIcon />}
       </Button>
@@ -63,38 +71,43 @@ export default function Filter(props) {
       <Button /*onClick={()=>navigate("/communityEvent")}*/ onClick={user?user.emailVerified?()=>props.setShowEventForm(true):()=>setVerifyEmail(true):()=>props.setShowRegister(true)} margin={"15px !important"} sx={{height:"80%", margin:"10px", backgroundColor:'green',color:"#0BF763", "&:hover":{backgroundColor:'#2f9b14'}}} variant="fullfilled">
       <TelegramIcon sx={{color:"#0BF763"}}/> Let's organize an event
       </Button>
-      <Collapse sx={{ width: "100%" , marginTop:"45px !important"}} in={expanded} timeout="auto">
+      <Collapse sx={{ width: "100%" , marginTop:"0px !important"}} in={expanded} timeout="auto">
         <Box
           sx={{
-            padding: 0,
+            padding: 2,
             marginBottom: "10px",
-            width: "100%",
-            display: "flex",
-            gap: "40px",
+            width: {md:"97%", xs:"85%"},
+            display:"flex",
+            
             justifyContent: "center",
             alignItems: "center",
+            borderBottom:"1px solid #d6d6d6",
+            borderRight:"1px solid #d6d6d6",
+            borderLeft:"1px solid #d6d6d6",
+            borderRadius:"10px",
+            paddingTop:"40px",
+            
+          
+            zIndex:9999
           }}
         >
-          <Grid container spacing={4} width={"100%"} className="container">
+          <Grid container marginLeft={{xs:"3px"}}  spacing={4} width={"100%"}  display={"flex"} justifyContent={{md:"left", xs:"center"}} alignItems={"center"} gap={3} >
             <Grid
               item
               style={{ width: "50%" }}
               padding={0}
-              xs={2}
-              sm={1}
-              md={0.5}
+              xs={12}
+              sm={6}
+              md={5}
+              display={{md:"flex"}}
+              alignItems={"center"}
+              gap={3}
+              sx={{backgroundColor:"#d6d6d6", borderRadius:"10px"}}
+              
             >
-              <Typography>Slots</Typography>
-            </Grid>
-            <Grid
-              item
-              paddingRight={"15px !important"}
-              alignContent={"center"}
-              padding={0}
-              xs={9}
-              sm={4.5}
-              md={3}
-            >
+              <Typography marginBottom={{xs:"25px"}}>Participants:</Typography>
+       
+            
               <Slider
                 sx={{ padding: 0, margin: 0 }}
                 min={0}
@@ -106,21 +119,22 @@ export default function Filter(props) {
 
                 //getAriaValueText={valuetext}
               />
+                <Button
+                sx={{ backgroundColor: "#d6d6d6" }}
+                onClick={getUpData}
+                variant="fulfilled"
+              >
+                Unlimited
+              </Button>
             </Grid>
-            <Grid item padding={0} xs={2} sm={1} md={0.5}>
+            {!props.community?<Grid item padding={0} xs={12} sm={6} md={5}    display={{md:"flex"}}
+              alignItems={"center"} gap={3} sx={{backgroundColor:"#d6d6d6", borderRadius:"10px"}}>
               {" "}
-              <Typography htmlFor="">Price</Typography>
-            </Grid>
-            <Grid
-              item
-              paddingRight={"15px !important"}
-              padding={0}
-              xs={9}
-              sm={4.5}
-              md={3}
-            >
+              <Typography marginBottom={{xs:"25px"}}>Price:</Typography>
+         
               {" "}
               <Slider
+              
                 sx={{ margin: "0px" }}
                 min={0}
                 max={30000}
@@ -131,6 +145,24 @@ export default function Filter(props) {
                 valueLabelDisplay="on"
                 //getAriaValueText={valuetext}
               />
+               <Button
+                sx={{ backgroundColor: "#d6d6d6" }}
+                onClick={getUpData}
+                variant="fulfilled"
+              >
+                Free
+              </Button>
+            </Grid>:<Typography>Community activites are free</Typography>}
+            <Grid item padding={0} xs={12} sm={2} md={1.5}>
+              <Button
+                sx={{ backgroundColor: "#d6d6d6",display:{xs:"none", md:"inline"} }}
+                onClick={getUpData}
+                variant="fulfilled"
+                
+              >
+                Filter
+              </Button>
+
             </Grid>
             <Grid
               item
@@ -149,7 +181,7 @@ export default function Filter(props) {
                 id="outlined-basic"
                 onChange={(e) => setLocation(e.target.value)}
                 value={location}
-                label="Location"
+                label="City"
                 variant="filled"
               />
             </Grid>
@@ -174,14 +206,65 @@ export default function Filter(props) {
                 variant="filled"
               />
             </Grid>
-            <Grid item padding={0} xs={12} sm={2} md={1.5}>
-              <Button
-                sx={{ backgroundColor: "#d6d6d6" }}
+            <SportsSelect sportType={setSportType}/>
+           {props.community?<Grid
+              item
+              padding={0}
+              xs={12}
+              sm={2}
+              md={5}
+              paddingTop={"20px !important"}
+              display={{md:"flex"}}
+              gap={3}
+              alignItems={"center"}
+              
+            >
+            
+            <Typography  >DateRange:</Typography>
+            <Typography   >From</Typography>
+            <TextField
+                sx={{
+                  color: "#3c3c3c",
+                  "& .input:focus !important": { color: "#3c3c3c" },
+                  
+                }}
+                id="outlined-basic"
+                onChange={(e) => setExactDateFrom(e.target.value)}
+                value={exactDateFrom}
+                label="yyyy-mm-dd"
+                variant="filled"
+              />
+              <Typography   >until</Typography>
+            <TextField
+                sx={{
+                  color: "#3c3c3c",
+                  "& .input:focus !important": { color: "#3c3c3c" },
+                 
+                }}
+                id="outlined-basic"
+                onChange={(e) => setExactDateTo(e.target.value)}
+                value={exactDateTo}
+                label="yyyy-mm-dd"
+                variant="filled"
+              />
+            </Grid>: <Typography>You cannot filter permanent partners based on date</Typography>}
+            {/*<DateRangePickerValue/>*/}
+            <Button
+                sx={{ backgroundColor: "#d6d6d6",display:{md:"none"} }}
                 onClick={getUpData}
                 variant="fulfilled"
+                
               >
                 Filter
               </Button>
+            <Grid item padding={0} xs={12} sm={1} md={1}>
+              <Typography
+              
+               
+              >
+               {props.community? "Events found:": "Partners found"} : {props.community? props.communityLength: props.partnersLength}
+              </Typography>
+
             </Grid>
           </Grid>
         </Box>
