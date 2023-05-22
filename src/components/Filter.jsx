@@ -153,17 +153,7 @@ export default function Filter(props) {
                 Free
               </Button>
             </Grid>:<Typography>Community activites are free</Typography>}
-            <Grid item padding={0} xs={12} sm={2} md={1.5}>
-              <Button
-                sx={{ backgroundColor: "#d6d6d6",display:{xs:"none", md:"inline"} }}
-                onClick={getUpData}
-                variant="fulfilled"
-                
-              >
-                Filter
-              </Button>
 
-            </Grid>
             <Grid
               item
               padding={0}
@@ -250,7 +240,7 @@ export default function Filter(props) {
             </Grid>: <Typography>You cannot filter permanent partners based on date</Typography>}
             {/*<DateRangePickerValue/>*/}
             <Button
-                sx={{ backgroundColor: "#d6d6d6",display:{md:"none"} }}
+                sx={{ backgroundColor: "#d6d6d6" }}
                 onClick={getUpData}
                 variant="fulfilled"
                 
