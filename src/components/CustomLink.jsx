@@ -19,6 +19,8 @@ import VerifyEmail from './verifyEmail';
 import Skeleton from 'react-loading-skeleton'
 import { Example } from './framerTest';
 import { motion } from "framer-motion";
+import UserRegisterWithFirebase from './UserRegisterWithFirebase';
+import ProvideUserName from './ProvideUserName';
 
  export default function CustomLink() {
   const { pathname } = useLocation();
@@ -28,6 +30,10 @@ import { motion } from "framer-motion";
     const [linkData, setLinkData] = useState({})
   const [cancelEvent, setCancelEvent] = useState(false)
   const [verifyEmail, setVerifyEmail] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [provideUserName, setProvideUserName] = useState(false)
+  
    const {user} = UserAuth()
    const constraintsRef = useRef(null);
    
@@ -199,15 +205,9 @@ import { motion } from "framer-motion";
         margin: "10px"
       }}>
       
-        {!user? <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-         {linkData.description} 
-        </Typography> : user.displayName === linkData.user ? <Box display={"flex"} justifyContent={"space-between"}>
         <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-        {linkData.description}
-        </Typography>  </Box> :
-        <Typography variant="h5" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-           {linkData.description} 
-        </Typography>}
+         {linkData.description} 
+        </Typography>
 
         <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex",justifyContent:"space-between", gap:6}}>
           <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex", gap:6}}>
@@ -252,47 +252,57 @@ import { motion } from "framer-motion";
         </Typography>
         </Box>
         </Box>
-        {user.displayName === linkData.user?<Box sx={{display:{md:"flex",xs:"none"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+        {user? user.displayName === linkData.user?<Box sx={{display:{md:"flex",xs:"none"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
           You Are the organizer 
         </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
         <Button variant='outlined' sx={{color:"black", borderColor:"black",marginTop:"5px"}}>Finalize/Book event</Button></Box>:
-        <Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-        Organizer 
+        <Box display={"flex"} sx={{display:{md:"flex",xs:"none"}}} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
+        Organizer:
+      </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
+      {linkData.user}
+      </Typography></Box>:  <Box display={"flex"} sx={{display:{md:"flex",xs:"none"}}} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
+        Organizer:
       </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
       {linkData.user}
       </Typography></Box>}
         </Box>
-        {user.displayName === linkData.user?<Box sx={{display:{md:"none",xs:"flex"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
+        {user? user.displayName === linkData.user?<Box sx={{display:{md:"none",xs:"flex"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
           You Are the organizer 
         </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
         <Button variant='outlined' sx={{color:"black", borderColor:"black",marginTop:"5px"}}>Finalize/Book event</Button></Box>:
-        <Box display={"flex"} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-        Organizer 
+        <Box display={"flex"} sx={{display:{md:"none",xs:"flex"}}} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
+        Organizer:
+      </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
+      {linkData.user}
+      </Typography></Box>: <Box display={"flex"} sx={{display:{md:"none",xs:"flex"}}} flexDirection={"column"}><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
+        Organizer:
       </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
       {linkData.user}
       </Typography></Box>}
         
          
-        {linkData?.slots? linkData.slots.includes(user.displayName)? <CopyToClipboardButton datetime={linkData.time}/> :"":""}
-      { user.displayName === linkData.user ?  !linkData.isopen? <Button onClick={openActivity} variant='outlined' sx={{color:"black", borderColor:"black"}}>Open the activity for the community</Button>: 
-      <Typography variant='h6' sx={{color:"green"}}>You opened this activity for the community</Typography>:""}
+        {user? linkData?.slots? linkData.slots.includes(user.displayName)? <CopyToClipboardButton datetime={linkData.time}/> :"":"":""}
+      {user? user.displayName === linkData.user ?  !linkData.isopen? <Button onClick={openActivity} variant='outlined' sx={{color:"black", borderColor:"black"}}>Open the activity for the community</Button>: 
+      <Typography variant='h6' sx={{color:"green"}}>You opened this activity for the community</Typography>:"":""}
       
         {dateObj >= now ? (
   user ? (
     <Box display={"flex"} gap={3}>
-      {user.displayName === linkData.user ?"":<Button onClick={user.emailVerified?join:()=>setVerifyEmail(true)} variant="contained" color="primary" sx={{ width: '100px' }}>
+      {user.displayName === linkData.user ?"":<Button onClick={user.emailVerified?join:()=>setVerifyEmail(true)} variant="outlined" color="primary" sx={{ width: '100px',color:"black",backgroundColor:"#d6d6d6" }}>
         {linkData?.slots ? (linkData.slots.includes(user.displayName) ? "Leave" : "Join") : "error"}
       </Button>}
       {linkData?.time && <CountdownTimer targetDateStr={linkData.time} />}
     </Box>
   ) : (
-    <Box>
-      <Button variant="contained" onClick={() => navigate(`/login/${encodedString}`)} color="primary" sx={{ width: '100px' }}>
+    <Box >
+      <Box display={"flex"} justifyContent={"space-between"}>
+      <Button variant="outlined" onClick={() => setShowLogin(true)} color="primary" sx={{ width: '48%',color:"black",backgroundColor:"#d6d6d6" }}>
         Log in
       </Button>
-      <Button onClick={() => navigate(`/signup/${encodedString}`)} variant="contained" color="primary" sx={{ width: '100px' }}>
+      <Button onClick={() => setShowRegister(true)} variant="outlined" color="primary" sx={{ width: '48%',color:"black",backgroundColor:"#d6d6d6" }}>
         sign up
       </Button>
+      </Box>
       {linkData?.time && <CountdownTimer targetDateStr={linkData.time} />}
     </Box>
   )
@@ -312,7 +322,7 @@ import { motion } from "framer-motion";
         <div className="example-container">
 
    
-     <>
+     {/*<>
       <motion.div className="drag-area" ref={constraintsRef} style={{border:"1px solid #dbdbdb", borderRadius:"10px", boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',}} >
 
       
@@ -320,7 +330,7 @@ import { motion } from "framer-motion";
           { liSlotsList2 }
       </motion.div>
         
-    </>
+</>*/}
      </div>
 
         <Grid
@@ -360,12 +370,15 @@ import { motion } from "framer-motion";
             </Grid>
 
             </Box>
-          {linkData?.slots? linkData.slots.includes(user.displayName)?<Conversation _id={linkData._id}/> :"" : ""}  
+          {user?linkData?.slots? linkData.slots.includes(user.displayName)?<Conversation _id={linkData._id}/> :"" : "":""}  
       </Grid>
       
       </Grid>
      {cancelEvent && <CancelEvent indicator={setCancelEvent}/>}
      {verifyEmail && <VerifyEmail indicator={setVerifyEmail}/>}
+     {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
+     {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
+     {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
      
       </Grid>
   );

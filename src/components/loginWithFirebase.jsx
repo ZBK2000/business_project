@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Footer from "./FooterNOTUSED";
 import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
+import { motion } from "framer-motion"
 
 export default function LoginWithFirebase(props) {
   //declaring states and consts
@@ -47,7 +48,7 @@ export default function LoginWithFirebase(props) {
       //props.getUpData2(accepted.user);
       
       props.indicator(false)
-        navigate(`/`);
+      //  navigate(`/`);
       
     }
   } catch (error) {
@@ -77,7 +78,7 @@ export default function LoginWithFirebase(props) {
         await update(user1, accepted.userName)
         props.indicator(false)
       
-        navigate(`/`)
+       // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
         props.indicator(false)
           props.setProvideUserName(true)
@@ -107,6 +108,10 @@ export default function LoginWithFirebase(props) {
       justifyContent: 'center',
       zIndex: 9999, // Higher z-index to make sure it's above everything else
     }}>
+         <motion.div
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}>
       <Box sx={{width:"400px",height:"500px", backgroundColor:"white", borderRadius:"10px", padding:"10px"}}>
     <div className="logindiv">
 
@@ -190,6 +195,7 @@ export default function LoginWithFirebase(props) {
       )}
      
     </div>
-    </Box></Box>
+    </Box>
+    </motion.div></Box>
   );
 }

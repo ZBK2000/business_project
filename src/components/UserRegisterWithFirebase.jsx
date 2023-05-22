@@ -56,7 +56,7 @@ const {googleSignIn} = UserAuth()
           });
             
             props.indicator(false)
-            navigate(`/`)
+          //  navigate(`/`)
           
         }
       } else if (accepted === "username"){
@@ -108,7 +108,7 @@ const {googleSignIn} = UserAuth()
         await update(user1, accepted.userName)
         props.indicator(false)
        
-        navigate(`/`)
+       // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
         props.indicator(false)
           props.setProvideUserName(true)

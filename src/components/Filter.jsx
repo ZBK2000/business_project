@@ -252,7 +252,7 @@ export default function Filter(props) {
               
                
               >
-               {props.community? "Events found:": "Partners found"} : {props.community? props.communityLength: props.partnersLength}
+               {props.community? "Events found": "Partners found"} : {props.community? props.communityLength: props.partnersLength}
               </Typography>
 
             </Grid>
