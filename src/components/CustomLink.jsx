@@ -188,6 +188,21 @@ import ProvideUserName from './ProvideUserName';
     
   }
 
+  async function cancelCommunityEvent(id, participants){
+    
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cancelEvent`, {
+      method: "POST",
+      body: JSON.stringify({ id, participants}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await response.json()
+    console.log(result)
+    if(result.msg ==='Processing completed successfully')
+    {console.log("successful delete")}
+   }
+   
 
 
 
@@ -374,7 +389,7 @@ import ProvideUserName from './ProvideUserName';
       </Grid>
       
       </Grid>
-     {cancelEvent && <CancelEvent indicator={setCancelEvent}/>}
+     {cancelEvent && <CancelEvent indicator={setCancelEvent} cancelCommunityEvent={cancelCommunityEvent} id={linkData._id} participants={linkData.slots}/>}
      {verifyEmail && <VerifyEmail indicator={setVerifyEmail}/>}
      {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
      {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
