@@ -48,10 +48,12 @@ export default function Header (props){
     } */
 
     function navigateToLogin(){
+      setAnchorEl(null);
       props.setShowLogin(true)
     }
 
     function navigateToSignUp(){
+      setAnchorEl(null);
       props.setShowRegister(true)
     }
 
