@@ -22,6 +22,7 @@ import SportsSelect from "./sportSelect";
 import StaticDatePickerCollapsible from "./NextSevenDay copy";
 import zIndex from "@mui/material/styles/zIndex";
 import DateRangePickerValue from "./DateRange";
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function Filter(props) {
   //declaring states and consts
@@ -35,6 +36,10 @@ export default function Filter(props) {
   const [sportType,setSportType] = React.useState("")
   const [exactDateFrom, setExactDateFrom] = React.useState("")
   const [exactDateTo, setExactDateTo] = React.useState("")
+  const [free, setFree] = React.useState(false)
+  const [limited, setLimited] = React.useState(false)
+  const [paid, setPaid] = React.useState(false)
+  const [unlimited, setUnlimited] = React.useState(false)
 
   const marks = [
     {
@@ -58,7 +63,9 @@ export default function Filter(props) {
     setExpanded(!expanded);
   };
   const getUpData = () => {
-    props.getUpData([value, value2, location, name, sportType, exactDateFrom, exactDateTo]);
+    
+      props.getUpData([value, value2, location, name, sportType, exactDateFrom, exactDateTo, limited,unlimited,free, paid ]);
+    
   };
 
   return (
@@ -86,30 +93,49 @@ export default function Filter(props) {
             borderLeft:"1px solid #d6d6d6",
             borderRadius:"10px",
             paddingTop:"40px",
-            
           
-            zIndex:9999
+          
+  /* Use transform instead of left for smooth sliding effect */
+  zIndex: 999,
+ 
           }}
         >
           <Grid container marginLeft={{xs:"3px"}}  spacing={4} width={"100%"}  display={"flex"} justifyContent={{md:"left", xs:"center"}} alignItems={"center"} gap={3} >
             <Grid
               item
-              style={{ width: "50%" }}
-              padding={0}
+              
+              padding={"0px !important"}
               xs={12}
               sm={6}
-              md={5}
-              display={{md:"flex"}}
-              alignItems={"center"}
+              md={4}
+              display={"flex"}
+              alignItems={{xs:"center",md:"end"}}
+              justifyContent={"center"}
               gap={3}
-              sx={{backgroundColor:"#d6d6d6", borderRadius:"10px"}}
+              flexDirection={{xs:"column", md:"row"}}
+              
               
             >
-              <Typography marginBottom={{xs:"25px"}}>Participants:</Typography>
+              <Box display={"flex"}
+              alignItems={"center"} flexDirection={{md:"column"}} gap={1}
+              >
+
+             
+              <Button
+              onClick={()=>setUnlimited(prev=>!prev)}
+                sx={{ backgroundColor: unlimited &&props.community?"#909090":"#d6d6d6", fontWeight: unlimited&&props.community&&"bold",width:'100%' }}
+                disabled={!props.community}
+                variant="fulfilled"
+              >
+                Unlimited <PersonIcon sx={{color: !unlimited&&"#aeaeae"}}/>
+              </Button>
+              <Button onClick={()=>setLimited(prev=>!prev)} variant="fulfilled" marginBottom={{xs:"50px", md:"5px"}}  sx={{ backgroundColor: limited?"#909090":"#d6d6d6", fontWeight: (limited)&&"bold", width:'100%'}}>limited {"  "}<PersonIcon sx={{color: !limited&&"#aeaeae"}} /></Button>
+              </Box>
        
             
               <Slider
-                sx={{ padding: 0, margin: 0 }}
+                 sx={{ margin: "0px", opacity:limited?"1":"0.3" }}
+                disabled={!limited?true:false}
                 min={0}
                 max={20}
                 getAriaLabel={() => "Temperature range"}
@@ -119,23 +145,38 @@ export default function Filter(props) {
 
                 //getAriaValueText={valuetext}
               />
-                <Button
-                sx={{ backgroundColor: "#d6d6d6" }}
-                onClick={getUpData}
-                variant="fulfilled"
-              >
-                Unlimited
-              </Button>
+              
             </Grid>
-            {!props.community?<Grid item padding={0} xs={12} sm={6} md={5}    display={{md:"flex"}}
-              alignItems={"center"} gap={3} sx={{backgroundColor:"#d6d6d6", borderRadius:"10px"}}>
+            <Grid
+             item
+             
+              padding={"0px !important"} xs={12} sm={6} md={4}    display={"flex"}
+              gap={3}
+              flexDirection={{xs:"column", md:"row"}}
+              alignItems={{xs:"center",md:"end"}}
+              >
               {" "}
-              <Typography marginBottom={{xs:"25px"}}>Price:</Typography>
-         
+              <Box marginLeft={"20px"} display={"flex"}
+              alignItems={"center"}
+              flexDirection={{md:"column"}} gap={1}
+              
+              >
+             
+              <Button
+              
+                sx={{ backgroundColor:(free)?"#909090": "#d6d6d6", fontWeight: (free)&&"bold" , width:"100%"}}
+                
+                variant="fulfilled"
+                onClick={()=>setFree(prev=>!prev)}
+              >
+                Free
+              </Button>
+              <Button variant="fulfilled" onClick={()=>setPaid(prev=>!prev)} disabled={props.community?true:false} marginBottom={{xs:"25px", md:"5px"}} sx={{ backgroundColor: !paid||props.community? "#d6d6d6": "#909090", fontWeight:paid&&!props.community&&"bold", width:"100%"}}>Priced</Button>
+              </Box>
               {" "}
               <Slider
-              
-                sx={{ margin: "0px" }}
+               disabled={props.community || !paid?true:false}
+                sx={{ margin: "0px", opacity:props.community||!paid?"0.3":"1" }}
                 min={0}
                 max={30000}
                 step={100}
@@ -145,28 +186,27 @@ export default function Filter(props) {
                 valueLabelDisplay="on"
                 //getAriaValueText={valuetext}
               />
-               <Button
-                sx={{ backgroundColor: "#d6d6d6" }}
-                onClick={getUpData}
-                variant="fulfilled"
-              >
-                Free
-              </Button>
-            </Grid>:<Typography>Community activites are free</Typography>}
+              
+            </Grid>
 
             <Grid
               item
-              padding={0}
-              xs={6}
+              padding={"0px !important"}
+              xs={12}
               sm={2}
-              md={1.5}
-              paddingTop={"20px !important"}
+              md={3.5}
+              
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-around"}
+              gap={1}
             >
               <TextField
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
                   zIndex:9999
+                  ,width:{md:"48%"}
                 }}
                 id="outlined-basic"
                 onChange={(e) => setLocation(e.target.value)}
@@ -174,15 +214,8 @@ export default function Filter(props) {
                 label="City"
                 variant="filled"
               />
-            </Grid>
-            <Grid
-              item
-              padding={0}
-              xs={6}
-              sm={2}
-              md={1.5}
-              paddingTop={"20px !important"}
-            >
+            
+           
               <TextField
                 sx={{
                   color: "#3c3c3c",
@@ -195,24 +228,29 @@ export default function Filter(props) {
                 label="Name"
                 variant="filled"
               />
-            </Grid>
+           </Grid>
             <SportsSelect sportType={setSportType}/>
-           {props.community?<Grid
+           <Grid
               item
-              padding={0}
+              padding={"3px !important"}
               xs={12}
               sm={2}
               md={5}
-              paddingTop={"20px !important"}
-              display={{md:"flex"}}
-              gap={3}
+              
+              display={"flex"}
+              flexDirection={{xs:"column", md:"row"}}
+              gap={{md:3}}
               alignItems={"center"}
+              justifyContent={"center"}
+              sx={{border:"1px solid #d6d6d6", borderRadius:"10px", opacity:props.community?"1":"0.3"}}
               
             >
             
-            <Typography  >DateRange:</Typography>
+            <Typography width={"100%"}>DateRange:</Typography>
+            
             <Typography   >From</Typography>
             <TextField
+            disabled={props.community?false:true}
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
@@ -226,6 +264,7 @@ export default function Filter(props) {
               />
               <Typography   >until</Typography>
             <TextField
+            disabled={props.community?false:true}
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
@@ -237,24 +276,32 @@ export default function Filter(props) {
                 label="yyyy-mm-dd"
                 variant="filled"
               />
-            </Grid>: <Typography>You cannot filter permanent partners based on date</Typography>}
+            </Grid>
             {/*<DateRangePickerValue/>*/}
-            <Button
-                sx={{ backgroundColor: "#d6d6d6" }}
+            <Grid item padding={"0px !important  "} sx={{width:'px'}} xs={12} sm={1} md={3.5} >
+            <Box  display={"flex"}
+              alignItems={"center"}
+              flexDirection={{xs:"column", md:"row"}}
+              justifyContent={"space-around"}
+              marginLeft={"0px"}>
+
+            <Fab
+                sx={{ backgroundColor: "#d6d6d6", width:"50%" }}
                 onClick={getUpData}
-                variant="fulfilled"
+                variant="extended"
                 
               >
-                Filter
-              </Button>
-            <Grid item padding={0} xs={12} sm={1} md={1}>
+               Apply Filter
+              </Fab>
+            
               <Typography
-              
+              variant="h6"
                
               >
                {props.community? "Events found": "Partners found"} : {props.community? props.communityLength: props.partnersLength}
               </Typography>
-
+             
+            </Box>
             </Grid>
           </Grid>
         </Box>

@@ -87,7 +87,7 @@ export default function Header (props){
   };
 
     return (
-      <Box sx={{ flexGrow: 1, width:"100%"}}>
+      <Box sx={{ flexGrow: 1, width:"100%",}}>
         <AppBar position="static" >
           <Box display={"flex"} justifyContent={"center"} margin={"0% 2.5%"}>
           <Box sx={{ width: props?.startOfHeader ?"1152px":"100%", padding:props?.startOfHeader ?"0px":"0px"}} >

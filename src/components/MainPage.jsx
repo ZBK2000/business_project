@@ -146,16 +146,27 @@ export default function MainPage(props) {
       const shouldFilterName = filterItems[3] !== "";
       const shouldFilterSportType = filterItems[4] !== "";
       console.log(shouldFilterSportType, filterItems[4], item.activity, item.activity === filterItems[4])
-
+      let priceFilter
+      
+      if(filterItems[9]&&filterItems[10]){
+        priceFilter=(
+          item.price <= filterItems[1][1] &&
+          item.price >= filterItems[1][0]) ||  item.price === 0
+      } else if(!filterItems[9]&&filterItems[10]){
+        priceFilter= item.price <= filterItems[1][1] &&
+        item.price >= filterItems[1][0] && item.price !== 0
+      } else if(filterItems[9]&&!filterItems[10]){
+        priceFilter= item.price === 0
+      } else{
+        priceFilter=true
+      }
       if (
         (!shouldFilterLocation || item.location.toLowerCase().includes(filterItems[2].toLowerCase())) &&
         (!shouldFilterName || item.name.toLowerCase().includes(filterItems[3].toLowerCase())) &&
         (!shouldFilterSportType || item.activity === filterItems[4])&&
         item.slot_number.every(slotNumber => 
           slotNumber <= filterItems[0][1] && slotNumber >= filterItems[0][0])&&
-        
-        item.price <= filterItems[1][1] &&
-        item.price >= filterItems[1][0]
+       priceFilter
       ) {
         filteredData.push(item);
       } else if (
@@ -164,8 +175,7 @@ export default function MainPage(props) {
         !shouldFilterSportType&&
         item.slot_number.every(slotNumber => 
           slotNumber <= filterItems[0][1] && slotNumber >= filterItems[0][0])&&
-        item.price <= filterItems[1][1] &&
-        item.price >= filterItems[1][0]
+        priceFilter
       ) {
         // if both filter criteria are empty, include the item in the filtered data
         filteredData.push(item);
@@ -248,13 +258,27 @@ export default function MainPage(props) {
       console.log(filterItems)
     props.allLinks.forEach((item) => {
       try {
-      console.log(item)
+      
       const shouldFilterLocation = filterItems[2] !== "";
       const shouldFiltertrackName = filterItems[3] !== "";
       const shouldFilterSportType = filterItems[4] !== "";
       const filterdatefrom = filterItems[5] !== "" ? new Date(filterItems[5]) :"";
       const filterdateto = filterItems[6] !== ""? new Date(filterItems[6]) :"";
       const actualDate = new Date(item.time.split(" ")[0])
+      let slotFilter
+      console.log(slotFilter, item.slots.length)
+      if(filterItems[7]&&filterItems[8]){
+        slotFilter=(item.slots.length <= filterItems[0][1] &&
+        item.slots.length >= filterItems[0][0]) ||  item.isLimited === !filterItems[8]
+      } else if(!filterItems[7]&&filterItems[8]){
+          slotFilter= item.isLimited === filterItems[7]
+      } else if(filterItems[7]&&!filterItems[8]){
+        slotFilter=item.slots.length <= filterItems[0][1] &&
+        item.slots.length >= filterItems[0][0] && item.isLimited === !filterItems[8]
+      } else{
+        slotFilter=true
+      }
+
   
       
 
@@ -263,8 +287,7 @@ export default function MainPage(props) {
         (!shouldFiltertrackName || item.trackName.toLowerCase().includes(filterItems[3].toLowerCase())) &&
         (!shouldFilterSportType || item.sportType.toLowerCase().includes(filterItems[4].toLowerCase())) &&
         (filterdatefrom? actualDate >= filterdatefrom:true) && (filterdateto? actualDate <= filterdateto:true) &&
-        item.slots.length <= filterItems[0][1] &&
-        item.slots.length >= filterItems[0][0]
+        slotFilter
         
         
       ) {
@@ -275,8 +298,7 @@ export default function MainPage(props) {
         !shouldFiltertrackName &&
         !shouldFilterSportType&&
         (filterdatefrom? actualDate >= filterdatefrom:true) && (filterdateto? actualDate <= filterdateto:true) &&
-        item.slots.length <= filterItems[0][1] &&
-        item.slots.length >= filterItems[0][0]
+        slotFilter
     
       ) {
         // if both filter criteria are empty, include the item in the filtered data
