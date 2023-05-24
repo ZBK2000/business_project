@@ -220,52 +220,60 @@ import ProvideUserName from './ProvideUserName';
         margin: "10px"
       }}>
       
-        <Typography variant="h4" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
-         {linkData.description} 
+        <Typography variant="h4" component="h1" gutterBottom sx={{ marginTop: '10px', marginBottom:"0px" }}>
+         {linkData.trackName} 
         </Typography>
 
         <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex",justifyContent:"space-between", gap:6}}>
           <Box sx={{backgroundColor:"#dbdbdb", borderRadius:"10px", padding:"10px", display:"flex", gap:6}}>
           <Box>
-        <Typography variant="h6" component="h1" gutterBottom >
-          Name of location/activity: 
-          <Typography variant="h6" component="h1" gutterBottom >
-          Name of subTrack: 
-          </Typography>
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-          Date: 
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-          Location: 
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-          Event Type: 
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-          Sport Type: 
-        </Typography>
+        
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+  <Box sx={{ display: "grid", gridTemplateColumns: "120px auto", gap: 6 }}>
+    <Typography variant="h6" component="h1" gutterBottom>
+      Date:
+    </Typography>
+    <Typography variant="h6" component="h1" gutterBottom>
+      {linkData.time}
+    </Typography>
+  </Box>
+  <Box sx={{ display: "grid", gridTemplateColumns: "120px auto", gap: 6 }}>
+    <Typography variant="h6" component="h1" gutterBottom>
+      Location:
+    </Typography>
+    <Typography variant="h6" component="h1" gutterBottom>
+      {linkData.location}
+    </Typography>
+  </Box>
+  <Box sx={{ display: "grid", gridTemplateColumns: "120px auto", gap: 6 }}>
+    <Typography variant="h6" component="h1" gutterBottom>
+      Subtrack:
+    </Typography>
+    <Typography variant="h6" component="h1" gutterBottom>
+      {linkData.subTrackName}
+    </Typography>
+  </Box>
+  <Box sx={{ display: "grid", gridTemplateColumns: "120px auto", gap: 6 }}>
+    <Typography variant="h6" component="h1" gutterBottom>
+      Event Type:
+    </Typography>
+    <Typography variant="h6" component="h1" gutterBottom>
+      {linkData.isopen ? "Community" : "Private"}
+    </Typography>
+  </Box>
+  <Box sx={{ display: "grid", gridTemplateColumns: "120px auto", gap: 6 }}>
+    <Typography variant="h6" component="h1" gutterBottom>
+      Sport Type:
+    </Typography>
+    <Typography variant="h6" component="h1" gutterBottom>
+      {linkData?.sportType ? linkData?.sportType : "undefined"}
+    </Typography>
+  </Box>
+</Box>
+
+       
         </Box>
-        <Box>
-        <Typography variant="h6" component="h1" gutterBottom >
-           {linkData.trackName}
-          <Typography variant="h6" component="h1" gutterBottom >
-           {linkData.subTrackName}
-          </Typography>
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-          {linkData.time}
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-           {linkData.location}
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-           {linkData.isopen? "Community":"Private"}
-        </Typography>
-        <Typography variant="h6" component="h1" gutterBottom >
-           {linkData?.sportType? linkData?.sportType :"undefined"}
-        </Typography>
-        </Box>
+      
         </Box>
         {user? user.displayName === linkData.user?<Box sx={{display:{md:"flex",xs:"none"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px' }}>
           You Are the organizer 
@@ -280,7 +288,17 @@ import ProvideUserName from './ProvideUserName';
       </Typography><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px', textAlign:"center"}}>
       {linkData.user}
       </Typography></Box>}
+      
         </Box>
+        <Box sx={{borderRadius:"10px", padding:"20px",paddingTop:"5px",border: '1px solid #dbdbdb'}}>
+        <Typography variant='h5' sx={{borderBottom: '1px solid #dbdbdb'}}>
+        Description of the event:
+       </Typography>
+        <Typography variant='h6' marginTop={"5px"}>
+        {linkData.description}
+       </Typography>
+        </Box>
+      
         {user? user.displayName === linkData.user?<Box sx={{display:{md:"none",xs:"flex"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
           You Are the organizer 
         </Typography><Button onClick={()=>setCancelEvent(true)} variant='outlined' sx={{color:"black", borderColor:"black"}}>Cancel event</Button> 
