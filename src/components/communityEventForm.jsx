@@ -49,6 +49,18 @@ export default function CommunityEvent(props) {
       slots = Array(1).fill("")
     }
     
+    let latAndLong
+    
+    const response_loc = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${loc}&key=${import.meta.env.VITE_GOOGLE_MAPS_API}`);
+      const data_loc = await response_loc.json();
+      
+  
+      if (data_loc.results.length > 0) {
+        const location = data_loc.results[0].geometry.location;
+        
+        latAndLong = [location.lat, location.lng ];
+      }
+
     let formData = new FormData();
     for (let i = 0; i < img.length; i++) {
       formData.append("img_urls", img[i]);
@@ -56,7 +68,7 @@ export default function CommunityEvent(props) {
     console.log(slots)
     slots[slots.indexOf("")] = user
     console.log(subTrackName)
-    const dataForLink = {trackName, slots, location: loc, time: `${exactDate} ${time}`,user, subTrackName, description, isopen, city, sportType, isLimited, organizer, activity_start_datetime }
+    const dataForLink = {trackName, slots, location: data_loc?.results[0]?.formatted_address ? data_loc.results[0].formatted_address: loc, time: `${exactDate} ${time}`,user, subTrackName, description, isopen, city, sportType, isLimited, organizer, activity_start_datetime, latAndLong }
     console.log(dataForLink)
     const response = await toast.promise( fetch(`${import.meta.env.VITE_BACKEND_URL}/customLink`, {
       method: "POST",

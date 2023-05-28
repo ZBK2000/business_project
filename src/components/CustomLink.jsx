@@ -23,6 +23,7 @@ import UserRegisterWithFirebase from './UserRegisterWithFirebase';
 import ProvideUserName from './ProvideUserName';
 import CelebrationAnimation from './finalizing';
 import { toast } from 'react-toastify';
+import GoogleMapIndividual from './staticGoogleMap';
 
  export default function CustomLink() {
   const { pathname } = useLocation();
@@ -221,7 +222,7 @@ import { toast } from 'react-toastify';
    }
    
 
-
+console.log(linkData)
 
    
   return (<Grid>
@@ -307,14 +308,20 @@ import { toast } from 'react-toastify';
       {linkData.user}
       </Typography></Box>}
       
+      
         </Box>
-        <Box sx={{borderRadius:"10px", padding:"20px",paddingTop:"5px",border: '1px solid #dbdbdb'}}>
+        <Box display={{md:"flex"}}>
+        <Box sx={{borderRadius:"10px", padding:"20px",paddingTop:"5px",border: '1px solid #dbdbdb', width:{md:"50%"}}}>
         <Typography variant='h5' sx={{borderBottom: '1px solid #dbdbdb'}}>
         Description of the event:
        </Typography>
         <Typography variant='h6' marginTop={"5px"}sx={{whiteSpace: 'pre-wrap'}} >
         {linkData.description}
        </Typography>
+        </Box>
+        <Box sx={{width:{md:"50%"}}}>
+        {linkData.latAndLong&&<GoogleMapIndividual coordinates={linkData?.latAndLong ?linkData.latAndLong:[]}/>}
+        </Box>
         </Box>
       
         {user? user.displayName === linkData.user?<Box sx={{display:{md:"none",xs:"flex"}}}  flexDirection={"column"} ><Typography variant="h6" component="h1" gutterBottom sx={{ marginBottom: '16px',textAlign:"center" }}>
@@ -430,6 +437,7 @@ import { toast } from 'react-toastify';
      {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
      {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
      {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
+     
     
       </Grid>
   );
