@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import ResetPassword from "./forgotPassword";
 import { toast } from "react-toastify";
 import Loading from "./loading";
+import ProvideUserName from "./ProvideUserName";
 
 export default function LoginWithFirebase(props) {
   //declaring states and consts
@@ -23,6 +24,7 @@ export default function LoginWithFirebase(props) {
   const { signIn } = UserAuth();
   const {googleSignIn} = UserAuth()
   const { update } = UserAuth();
+  const [provideUserName, setProvideUserName] = useState(false)
 
 
   //this is for simply to renavige if someone wants to enter this enpoint regardless they are logged in
@@ -89,8 +91,8 @@ export default function LoginWithFirebase(props) {
       
        // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
-        props.indicator(false)
-          props.setProvideUserName(true)
+        
+          setProvideUserName(true)
           
       }
     } catch (error) {
@@ -210,6 +212,7 @@ export default function LoginWithFirebase(props) {
     </Box>
     </motion.div>
     {reset&&<ResetPassword indicator={setReset}/>}
+    {provideUserName && <ProvideUserName indicator={setProvideUserName} indicator2={props.indicator}/>}
     </Box>
   );
 }

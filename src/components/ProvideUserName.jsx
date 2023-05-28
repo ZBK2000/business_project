@@ -33,6 +33,7 @@ console.log(players)
       if (accepted=="success"){
         await update(user, userName)
         props.indicator(false)
+        if(props?.indicator2) props?.indicator2(false)
         toast(`Welcome ${userName}` )
       }
  }
@@ -53,11 +54,12 @@ return (
   }}>
     <Box sx={{width:"300px", backgroundColor:"white", borderRadius:"10px", padding:"30px"}}
     >
+  
   <Typography variant="h5">It seems like you are new here, please tell us a name that we can call you :)</Typography>
   <Typography marginTop={"30px"} variant="h6">UserName:</Typography>
  
         <input id="desc" onChange={(e) => setUserName(e.target.value)} />
-        <Button onClick={setUsernamefunc} sx={{color:"black",backgroundColor:"#d6d6d6", width:'100%', marginTop:'10px'}}  variant="fulfilled">Cancel Event</Button>
+        <Button onClick={setUsernamefunc} sx={{color:"black",backgroundColor:"#d6d6d6", width:'100%', marginTop:'10px'}}  variant="fulfilled">Set UserName</Button>
   </Box>
 </Box>
 )

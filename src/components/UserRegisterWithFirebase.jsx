@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion"
 import { toast } from "react-toastify";
 import Loading from "./loading";
+import ProvideUserName from "./ProvideUserName";
 
 export default function UserRegisterWithFirebase(props) {
   //declaring states
@@ -16,7 +17,7 @@ export default function UserRegisterWithFirebase(props) {
   const [existingUser, setExinstingUser] = useState(false)
   const [existingEmail, setExinstingEmail] = useState(false)
   const [rigthPassword, setRightPassword] = useState(false)
-  
+  const [provideUserName, setProvideUserName] = useState(false)
   const [error, setError] = useState(false)
   const navigate = useNavigate();
   const { createUser } = UserAuth();
@@ -114,8 +115,8 @@ const {googleSignIn} = UserAuth()
        
        // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
-        props.indicator(false)
-          props.setProvideUserName(true)
+        
+          setProvideUserName(true)
           
       }
     } catch (error) {
@@ -243,6 +244,7 @@ const {googleSignIn} = UserAuth()
     </Box>
 
     </motion.div>
+    {provideUserName && <ProvideUserName indicator={setProvideUserName} indicator2={props.indicator}/>}
     </Box>
   );
 }

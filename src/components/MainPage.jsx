@@ -56,7 +56,7 @@ export default function MainPage(props) {
   const [mapView, setMapView] = useState(false)
   const [showLogin, setShowLogin] = useState(false) 
   const [showRegister, setShowRegister] = useState(false)
-  const [provideUserName, setProvideUserName] = useState(false)
+  
   const [showEventForm, setShowEventForm] = useState(false)
   const [currentSport, setCurrentSport] = useState("")
   const [community, setCommunity] = useState(false)
@@ -557,7 +557,7 @@ useEffect(() => {
       {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
      {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
       {showEventForm &&<CommunityEvent indicator={setShowEventForm}/>} 
-      {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
+      
 
       </Grid>
 
