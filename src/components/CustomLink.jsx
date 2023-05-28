@@ -21,6 +21,8 @@ import { Example } from './framerTest';
 import { motion } from "framer-motion";
 import UserRegisterWithFirebase from './UserRegisterWithFirebase';
 import ProvideUserName from './ProvideUserName';
+import CelebrationAnimation from './finalizing';
+import { toast } from 'react-toastify';
 
  export default function CustomLink() {
   const { pathname } = useLocation();
@@ -45,14 +47,18 @@ import ProvideUserName from './ProvideUserName';
     }, [pathname]);
 
    async function join(){
-     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/rightCustomLink`,
+     const response = await toast.promise( fetch(`${import.meta.env.VITE_BACKEND_URL}/rightCustomLink`,
         {
         method: "POST",
         body: JSON.stringify({hashcode :hashcode}),
         headers: {
           "Content-Type": "application/json",
         },
-    })
+    }),{
+      pending: 'Please wait',
+      
+      error: 'Sorry something went wrong, try again'
+    } )
         console.log(response)
         const data = await response.json();
         if(!linkData.isLimited){
@@ -70,14 +76,20 @@ import ProvideUserName from './ProvideUserName';
           }}
 
           console.log(data)
-          const response2 = await fetch(`${import.meta.env.VITE_BACKEND_URL}/rightCustomLinkUpdate`,
+          const response2 = await toast.promise( fetch(`${import.meta.env.VITE_BACKEND_URL}/rightCustomLinkUpdate`,
           {
           method: "POST",
           body: JSON.stringify({data: data, user: user.displayName}),
           headers: {
             "Content-Type": "application/json",
           },
-      })
+      }),{
+        pending: 'Please wait',
+        success: data.slots.includes(user.displayName)?'Successfuly Joined the Event':"Succesfully left the Event",
+        error: data.slots.includes(user.displayName)?'Sorry, your join request were declined':'Sorry, your Leave request were declined'
+      }
+  )
+      
         const newData = await response2.json()
         setLinkData(prev => {
           return {
@@ -190,17 +202,22 @@ import ProvideUserName from './ProvideUserName';
 
   async function cancelCommunityEvent(id, participants){
     
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cancelEvent`, {
+    const response = await toast.promise(fetch(`${import.meta.env.VITE_BACKEND_URL}/cancelEvent`, {
       method: "POST",
       body: JSON.stringify({ id, participants}),
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    }),{
+      pending: 'Please wait',
+      
+      error: 'Sorry,'
+    })
     const result = await response.json()
     console.log(result)
     if(result.msg ==='Processing completed successfully')
     {console.log("successful delete")}
+    toast("Successfully cancelled this event")
    }
    
 
@@ -209,6 +226,7 @@ import ProvideUserName from './ProvideUserName';
    
   return (<Grid>
     <Header title="Custom Group" startOfHeader={true}/>
+
     <Grid display={"flex"} justifyContent={"center"}>
     <Grid sx={{ 
         display: 'flex',
@@ -294,7 +312,7 @@ import ProvideUserName from './ProvideUserName';
         <Typography variant='h5' sx={{borderBottom: '1px solid #dbdbdb'}}>
         Description of the event:
        </Typography>
-        <Typography variant='h6' marginTop={"5px"}>
+        <Typography variant='h6' marginTop={"5px"}sx={{whiteSpace: 'pre-wrap'}} >
         {linkData.description}
        </Typography>
         </Box>
@@ -412,7 +430,7 @@ import ProvideUserName from './ProvideUserName';
      {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
      {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
      {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
-     
+    
       </Grid>
   );
 }

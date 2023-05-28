@@ -4,7 +4,7 @@ import React from 'react';
 const CopyToClipboardButton = (props) => {
     const handleClick = () => {
         const url = window.location.href;
-        const customLink = `Invitation to join this match at ${props.datetime}`;
+        const customLink = `Invitation to join this Event at ${props.datetime}`;
         const text = `${customLink} ${url}`;
       
         // Create a temporary textarea element

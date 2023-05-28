@@ -3,6 +3,7 @@ import { Button, Fab, Grid, IconButton, List, ListItem, ListItemText, MenuItem, 
 import PersonIcon from '@mui/icons-material/Person';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function  CancelEvent(props) {
 const [description, setDescription] = useState("");
@@ -20,17 +21,21 @@ console.log(players)
 
 async function cancelCommunityEvent(id, participants, desc){
     
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cancelEvent`, {
+  const response = await toast.promise( fetch(`${import.meta.env.VITE_BACKEND_URL}/cancelEvent`, {
     method: "POST",
     body: JSON.stringify({ id, participants, desc}),
     headers: {
       "Content-Type": "application/json",
     },
-  });
+  }), {
+    pending: 'Please wait',
+    error: 'Sorry,'
+  })
   const result = await response.json()
   console.log(result)
   if(result.message ==='Processing completed successfully')
-  {setSuccess(true)}
+  toast("Sucessfully cancelled this event!")
+  navigate("/")
  }
  
  function closePopup(e){

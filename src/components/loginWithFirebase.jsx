@@ -5,6 +5,9 @@ import Footer from "./FooterNOTUSED";
 import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
 import { motion } from "framer-motion"
+import ResetPassword from "./forgotPassword";
+import { toast } from "react-toastify";
+import Loading from "./loading";
 
 export default function LoginWithFirebase(props) {
   //declaring states and consts
@@ -13,12 +16,14 @@ export default function LoginWithFirebase(props) {
   const [nameOfUser, setNameOfUser] = useState("");
   const [registrateds, setRegistrateds] = useState("");
   const [loginerror, setLoginError] = useState(0)
+  const [reset, setReset] = useState(false)
   const { user } = UserAuth();
   const navigate = useNavigate();
   const { name } = useParams();
   const { signIn } = UserAuth();
   const {googleSignIn} = UserAuth()
   const { update } = UserAuth();
+
 
   //this is for simply to renavige if someone wants to enter this enpoint regardless they are logged in
  
@@ -44,10 +49,12 @@ export default function LoginWithFirebase(props) {
 
     //setRegistrateds(accepted);
     //props.getUpData(accepted);
+
     if (accepted) {
       //props.getUpData2(accepted.user);
       
       props.indicator(false)
+      toast(`Welcome ${accepted.user}` )
       //  navigate(`/`);
       
     }
@@ -76,7 +83,9 @@ export default function LoginWithFirebase(props) {
       console.log(accepted)
       if(JSON.stringify(accepted.msg)==JSON.stringify("successful login")){
         await update(user1, accepted.userName)
+        toast(`Welcome ${accepted.userName}` )
         props.indicator(false)
+        
       
        // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
@@ -172,12 +181,15 @@ export default function LoginWithFirebase(props) {
               />
                <Button type="submit" variant="outlined" sx={{width:"100%", color:"black", marginTop:"20px",backgroundColor:"#d6d6d6"}}>
               <Typography>Log in</Typography>{" "}
+            
                </Button>
+               <Typography sx={{width:"100%", textAlign:"center", marginTop:"10px", cursor:"pointer"}} onClick={()=>setReset(prev=>!prev)}> <u>Forgot password</u></Typography>
             </div>
           </form>
         </div>
       ) : (
-        <Typography>Loading...</Typography>
+        
+        <Loading/>
       )}
       {loginerror == 1 ? (
         <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">
@@ -196,6 +208,8 @@ export default function LoginWithFirebase(props) {
      
     </div>
     </Box>
-    </motion.div></Box>
+    </motion.div>
+    {reset&&<ResetPassword indicator={setReset}/>}
+    </Box>
   );
 }

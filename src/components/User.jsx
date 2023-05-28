@@ -349,7 +349,7 @@ export default function User(props) {
 
         <Typography variant="h5" margin={"10px"} width={"200px"}>Your email:</Typography>
         <Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[0]: "cannot get"}</Typography>
-        <EditIcon/>
+        {/*<EditIcon/>*/}
           </Box>
          {!user.emailVerified && <Box display={"flex"} alignItems={"center"}><Typography sx={{color:"red"}}>your email is not verified! You have to verify it to be able to join or organize activites:</Typography>
        <Button onClick={()=>sendEmailVerification(user)} variant="outlined" sx={{color:"Red"}}>resend verification email</Button>  </Box>}
@@ -357,13 +357,13 @@ export default function User(props) {
 
 <Typography variant="h5" margin={"10px"} width={"200px"}>Your username:</Typography>
 <Typography variant="h5" margin={"10px"} width={"300px"}> {emailAndUser? emailAndUser[1]: "cannot get"}</Typography>
-<EditIcon/>
+{/*<EditIcon/>*/}
   </Box>
   <Box display={{md:"flex"}}>
 
 <Typography variant="h5" margin={"10px"} width={"200px"}>Password:</Typography>
 <Typography variant="h5" margin={"10px"} width={"300px"}>**********</Typography>
-<EditIcon/>
+{/*<EditIcon/>*/}
   </Box>
       </Grid>
         <Grid
@@ -448,24 +448,24 @@ export default function User(props) {
                     className="booked-times"
                     elevation={6}
                   >
-                   <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
-                    <Typography variant="h6" className="booked-times-h2">
-                      {link[1]}
+                   <Box className="tooltip  " sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
+                    <Typography variant="h6" sx={{overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", maxWidth:"160px"}} className="booked-times-h2">
+                      {link[1]} <span class="tooltiptext">{link[1]}</span>
                     </Typography>
                     </Box>
                     <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
-                     <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
-                    <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                     <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"},padding:{xs:"5px 0px"},height:{xs:"80px", md:"100%"}}} >
+                    <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%",flexDirection:{xs:"column", md:"row"}, height:'100%'}}>
                      <DateRangeIcon/>
                     <Typography> {link[2]}</Typography>
                     </Box>
                     <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
-                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%",flexDirection:{xs:"column", md:"row"}, height:'100%'}}>
                     <LocationOnIcon/> 
                     <Typography>  {link.slice(-2,-1)}</Typography>
                     </Box>
                     <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
-                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                    <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%", flexDirection:{xs:"column", md:"row"},height:'100%'}}>
                     <DirectionsRunOutlinedIcon/> 
                     <Typography> {link.slice(-1)}</Typography>
                     </Box></Box>
@@ -547,24 +547,24 @@ export default function User(props) {
                 className="booked-times"
                 elevation={6}
               >
-               <Box  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
-                <Typography variant="h6" className="booked-times-h2">
-                  {link[1]}
+               <Box className="tooltip  "  sx={{padding:"10px", borderRight:{md:"1px solid #7B8FA1"}, width:"200px", marginRight:"10px"}}>
+                <Typography sx={{overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", maxWidth:"160px"}} variant="h6" className="booked-times-h2">
+                  {link[1]} <span class="tooltiptext">{link[1]}</span>
                 </Typography>
                 </Box>
                 <Box display={"flex"} justifyContent={"space-between"} width={"100%"} sx={{flexDirection:{xs:"column", md:"row"}}}>
-                 <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"}}} >
-                <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%"}}>
+                 <Box display={"flex"} gap={{md:3}} width={{md:"70%", xs:"100%"}} alignItems={"center"} justifyContent={"space-around"} sx={{borderTop:{xs:"1px solid #7B8FA1", md:"none"}, borderBottom:{xs:"1px solid #7B8FA1", md:"none"},height:{xs:"80px", md:"100%"}, padding:{xs:"5px 0px"}}} >
+                <Box sx={{display:"flex", alignItems:"center", gap:1,width:"30%", flexDirection:{xs:"column", md:"row"},height:'100%'}}>
                  <DateRangeIcon/>
                 <Typography> {link[2]}</Typography>
                 </Box>
                 <Typography sx={{color:"#7B8FA1 "}}  ><li></li></Typography>
-                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%",flexDirection:{xs:"column", md:"row"}, height:'100%'}}>
                 <LocationOnIcon/> 
                 <Typography>  {link.slice(-2,-1)}</Typography>
                 </Box>
                 <Typography sx={{color:"#7B8FA1 "}}><li></li></Typography>
-                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%"}}>
+                <Box sx={{display:"flex", alignItems:"center", gap:1, width:"30%",flexDirection:{xs:"column", md:"row"},height:'100%'}}>
                 <DirectionsRunOutlinedIcon/> 
                 <Typography> {link.slice(-1)}</Typography>
                 </Box></Box>

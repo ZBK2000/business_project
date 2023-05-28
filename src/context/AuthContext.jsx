@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { useContext } from "react"
 
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification} from "firebase/auth"
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification, sendPasswordResetEmail} from "firebase/auth"
 import {auth} from "../components/firebase"
 const UserContext = createContext()
 
@@ -23,6 +23,17 @@ export const AuthContextProvider = ({children}) =>{
        
       };
 
+      async function passwordReset(mail, success) {
+        try {
+          
+          await sendPasswordResetEmail(auth, mail);
+          console.log('Password reset email sent successfully.');
+          success(true)
+        } catch (error) {
+          console.error('Error sending password reset email:', error);
+        }
+      }
+      
     async function update (user, nameOfUser){
         await updateProfile(user,{
             displayName: nameOfUser,
@@ -60,7 +71,7 @@ export const AuthContextProvider = ({children}) =>{
 
     }
     return(
-        <UserContext.Provider value={{createUser, user, logout, signIn, googleSignIn, update}}>
+        <UserContext.Provider value={{createUser, user, logout, signIn, googleSignIn, update, passwordReset}}>
             {children}
         </UserContext.Provider>
     )

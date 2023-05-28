@@ -205,7 +205,7 @@ export default function Filter(props) {
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
-                  zIndex:9999
+                  zIndex:999
                   ,width:{md:"48%"}
                 }}
                 id="outlined-basic"
@@ -220,7 +220,7 @@ export default function Filter(props) {
                 sx={{
                   color: "#3c3c3c",
                   "& .input:focus !important": { color: "#3c3c3c" },
-                  zIndex: 9999
+                  zIndex: 999
                 }}
                 id="outlined-basic"
                 onChange={(e) => setName(e.target.value)}
@@ -286,7 +286,7 @@ export default function Filter(props) {
               marginLeft={"0px"}>
 
             <Fab
-                sx={{ backgroundColor: "#d6d6d6", width:"50%" }}
+                sx={{ backgroundColor: "#d6d6d6", width:"50%", zIndex:999 }}
                 onClick={getUpData}
                 variant="extended"
                 

@@ -66,9 +66,9 @@ export default function Sports (props){
          overflowX: 'auto',
         
         }}>
-           {sportsIcons.map((item)=>{
+           {sportsIcons.map((item, index)=>{
         return(
-          <Box onClick={()=>settingSport(item.name)} display={"flex"} flexDirection={"column"} alignItems={"center"} sx={{ color:item.name==props.sport?"black":"#c9c3c3", "&:hover":{color:"black"}}}>
+          <Box key={index} onClick={()=>settingSport(item.name)} display={"flex"} flexDirection={"column"} alignItems={"center"} sx={{ color:item.name==props.sport?"black":"#c9c3c3", "&:hover":{color:"black"}}}>
             {item.icon}
             <Typography variant='h8'>{item.name}</Typography>
         </Box>

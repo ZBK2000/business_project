@@ -4,6 +4,8 @@ import Header from "./Header";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion"
+import { toast } from "react-toastify";
+import Loading from "./loading";
 
 export default function UserRegisterWithFirebase(props) {
   //declaring states
@@ -56,6 +58,7 @@ const {googleSignIn} = UserAuth()
           });
             
             props.indicator(false)
+            toast(`Welcome ${nameOfUser}` )
           //  navigate(`/`)
           
         }
@@ -107,6 +110,7 @@ const {googleSignIn} = UserAuth()
       if(JSON.stringify(accepted.msg)==JSON.stringify("successful login")){
         await update(user1, accepted.userName)
         props.indicator(false)
+        toast(`Welcome ${accepted.userName}` )
        
        // navigate(`/`)
       } else if(accepted.msg=="successfully registrated"){
@@ -208,7 +212,7 @@ const {googleSignIn} = UserAuth()
          {/* </Grid>*/}
         </form>
       ) : (
-        <Typography>Loading..., please wait</Typography>
+        <Loading/>
       )}
       {existingUser && existingEmail && (
         <Typography sx={{ marginTop: "15px" }} variant="h5" className="success">

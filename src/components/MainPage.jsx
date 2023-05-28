@@ -30,6 +30,14 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import UserRegisterWithFirebase from "./UserRegisterWithFirebase";
 import ProvideUserName from './ProvideUserName';
 import SkeletonComponent from "./skeleton";
+//import InfiniteScroll from "./infiniteScroll";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { motion } from "framer-motion"
+import Loading from "./loading";
+import StaticDatePickerCollapsible from "./NextSevenDay copy";
+import { useRef } from "react";
+import FilterTags from "./filterTags";
+import Notifications from "./notifications";
 
 
 export default function MainPage(props) {
@@ -46,12 +54,16 @@ export default function MainPage(props) {
   const [favouriteData, setfavouriteData] = useState([]) 
   const [locations, setLocations] = useState([])
   const [mapView, setMapView] = useState(false)
-  const [showLogin, setShowLogin] = useState(false)
+  const [showLogin, setShowLogin] = useState(false) 
   const [showRegister, setShowRegister] = useState(false)
   const [provideUserName, setProvideUserName] = useState(false)
   const [showEventForm, setShowEventForm] = useState(false)
   const [currentSport, setCurrentSport] = useState("")
   const [community, setCommunity] = useState(false)
+  const [isMoreLink, setIsMoreLink] = useState(true)
+  const [isMoreTrack, setIsMoreTrack] = useState(true)
+  const [newFilterSet, setNewFilterSet] = useState(false)
+  const isFirstRender = useRef(true)
   
   
   useEffect(()=>{
@@ -121,7 +133,7 @@ export default function MainPage(props) {
   let filteredData =[]
  let favOrAll=useMemo(()=>[], [])
  
-
+ //let links=useMemo(()=>[], [])
   function showFavourite(){
     if (favouriteData.length !== 0) {setfavouriteData([])}
     else{
@@ -196,7 +208,7 @@ export default function MainPage(props) {
     }
     
   }
-  const newTracks = filteredData.map(function (item) {
+  const newTracks = filteredData.map(function (item, index) {
     if(currentSport== item.activity | !currentSport){
     return (
       <Grid
@@ -208,13 +220,19 @@ export default function MainPage(props) {
         md={4}
         lg={3}
         xl={2.4}
+        key={item._id}
+        sx={{cursor:"pointer"}}
       >
+         <motion.div
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}>
         <Card
           className="tracks"
           sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
          onClick={() => reNavigate(item)}
          //onClick={() => setShowLogin(true)}
-          key={item.name}
+          
         >
           {heartList.includes(item.name) ?<FavoriteIcon  onClick={(e)=>changeHeart(e, item.name)} sx={{position:"absolute", color:"#fb7b7b", left:"85%", top:"5%"}}/>:
           <FavoriteBorderIcon onClick={(e)=>changeHeart(e, item.name)} sx={{position:"absolute",color:"#fb7b7b", left:"85%", top:"5%"}}/>}
@@ -226,10 +244,10 @@ export default function MainPage(props) {
            
             title=""
           />
-          <CardContent>
+          <CardContent className="tooltip  ">
           
-            <Typography gutterBottom variant="h5" component="div">
-              {item.name}
+          <Typography gutterBottom variant="h5" component="div" sx={{overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", maxWidth:"250px"}}>
+              {item.name} <span class="tooltiptext">{item.name} </span>
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {item?.city? item.city : item.location}
@@ -246,6 +264,7 @@ export default function MainPage(props) {
             </Typography>
           </CardContent>
         </Card>
+        </motion.div>
       </Grid>
     );
   }});
@@ -278,9 +297,6 @@ export default function MainPage(props) {
       } else{
         slotFilter=true
       }
-
-  
-      
 
       if (
         (!shouldFilterLocation || item.city.toLowerCase().includes(filterItems[2].toLowerCase())) &&
@@ -318,7 +334,7 @@ export default function MainPage(props) {
   const validLinks = filteredDataCommunity ==="empty" ? []: filteredDataCommunity.length >0  ? filteredDataCommunity: props.allLinks 
   let activityCounter = 0
   console.log(validLinks, props.allLinks)
-  const liveActivities =validLinks.map(function (item) {
+  const liveActivities =validLinks.map(function (item, index) {
     if (item.isopen){
       const date_components = item.time.split(" ");
       const date = date_components[0];
@@ -330,7 +346,8 @@ export default function MainPage(props) {
       const current_datetime = new Date();
       // Convert the date and time components to Date objects
       const activity_start_datetime = new Date(`${date}T${start_time}:00:00`)
-      if (activity_start_datetime >= current_datetime) {
+     
+    // if (activity_start_datetime >= current_datetime) {
         if(currentSport== item.sportType | !currentSport){
       const count = item.slots.reduce((acc, curr) => {
         if (curr === "") {
@@ -343,19 +360,25 @@ export default function MainPage(props) {
     return (
       <Grid
       
-        item
-        padding={"8px !important"}
-        xs={12}
-        sm={6}
-        md={4}
-        lg={3}
-        xl={2.4}
-      >
+      item
+      padding={"8px !important"}
+      xs={12}
+      sm={6}
+      md={4}
+      lg={3}
+      xl={2.4}
+      key={item._id}
+      sx={{cursor:"pointer"}} >
+
+        <motion.div
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}>
         <Card
           className="tracks"
           sx={{ backgroundColor: theme.palette.secondary.main, margin: "auto", position:"relative"}}
           onClick={user?() => navigate(`/tracks/${item.name}/${item._id}`):()=>setShowRegister(true)}
-          key={item.name}
+          
         >
           
           
@@ -366,10 +389,10 @@ export default function MainPage(props) {
             title={`community activity - ${item.sportType}`}
             
           />
-          <CardContent>
+          <CardContent className="tooltip  ">
           
-            <Typography gutterBottom variant="h5" component="div">
-              {item.trackName}
+            <Typography gutterBottom variant="h5" component="div" sx={{overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", maxWidth:"250px"}}>
+              {item.trackName} <span class="tooltiptext">{item.trackName} </span>
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {item?.city? item.city:"-"}
@@ -386,15 +409,87 @@ export default function MainPage(props) {
             </Typography>
           </CardContent>
         </Card>
-      </Grid>
+        </motion.div>
+        </Grid>
+      
     );
-  }}}}) 
+  }
+//}
+}}) 
 
 
 
 
+
+const loadMore = async (filter=false) => {
+  const count = props.allLinks.length
+  const count2 = props.allTrack.length
+  try {
+    
+      
+    //setTimeout( async()=>{
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/partialLoad`,{
+        method: "POST",
+        body: JSON.stringify({count , count2, community, filterItems}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    const data = await response.json();
+    if(community){
+    if(data.allLinks.length){
+if(filter){
+  props.allLinksSetter([data.allLinks])
+} else{
+      props.allLinksSetter(prev=>[...prev,...data.allLinks])
+    }
+    }else{
+setIsMoreLink(false)
+    }}
+    else if(!community){
+      if(data.allTrack.length){
+
+        props.allTracksSetter(prev=>[...prev,...data.allTrack])
+      }else{
+  setIsMoreTrack(false)
+      }
+    }
+//  },2000)
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+console.log(props.allLinks.length, props.allTrack.length)
+useEffect(() => {
+  
+  
+  if(!community && !props.allTrack.length){
+
+    loadMore();
+  } else if(community && !props.allLinks.length){
+    loadMore();
+  }
+}, [community,newFilterSet]);
+
+useEffect(() => {
+  if(isFirstRender.current) {
+
+    isFirstRender.current=false
+  }
+   else{
+  props.allTracksSetter(prev=>prev=[])
+  props.allLinksSetter(prev=>prev=[])
+  setIsMoreLink(true)
+  setIsMoreTrack(true)
+  setNewFilterSet(prev=>!prev)
+
+  }
 
   
+}, [ filterItems]);
+
+
   console.log(props.allTrack)
   return (
     <Grid display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
@@ -417,17 +512,26 @@ export default function MainPage(props) {
        
       </Grid>
       <Filter getUpData={setFilterItems} showFavourite={showFavourite} mapViewFunc={mapViewFunc} setShowEventForm={setShowEventForm} setShowRegister={setShowRegister} favouriteData={favouriteData} mapView={mapView} communityLength={activityCounter} partnersLength={filteredData.length} community={community}/>
-      <Box display={"flex"}><Typography onClick={()=>setCommunity(false)} variant="h5" sx={{color:community?"grey":"black",margin:"-10px 8px 20px",width:"108px", borderRight:"1px solid black", cursor:"pointer"}}>Partners</Typography>
-      <Typography onClick={()=>setCommunity(true)} variant="h5" sx={{color:community?"black":"grey",margin:"-10px 8px 20px", cursor:"pointer"}}>Community events</Typography></Box>
-      {!mapView? <Grid
-        sx={{ marginLeft: "0px", marginRight: "0px", width: "100%", marginBottom:"30px"}}
+      <Box display={{md:"flex"}}><Box display={"flex"}><Typography onClick={()=>setCommunity(false)} variant="h5" sx={{color:community?"grey":"black",margin:"-10px 8px 20px",width:"108px", borderRight:"1px solid black", cursor:"pointer"}}>Partners</Typography>
+      <Typography onClick={()=>setCommunity(true)} variant="h5" sx={{color:community?"black":"grey",margin:"-10px 8px 20px", cursor:"pointer"}}>Community events</Typography></Box> <Box><FilterTags filterTags={filterItems}/></Box> </Box>
+      {!mapView? <Grid marginTop={"0px"}> 
+        {community?    <InfiniteScroll className="element" scrollableTarget="container"  scrollThreshold={0.9} loader={<Loading/>} next={loadMore} dataLength={props.allLinks.length} hasMore={isMoreLink}> <Grid
+        sx={{ marginLeft: "0px", marginRight: "0px",marginTop:"0px", width: "100%", marginBottom:"30px"}}
         container
         
         spacing={2}
         className="container"
-      >
-        {community? validLinks !=[]?liveActivities:<SkeletonComponent/> : filteredData!=[]? newTracks: <SkeletonComponent/>}
-      </Grid> : <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
+        
+      >{liveActivities}</Grid> </InfiniteScroll> :  <InfiniteScroll className="element"  scrollThreshold={0.9} loader={<Loading/>} next={loadMore} dataLength={props.allTrack.length} hasMore={isMoreTrack}> <Grid
+        sx={{ marginLeft: "0px", marginRight: "0px",marginTop:"0px", width: "100%", marginBottom:"30px"}}
+        container
+        
+        spacing={2}
+        className="container"
+        
+      >{newTracks}</Grid> </InfiniteScroll>}
+        </Grid>: <MapContainer locations={allLocation} tracks={filteredData} center={filterItems? filterItems[2]: "Budapest"}/>}
+     
      {/*  <Typography variant="h5" sx={{margin:"-10px 8px 20px"}}>Community events</Typography>
       <Grid
         sx={{ margin:"0px",marginTop:"-16px" ,width: "100%" }}
@@ -454,8 +558,9 @@ export default function MainPage(props) {
      {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
       {showEventForm &&<CommunityEvent indicator={setShowEventForm}/>} 
       {provideUserName && <ProvideUserName indicator={setProvideUserName}/>}
+
       </Grid>
-      
+
     </Grid>
   );
 }

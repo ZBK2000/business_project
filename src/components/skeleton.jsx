@@ -2,11 +2,12 @@ import { Box, Card, CardContent, CardMedia, Grid, Paper, Typography } from '@mui
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useTheme } from "@emotion/react";
+import { motion } from "framer-motion"
 
 const SkeletonComponent = () => {
     const theme = useTheme();
     return (
-      <Grid sx={{ marginLeft: "0px", marginRight: "0px", width: "95%", marginBottom:"30px"}}
+      <Grid sx={{ marginLeft: "0px", marginRight: "0px", width: "100%", marginBottom:"30px"}}
       container
       
       spacing={2}
@@ -52,6 +53,7 @@ const SkeletonComponent = () => {
                 </Typography>
               </CardContent>
             </Card>
+            
           </Grid>
         ))}
       </Grid>

@@ -3,6 +3,7 @@ import { Button, Fab, Grid, IconButton, List, ListItem, ListItemText, MenuItem, 
 import PersonIcon from '@mui/icons-material/Person';
 import { useState } from "react";
 import { UserAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function  ProvideUserName(props) {
 const [userName, setUserName] = useState("");
@@ -32,6 +33,7 @@ console.log(players)
       if (accepted=="success"){
         await update(user, userName)
         props.indicator(false)
+        toast(`Welcome ${userName}` )
       }
  }
 return (

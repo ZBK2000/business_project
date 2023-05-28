@@ -34,10 +34,10 @@ function App() {
   const [slots, setSlots] = useState(4);
   
   //we make an initial call for all of the tracks data on all rerender
-  useEffect(() => {
+  /*useEffect(() => {
     async function fetchData() {
       try {
-     
+        
         const response = await fetch(import.meta.env.VITE_BACKEND_URL);
         const data = await response.json();
         setTracks(data.allTrack);
@@ -48,6 +48,23 @@ function App() {
     }
     fetchData();
   }, [change]);
+  /*
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setTimeout(async () => {
+          const response = await fetch(import.meta.env.VITE_BACKEND_URL);
+          const data = await response.json();
+          setTracks(data.allTrack);
+          setLinks(data.allLinks);
+        }, 5000);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, [change]);*/
+  
  
 
   return (
@@ -67,6 +84,8 @@ function App() {
                   allLinks={links}
                   getDownData={success}
                   getDownData2={name}
+                  allLinksSetter={setLinks}
+                  allTracksSetter={setTracks}
                 />
               }
             />
