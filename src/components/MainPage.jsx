@@ -555,7 +555,7 @@ useEffect(() => {
         */}
         
       {showLogin &&<LoginWithFirebase indicator={setShowLogin}/>} 
-     {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} setProvideUserName={setProvideUserName}/>}
+     {showRegister &&<UserRegisterWithFirebase indicator={setShowRegister} indicatorforLogin={setShowLogin} />}
       {showEventForm &&<CommunityEvent indicator={setShowEventForm}/>} 
       
 
